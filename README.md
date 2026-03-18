@@ -1,4 +1,4 @@
-# PDF to Markdown Converter
+# PDF to MD Converter
 
 将 PDF 文档转换为 Markdown 格式的在线工具。
 
