@@ -1,44 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import UploadZone from "@/components/UploadZone";
 import MarkdownPreview from "@/components/MarkdownPreview";
 import ProgressBar from "@/components/ProgressBar";
 
 type State = "idle" | "converting" | "done" | "error";
-
-const features = [
-  {
-    icon: "⚡",
-    title: "Lightning Fast",
-    description: "Convert your documents in seconds. Our optimized processing pipeline delivers results quickly without compromising accuracy."
-  },
-  {
-    icon: "🎯",
-    title: "High Accuracy",
-    description: "Smart layout detection preserves headings, lists, and formatting. Get clean, editable Markdown that matches your original document."
-  },
-  {
-    icon: "🔒",
-    title: "Privacy First",
-    description: "All conversions happen in your browser or on our secure servers. Your documents are never stored or shared with third parties."
-  },
-  {
-    icon: "🌐",
-    title: "Cross-Platform",
-    description: "Works seamlessly on desktop and mobile. No software installation required – just open your browser and start converting."
-  },
-  {
-    icon: "📝",
-    title: "Clean Formatting",
-    description: "Automatically detects and preserves document structure including headers, bullet points, tables, and code blocks."
-  },
-  {
-    icon: "💯",
-    title: "Completely Free",
-    description: "No hidden fees, no watermarks, no limits. Convert as many files as you need without any cost."
-  }
-];
 
 const faqs = [
   {
@@ -55,7 +23,7 @@ const faqs = [
   },
   {
     question: "Can I convert Markdown back to PDF?",
-    answer: "Currently MdPdf focuses on PDF to MD conversion. For MD to PDF, you can use any standard Markdown viewer or editor with export functionality."
+    answer: "Yes! Use our MD to PDF converter to transform your Markdown documents into polished PDF files."
   },
   {
     question: "What happens to my files after conversion?",
@@ -99,12 +67,18 @@ export default function Home() {
 
   return (
     <main className="max-w-5xl mx-auto px-4 py-12">
-      <div className="text-center mb-10">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">PDF to MD Converter</h1>
-        <p className="text-gray-500 text-lg">Convert PDF to MD instantly. Free online tool for developers, writers, and content creators</p>
+      {/* Hero Section */}
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-bold text-gray-900 mb-2">MdPdf – Free Online Converter</h1>
+        <p className="text-gray-500 text-lg">Fast, accurate, and free document conversion tools</p>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col gap-6 mb-16">
+      {/* PDF to MD Tool - Direct Use */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col gap-6 mb-8">
+        <div className="text-center mb-2">
+          <h2 className="text-xl font-bold text-gray-900">PDF to Markdown Converter</h2>
+          <p className="text-gray-500 text-sm">Upload a PDF and get clean Markdown instantly</p>
+        </div>
         <UploadZone onUpload={handleUpload} disabled={state === "converting"} />
 
         {state === "converting" && (
@@ -125,17 +99,60 @@ export default function Home() {
         )}
       </div>
 
-      {/* Features Section */}
+      {/* Quick Links to Dedicated Pages */}
+      <div className="grid md:grid-cols-2 gap-6 mb-16">
+        <Link
+          href="/pdf-to-md"
+          className="group bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md hover:border-blue-200 transition-all"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+              <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <div>
+              <span className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">More PDF to MD Features →</span>
+            </div>
+          </div>
+        </Link>
+
+        <Link
+          href="/md-to-pdf"
+          className="group bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md hover:border-indigo-200 transition-all"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+              <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <div>
+              <span className="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">Try MD to PDF →</span>
+            </div>
+          </div>
+        </Link>
+      </div>
+
+      {/* Features Summary */}
       <section className="mb-16">
         <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">Why Choose MdPdf?</h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, index) => (
-            <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-              <div className="text-3xl mb-3">{feature.icon}</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
-            </div>
-          ))}
+        <div className="grid md:grid-cols-3 gap-6">
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+            <div className="text-3xl mb-3">⚡</div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Lightning Fast</h3>
+            <p className="text-gray-600 text-sm leading-relaxed">Convert your documents in seconds. Our optimized processing pipeline delivers results quickly.</p>
+          </div>
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+            <div className="text-3xl mb-3">🎯</div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">High Accuracy</h3>
+            <p className="text-gray-600 text-sm leading-relaxed">Smart layout detection preserves headings, lists, and formatting in your documents.</p>
+          </div>
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+            <div className="text-3xl mb-3">🔒</div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Privacy First</h3>
+            <p className="text-gray-600 text-sm leading-relaxed">Your documents are processed securely and automatically deleted after conversion.</p>
+          </div>
         </div>
       </section>
 

@@ -1,6 +1,17 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
+  const pathname = usePathname();
+
+  const navItems = [
+    { href: "/", label: "Home" },
+    { href: "/pdf-to-md", label: "PDF to MD" },
+    { href: "/md-to-pdf", label: "MD to PDF" },
+  ];
+
   return (
     <header className="bg-white border-b border-gray-100">
       <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -9,10 +20,23 @@ export default function Header() {
             MdPdf
           </span>
         </Link>
-        <nav className="flex items-center gap-6">
-          <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium">
-            Home
-          </Link>
+        <nav className="flex items-center gap-1">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  isActive
+                    ? "bg-blue-50 text-blue-600"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
       </div>
     </header>
