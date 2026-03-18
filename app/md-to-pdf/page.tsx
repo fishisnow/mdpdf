@@ -5,6 +5,8 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { convertMarkdownToPdfInBrowser } from "@/lib/md-to-pdf-client";
+import { trackEvent } from "@/lib/analytics";
 
 type Tab = "write" | "preview";
 
@@ -85,36 +87,41 @@ export default function MdToPdfPage() {
 
     try {
       const safeFilename = getSafeFilename(filename);
-      const res = await fetch("/api/md-to-pdf", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ markdown, filename: safeFilename }),
+      trackEvent("md_to_pdf_click", {
+        file_name: `${safeFilename}.pdf`,
+        input_length: markdown.length,
       });
 
-      if (!res.ok) {
-        const reason = (await res.text()) || "Conversion failed";
-        throw new Error(reason);
-      }
+      const blob = await convertMarkdownToPdfInBrowser(markdown);
+      trackEvent("md_to_pdf_success", {
+        file_name: `${safeFilename}.pdf`,
+        input_length: markdown.length,
+        output_size_kb: Math.round(blob.size / 1024),
+      });
 
-      const contentDisposition = res.headers.get("Content-Disposition");
-      const matchedName = contentDisposition?.match(/filename="(.+?)"/i)?.[1];
-
-      const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = matchedName || `${safeFilename}.pdf`;
+      a.download = `${safeFilename}.pdf`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      trackEvent("md_to_pdf_download", {
+        file_name: `${safeFilename}.pdf`,
+        output_size_kb: Math.round(blob.size / 1024),
+      });
     } catch (err) {
       console.error("Failed to convert markdown to pdf:", err);
+      const message =
+        err instanceof Error ? err.message : "Failed to convert. Please try again.";
       setErrorMessage(
-        err instanceof Error ? err.message : "Failed to convert. Please try again.",
+        message,
       );
+      trackEvent("md_to_pdf_error", {
+        error_message: message.slice(0, 120),
+        input_length: markdown.length,
+      });
     } finally {
       setIsConverting(false);
     }
