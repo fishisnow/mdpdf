@@ -23,12 +23,13 @@ const mdComponents = {
 interface Props {
   markdown: string;
   filename: string;
+  onDownload?: (payload: { filename: string; markdownLength: number }) => void;
 }
 
 type Tab = "source" | "preview";
 type CopyState = "idle" | "copied";
 
-export default function MarkdownPreview({ markdown, filename }: Props) {
+export default function MarkdownPreview({ markdown, filename, onDownload }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>("preview");
   const [copyState, setCopyState] = useState<CopyState>("idle");
 
@@ -41,11 +42,17 @@ export default function MarkdownPreview({ markdown, filename }: Props) {
   const handleDownload = () => {
     const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
     const url = URL.createObjectURL(blob);
+    const downloadName = filename.replace(/\.pdf$/i, ".md");
     const a = document.createElement("a");
     a.href = url;
-    a.download = filename.replace(/\.pdf$/i, ".md");
+    a.download = downloadName;
     a.click();
     URL.revokeObjectURL(url);
+
+    onDownload?.({
+      filename: downloadName,
+      markdownLength: markdown.length,
+    });
   };
 
   return (

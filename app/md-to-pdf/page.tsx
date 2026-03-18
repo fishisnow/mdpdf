@@ -141,7 +141,7 @@ export default function MdToPdfPage() {
       {/* Hero Section */}
       <div className="text-center mb-10">
         <h1 className="text-4xl font-bold text-gray-900 mb-2">Markdown to PDF Converter</h1>
-        <p className="text-gray-500 text-lg">Convert Markdown to PDF instantly. Free online tool for writers and content creators</p>
+        <p className="text-gray-500 text-lg">Convert Markdown to PDF instantly. Free online tool for developers, writers, and content creators</p>
       </div>
 
       {/* Tool Section */}

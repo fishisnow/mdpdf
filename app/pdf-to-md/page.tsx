@@ -5,6 +5,7 @@ import Link from "next/link";
 import UploadZone from "@/components/UploadZone";
 import MarkdownPreview from "@/components/MarkdownPreview";
 import ProgressBar from "@/components/ProgressBar";
+import { trackEvent } from "@/lib/analytics";
 
 type State = "idle" | "converting" | "done" | "error";
 
@@ -33,6 +34,12 @@ export default function PdfToMdPage() {
   const [error, setError] = useState("");
 
   const handleUpload = async (file: File) => {
+    trackEvent("pdf_to_md_click", {
+      file_name: file.name,
+      file_size_kb: Math.round(file.size / 1024),
+      source_page: "pdf_to_md",
+    });
+
     setState("converting");
     setFilename(file.name);
     setError("");
@@ -49,9 +56,20 @@ export default function PdfToMdPage() {
       const text = await res.text();
       setMarkdown(text);
       setState("done");
-    } catch (err: any) {
-      setError(err.message ?? "Unknown error");
+      trackEvent("pdf_to_md_success", {
+        file_name: file.name,
+        output_length: text.length,
+        source_page: "pdf_to_md",
+      });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Unknown error";
+      setError(message);
       setState("error");
+      trackEvent("pdf_to_md_error", {
+        file_name: file.name,
+        error_message: message.slice(0, 120),
+        source_page: "pdf_to_md",
+      });
     }
   };
 
@@ -86,7 +104,17 @@ export default function PdfToMdPage() {
         )}
 
         {state === "done" && (
-          <MarkdownPreview markdown={markdown} filename={filename} />
+          <MarkdownPreview
+            markdown={markdown}
+            filename={filename}
+            onDownload={({ filename: downloadName, markdownLength }) => {
+              trackEvent("pdf_to_md_download", {
+                file_name: downloadName,
+                output_length: markdownLength,
+                source_page: "pdf_to_md",
+              });
+            }}
+          />
         )}
       </div>
 
