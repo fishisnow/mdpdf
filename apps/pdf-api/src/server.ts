@@ -1,8 +1,8 @@
-import { createServer } from "node:http";
-import { Readable } from "node:stream";
 import { convertMarkdownToPdf } from "./md-to-pdf.js";
 
-const DEFAULT_PORT = 8788;
+export interface Env {
+  CORS_ALLOWED_ORIGINS?: string;
+}
 
 function parseAllowedOrigins(value: string | undefined): string[] {
   return (value ?? "")
@@ -10,8 +10,6 @@ function parseAllowedOrigins(value: string | undefined): string[] {
     .map((origin) => origin.trim())
     .filter(Boolean);
 }
-
-const allowedOrigins = parseAllowedOrigins(process.env.CORS_ALLOWED_ORIGINS);
 
 function createJsonResponse(body: unknown, init: ResponseInit = {}): Response {
   return new Response(JSON.stringify(body), {
@@ -23,7 +21,8 @@ function createJsonResponse(body: unknown, init: ResponseInit = {}): Response {
   });
 }
 
-function getCorsHeaders(request: Request): HeadersInit {
+function getCorsHeaders(request: Request, env: Env): HeadersInit {
+  const allowedOrigins = parseAllowedOrigins(env.CORS_ALLOWED_ORIGINS);
   const origin = request.headers.get("origin");
   const allowOrigin = origin && allowedOrigins.includes(origin) ? origin : allowedOrigins[0] ?? "";
 
@@ -40,9 +39,9 @@ function getCorsHeaders(request: Request): HeadersInit {
   };
 }
 
-async function handleRequest(request: Request): Promise<Response> {
+export async function handleRequest(request: Request, env: Env): Promise<Response> {
   const url = new URL(request.url);
-  const corsHeaders = getCorsHeaders(request);
+  const corsHeaders = getCorsHeaders(request, env);
 
   if (request.method === "OPTIONS") {
     return new Response(null, {
@@ -75,7 +74,8 @@ async function handleRequest(request: Request): Promise<Response> {
 
     try {
       const pdf = await convertMarkdownToPdf(markdown);
-      return new Response(new Uint8Array(pdf), {
+      const pdfBytes = pdf.slice();
+      return new Response(pdfBytes, {
         status: 200,
         headers: {
           ...corsHeaders,
@@ -92,34 +92,8 @@ async function handleRequest(request: Request): Promise<Response> {
   return createJsonResponse({ error: "Not found" }, { status: 404, headers: corsHeaders });
 }
 
-const port = Number(process.env.PORT ?? DEFAULT_PORT);
-
-const nodeServer = createServer(async (req, res) => {
-  const requestUrl = `http://${req.headers.host ?? `localhost:${port}`}${req.url ?? "/"}`;
-  const requestInit: RequestInit & { duplex?: "half" } = {
-    method: req.method,
-    headers: req.headers as HeadersInit,
-  };
-
-  if (req.method !== "GET" && req.method !== "HEAD") {
-    requestInit.body = Readable.toWeb(req) as BodyInit;
-    requestInit.duplex = "half";
-  }
-
-  const request = new Request(requestUrl, requestInit);
-
-  const response = await handleRequest(request);
-  res.writeHead(response.status, Object.fromEntries(response.headers.entries()));
-
-  if (!response.body) {
-    res.end();
-    return;
-  }
-
-  const arrayBuffer = await response.arrayBuffer();
-  res.end(Buffer.from(arrayBuffer));
-});
-
-nodeServer.listen(port, () => {
-  console.log(`pdf-api listening on http://localhost:${port}`);
-});
+export default {
+  fetch(request: Request, env: Env): Promise<Response> {
+    return handleRequest(request, env);
+  },
+};

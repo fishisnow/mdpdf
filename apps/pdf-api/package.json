@@ -4,9 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
-    "build": "tsc -p tsconfig.json",
-    "start": "node dist/server.js",
+    "dev": "wrangler dev",
+    "build": "wrangler deploy --dry-run",
+    "deploy": "wrangler deploy",
+    "start": "wrangler dev",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
@@ -14,8 +15,9 @@
     "pdfmake": "^0.3.7"
   },
   "devDependencies": {
-    "@types/node": "^25.5.0",
+    "@cloudflare/workers-types": "^4.20260313.0",
+    "@types/pdfmake": "^0.3.2",
     "typescript": "^5.9.3",
-    "tsx": "^4.20.6"
+    "wrangler": "^4.57.1"
   }
 }

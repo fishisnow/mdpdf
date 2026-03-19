@@ -84,30 +84,30 @@ export default function Home() {
   };
 
   return (
-    <main className="max-w-5xl mx-auto px-4 py-12">
+    <main className="mx-auto max-w-5xl px-4 py-8 sm:py-10 md:py-12">
       {/* Hero Section */}
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">MdPdf – Free Online Converter</h1>
-        <p className="text-gray-500 text-lg">Fast, accurate, and free document conversion tools</p>
+      <div className="mb-8 text-center sm:mb-10">
+        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">MdPdf – Free Online Converter</h1>
+        <p className="mx-auto max-w-2xl text-base text-gray-500 sm:text-lg">Fast, accurate, and free document conversion tools</p>
       </div>
 
       {/* PDF to MD Tool - Direct Use */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col gap-6 mb-8">
-        <div className="text-center mb-2">
+      <div className="mb-8 flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:gap-6 sm:p-6 md:p-8">
+        <div className="mb-1 text-center sm:mb-2">
           <h2 className="text-xl font-bold text-gray-900">PDF to Markdown Converter</h2>
-          <p className="text-gray-500 text-sm">Upload a PDF and get clean Markdown instantly</p>
+          <p className="text-sm text-gray-500">Upload a PDF and get clean Markdown instantly</p>
         </div>
         <UploadZone onUpload={handleUpload} disabled={state === "converting"} />
 
         {state === "converting" && (
           <div className="flex flex-col gap-2">
-            <p className="text-sm text-gray-500">Converting <span className="font-medium">{filename}</span>…</p>
+            <p className="text-sm text-gray-500">Converting <span className="font-medium break-all">{filename}</span>…</p>
             <ProgressBar progress={70} />
           </div>
         )}
 
         {state === "error" && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+          <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
             {error}
           </div>
         )}
@@ -128,62 +128,62 @@ export default function Home() {
       </div>
 
       {/* Quick Link to MD to PDF Page */}
-      <div className="mb-16">
+      <div className="mb-12 sm:mb-16">
         <Link
           href="/md-to-pdf"
-          className="group bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md hover:border-indigo-200 transition-all block"
+          className="group block rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:border-indigo-200 hover:shadow-md sm:p-6"
         >
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
-              <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex items-start gap-3 sm:items-center">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-indigo-100">
+              <svg className="h-5 w-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
               </svg>
             </div>
             <div>
-              <span className="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">Try MD to PDF →</span>
+              <span className="font-semibold text-gray-900 transition-colors group-hover:text-indigo-600">Try MD to PDF →</span>
             </div>
           </div>
         </Link>
       </div>
 
       {/* Features Summary */}
-      <section className="mb-16">
-        <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">Why Choose MdPdf?</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="text-3xl mb-3">⚡</div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Lightning Fast</h3>
-            <p className="text-gray-600 text-sm leading-relaxed">Convert your documents in seconds. Our optimized processing pipeline delivers results quickly.</p>
+      <section className="mb-12 sm:mb-16">
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">Why Choose MdPdf?</h2>
+        <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
+          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+            <div className="mb-3 text-3xl">⚡</div>
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">Lightning Fast</h3>
+            <p className="text-sm leading-relaxed text-gray-600">Convert your documents in seconds. Our optimized processing pipeline delivers results quickly.</p>
           </div>
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="text-3xl mb-3">🎯</div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">High Accuracy</h3>
-            <p className="text-gray-600 text-sm leading-relaxed">Smart layout detection preserves headings, lists, and formatting in your documents.</p>
+          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+            <div className="mb-3 text-3xl">🎯</div>
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">High Accuracy</h3>
+            <p className="text-sm leading-relaxed text-gray-600">Smart layout detection preserves headings, lists, and formatting in your documents.</p>
           </div>
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="text-3xl mb-3">🔒</div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Privacy First</h3>
-            <p className="text-gray-600 text-sm leading-relaxed">Your documents are processed securely and automatically deleted after conversion.</p>
+          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+            <div className="mb-3 text-3xl">🔒</div>
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">Privacy First</h3>
+            <p className="text-sm leading-relaxed text-gray-600">Your documents are processed securely and automatically deleted after conversion.</p>
           </div>
         </div>
       </section>
 
       {/* FAQ Section */}
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-gray-900 text-center mb-4">MdPdf FAQs</h2>
-        <p className="text-gray-500 text-center mb-8">Everything you need to know about converting documents with MdPdf — fast, simple, and accurate.</p>
-        <div className="max-w-3xl mx-auto space-y-4">
+        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">MdPdf FAQs</h2>
+        <p className="mx-auto mb-8 max-w-2xl text-center text-gray-500">Everything you need to know about converting documents with MdPdf — fast, simple, and accurate.</p>
+        <div className="mx-auto max-w-3xl space-y-4">
           {faqs.map((faq, index) => (
-            <div key={index} className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+            <div key={index} className="overflow-hidden rounded-lg border border-gray-200 bg-white">
               <button
-                className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
+                className="flex w-full items-start justify-between gap-4 px-4 py-4 text-left transition-colors hover:bg-gray-50 sm:px-6"
                 onClick={() => setOpenFaq(openFaq === index ? null : index)}
               >
                 <span className="font-medium text-gray-900">{faq.question}</span>
-                <span className="text-gray-400 text-xl ml-4">{openFaq === index ? "−" : "+"}</span>
+                <span className="ml-auto shrink-0 text-xl text-gray-400">{openFaq === index ? "−" : "+"}</span>
               </button>
               {openFaq === index && (
-                <div className="px-6 pb-4 text-gray-600 text-sm leading-relaxed">
+                <div className="px-4 pb-4 text-sm leading-relaxed text-gray-600 sm:px-6">
                   {faq.answer}
                 </div>
               )}

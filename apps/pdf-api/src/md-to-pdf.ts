@@ -3,9 +3,8 @@ import type {
   ContentText,
   TableCell,
   TDocumentDefinitions,
-} from "../../../node_modules/@types/pdfmake/interfaces.d.ts";
-import { existsSync } from "node:fs";
-import path from "node:path";
+} from "pdfmake/interfaces";
+import { ARIAL_UNICODE_VFS } from "./arial-unicode-vfs.js";
 
 type TokenLike = {
   type?: string;
@@ -30,45 +29,28 @@ type FontMap = Record<
 >;
 
 type PdfMakeLike = {
+  addVirtualFileSystem: (vfs: Record<string, string>) => void;
   setFonts: (fonts: FontMap) => void;
   createPdf: (docDefinition: TDocumentDefinitions) => {
-    getBuffer: () => Promise<Buffer>;
+    getBuffer: () => Promise<Uint8Array>;
   };
 };
 
 const PDF_FONT_FAMILY = "ArialUnicode";
+const PDF_FONT_FILE = "ArialUnicode.ttf";
 
 const INLINE_CODE_STYLE = {
   font: PDF_FONT_FAMILY,
   background: "#f3f4f6",
 };
 
-function resolveBundledFont(filename: string): string {
-  const candidates: string[] = [
-    path.join(process.cwd(), "apps", "pdf-api", "fonts", filename),
-    path.join(process.cwd(), "fonts", filename),
-    path.join(process.cwd(), "dist", "..", "fonts", filename),
-    path.join(process.cwd(), "..", "fonts", filename),
-  ];
-
-  for (const fontPath of candidates) {
-    if (existsSync(fontPath)) {
-      return fontPath;
-    }
-  }
-
-  throw new Error(`Bundled font file not found: ${filename}`);
-}
-
 function getPdfFontMap(): FontMap {
-  const cjkFont = resolveBundledFont("ArialUnicode.ttf");
-
   return {
     [PDF_FONT_FAMILY]: {
-      normal: cjkFont,
-      bold: cjkFont,
-      italics: cjkFont,
-      bolditalics: cjkFont,
+      normal: PDF_FONT_FILE,
+      bold: PDF_FONT_FILE,
+      italics: PDF_FONT_FILE,
+      bolditalics: PDF_FONT_FILE,
     },
   };
 }
@@ -438,7 +420,7 @@ function createDocumentDefinition(content: Content[]): TDocumentDefinitions {
   };
 }
 
-export async function convertMarkdownToPdf(markdown: string): Promise<Buffer> {
+export async function convertMarkdownToPdf(markdown: string): Promise<Uint8Array> {
   const source = typeof markdown === "string" ? markdown : "";
   const normalized = source.trimEnd();
 
@@ -446,7 +428,10 @@ export async function convertMarkdownToPdf(markdown: string): Promise<Buffer> {
     throw new Error("Markdown content is empty");
   }
 
-  const [{ marked }, pdfmakeModule] = await Promise.all([import("marked"), import("pdfmake")]);
+  const [{ marked }, pdfmakeModule] = await Promise.all([
+    import("marked"),
+    import("pdfmake/build/pdfmake.js"),
+  ]);
   const pdfmake = (pdfmakeModule.default ?? pdfmakeModule) as unknown as PdfMakeLike;
 
   const tokens = marked.lexer(normalized, {
@@ -459,11 +444,18 @@ export async function convertMarkdownToPdf(markdown: string): Promise<Buffer> {
     throw new Error("No printable content found in markdown");
   }
 
+  pdfmake.addVirtualFileSystem(ARIAL_UNICODE_VFS as Record<string, string>);
   pdfmake.setFonts(getPdfFontMap());
-  if ("setUrlAccessPolicy" in pdfmake && typeof (pdfmake as { setUrlAccessPolicy?: unknown }).setUrlAccessPolicy === "function") {
-    (pdfmake as { setUrlAccessPolicy: (callback: (url: string) => boolean) => void }).setUrlAccessPolicy(() => false);
+  if (
+    "setUrlAccessPolicy" in pdfmake &&
+    typeof (pdfmake as { setUrlAccessPolicy?: unknown }).setUrlAccessPolicy === "function"
+  ) {
+    (pdfmake as { setUrlAccessPolicy: (callback: (url: string) => boolean) => void }).setUrlAccessPolicy(
+      () => false,
+    );
   }
 
   const output = pdfmake.createPdf(createDocumentDefinition(content));
-  return output.getBuffer();
+  const buffer = await output.getBuffer();
+  return buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
 }

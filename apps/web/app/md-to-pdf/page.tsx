@@ -168,42 +168,44 @@ export default function MdToPdfPage() {
   };
 
   return (
-    <main className="max-w-5xl mx-auto px-4 py-12">
+    <main className="mx-auto max-w-5xl px-4 py-8 sm:py-10 md:py-12">
       {/* Breadcrumb */}
-      <nav className="mb-8">
-        <Link href="/" className="text-blue-600 hover:underline text-sm">← Back to MdPdf</Link>
+      <nav className="mb-6 sm:mb-8">
+        <Link href="/" className="text-sm text-blue-600 hover:underline">← Back to MdPdf</Link>
       </nav>
 
       {/* Hero Section */}
-      <div className="text-center mb-10">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">Markdown to PDF Converter</h1>
-        <p className="text-gray-500 text-lg">Convert Markdown to PDF instantly. Free online tool for developers, writers, and content creators</p>
+      <div className="mb-8 text-center sm:mb-10">
+        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">Markdown to PDF Converter</h1>
+        <p className="mx-auto max-w-3xl text-base text-gray-500 sm:text-lg">Convert Markdown to PDF instantly. Free online tool for developers, writers, and content creators</p>
       </div>
 
       {/* Tool Section */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col gap-6 mb-16">
+      <div className="mb-12 flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:gap-6 sm:p-6 md:mb-16 md:p-8">
         {/* Tab Navigation */}
-        <div className="flex gap-1 border-b border-gray-200">
-          <button
-            onClick={() => setActiveTab("write")}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === "write"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-          >
-            Write Markdown
-          </button>
-          <button
-            onClick={() => setActiveTab("preview")}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === "preview"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-          >
-            Preview
-          </button>
+        <div className="overflow-x-auto border-b border-gray-200">
+          <div className="flex min-w-max gap-1">
+            <button
+              onClick={() => setActiveTab("write")}
+              className={`px-4 py-2 text-sm font-medium transition-colors ${
+                activeTab === "write"
+                  ? "border-b-2 border-blue-600 text-blue-600"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              Write Markdown
+            </button>
+            <button
+              onClick={() => setActiveTab("preview")}
+              className={`px-4 py-2 text-sm font-medium transition-colors ${
+                activeTab === "preview"
+                  ? "border-b-2 border-blue-600 text-blue-600"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              Preview
+            </button>
+          </div>
         </div>
 
         {activeTab === "write" && (
@@ -219,13 +221,13 @@ export default function MdToPdfPage() {
 - Item 2
 
 **Bold text** and *italic text*"
-              className="w-full h-[400px] p-4 font-mono text-sm bg-gray-50 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="h-[320px] w-full resize-none rounded-lg border border-gray-200 bg-gray-50 p-4 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:h-[360px] md:h-[400px]"
             />
           </div>
         )}
 
         {activeTab === "preview" && (
-          <div className="w-full h-[400px] p-6 bg-gray-50 border border-gray-200 rounded-lg overflow-y-auto">
+          <div className="h-[320px] w-full overflow-y-auto rounded-lg border border-gray-200 bg-gray-50 p-4 sm:h-[360px] sm:p-5 md:h-[400px] md:p-6">
             <div className="max-w-none">
               <ReactMarkdown remarkPlugins={[remarkGfm]} components={previewComponents}>
                 {markdown}
@@ -235,33 +237,33 @@ export default function MdToPdfPage() {
         )}
 
         {/* Filename input */}
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3 md:gap-4">
           <label className="text-sm text-gray-600">Filename:</label>
           <input
             type="text"
             value={filename}
             onChange={(e) => setFilename(e.target.value)}
-            className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:w-auto sm:min-w-[220px]"
             placeholder="document"
           />
           <span className="text-sm text-gray-400">.pdf</span>
         </div>
 
         {errorMessage && (
-          <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+          <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
             {errorMessage}
           </div>
         )}
 
-        <div className="flex gap-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
           <button
             onClick={handleConvert}
             disabled={!markdown.trim() || isConverting}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
           >
             {isConverting ? (
               <>
-                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                 </svg>
@@ -269,7 +271,7 @@ export default function MdToPdfPage() {
               </>
             ) : (
               <>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                 </svg>
                 Convert to PDF
@@ -279,9 +281,9 @@ export default function MdToPdfPage() {
           <button
             onClick={handleCopy}
             disabled={!markdown}
-            className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 flex items-center gap-2"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-gray-100 px-6 py-3 text-gray-700 transition-colors hover:bg-gray-200 disabled:opacity-50 sm:w-auto"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
             </svg>
             {copied ? "Copied!" : "Copy Markdown"}
@@ -290,51 +292,51 @@ export default function MdToPdfPage() {
       </div>
 
       {/* Features Section */}
-      <section className="mb-16">
-        <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">Why Use Our Markdown to PDF Converter?</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="text-3xl mb-3">⚡</div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Lightning Fast</h3>
-            <p className="text-gray-600 text-sm leading-relaxed">Convert your Markdown to PDF in seconds. No delays, no hassle.</p>
+      <section className="mb-12 sm:mb-16">
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">Why Use Our Markdown to PDF Converter?</h2>
+        <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
+          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+            <div className="mb-3 text-3xl">⚡</div>
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">Lightning Fast</h3>
+            <p className="text-sm leading-relaxed text-gray-600">Convert your Markdown to PDF in seconds. No delays, no hassle.</p>
           </div>
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="text-3xl mb-3">🎯</div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Clean Formatting</h3>
-            <p className="text-gray-600 text-sm leading-relaxed">Preserves headers, lists, code blocks, and links in your PDF output.</p>
+          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+            <div className="mb-3 text-3xl">🎯</div>
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">Clean Formatting</h3>
+            <p className="text-sm leading-relaxed text-gray-600">Preserves headers, lists, code blocks, and links in your PDF output.</p>
           </div>
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="text-3xl mb-3">💯</div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Completely Free</h3>
-            <p className="text-gray-600 text-sm leading-relaxed">No watermarks, no limits. Convert as many files as you need.</p>
+          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+            <div className="mb-3 text-3xl">💯</div>
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">Completely Free</h3>
+            <p className="text-sm leading-relaxed text-gray-600">No watermarks, no limits. Convert as many files as you need.</p>
           </div>
         </div>
       </section>
 
       {/* How to Use Section */}
-      <section className="mb-16">
-        <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">How to Convert Markdown to PDF</h2>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+      <section className="mb-12 sm:mb-16">
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">How to Convert Markdown to PDF</h2>
+        <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6 md:p-8">
           <ol className="space-y-4">
-            <li className="flex gap-4">
-              <span className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">1</span>
+            <li className="flex items-start gap-4">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white">1</span>
               <div>
                 <p className="font-medium text-gray-900">Write or paste your Markdown</p>
-                <p className="text-gray-600 text-sm">Use the editor above to write your Markdown content</p>
+                <p className="text-sm text-gray-600">Use the editor above to write your Markdown content</p>
               </div>
             </li>
-            <li className="flex gap-4">
-              <span className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">2</span>
+            <li className="flex items-start gap-4">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white">2</span>
               <div>
                 <p className="font-medium text-gray-900">Preview your content</p>
-                <p className="text-gray-600 text-sm">Switch to preview tab to see how it will look</p>
+                <p className="text-sm text-gray-600">Switch to preview tab to see how it will look</p>
               </div>
             </li>
-            <li className="flex gap-4">
-              <span className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">3</span>
+            <li className="flex items-start gap-4">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white">3</span>
               <div>
                 <p className="font-medium text-gray-900">Download as PDF</p>
-                <p className="text-gray-600 text-sm">Click the button to convert and download your PDF file</p>
+                <p className="text-sm text-gray-600">Click the button to convert and download your PDF file</p>
               </div>
             </li>
           </ol>
@@ -343,8 +345,8 @@ export default function MdToPdfPage() {
 
       {/* Related Link */}
       <div className="text-center">
-        <p className="text-gray-600 mb-4">Need the opposite conversion?</p>
-        <Link href="/" className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        <p className="mb-4 text-gray-600">Need the opposite conversion?</p>
+        <Link href="/" className="inline-flex max-w-full items-center justify-center rounded-lg bg-blue-600 px-6 py-3 text-center text-white transition-colors hover:bg-blue-700">
           Try PDF to Markdown Converter →
         </Link>
       </div>

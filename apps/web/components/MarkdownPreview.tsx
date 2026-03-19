@@ -57,38 +57,40 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-lg font-semibold text-gray-700">Result</h2>
         <button
           onClick={handleDownload}
-          className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+          className="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-700 sm:w-auto"
         >
           Download .md
         </button>
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex gap-1 border-b border-gray-200">
-        <button
-          onClick={() => setActiveTab("preview")}
-          className={`px-4 py-2 text-sm font-medium transition-colors ${
-            activeTab === "preview"
-              ? "text-blue-600 border-b-2 border-blue-600"
-              : "text-gray-500 hover:text-gray-700"
-          }`}
-        >
-          Preview
-        </button>
-        <button
-          onClick={() => setActiveTab("source")}
-          className={`px-4 py-2 text-sm font-medium transition-colors ${
-            activeTab === "source"
-              ? "text-blue-600 border-b-2 border-blue-600"
-              : "text-gray-500 hover:text-gray-700"
-          }`}
-        >
-          Source
-        </button>
+      <div className="overflow-x-auto border-b border-gray-200">
+        <div className="flex min-w-max gap-1">
+          <button
+            onClick={() => setActiveTab("preview")}
+            className={`px-4 py-2 text-sm font-medium transition-colors ${
+              activeTab === "preview"
+                ? "border-b-2 border-blue-600 text-blue-600"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            Preview
+          </button>
+          <button
+            onClick={() => setActiveTab("source")}
+            className={`px-4 py-2 text-sm font-medium transition-colors ${
+              activeTab === "source"
+                ? "border-b-2 border-blue-600 text-blue-600"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            Source
+          </button>
+        </div>
       </div>
 
       {/* Tab Content */}
@@ -97,19 +99,19 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
           <div className="relative">
             <button
               onClick={handleCopy}
-              className="absolute top-3 right-3 px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors z-10"
+              className="absolute right-3 top-3 z-10 rounded bg-gray-700 px-3 py-1 text-xs text-gray-300 transition-colors hover:bg-gray-600"
             >
               {copyState === "copied" ? "Copied!" : "Copy"}
             </button>
             <textarea
               readOnly
               value={markdown}
-              className="w-full h-[600px] p-4 font-mono text-sm bg-gray-900 text-green-400 rounded-lg resize-none border-0 outline-none"
+              className="h-[320px] w-full rounded-lg border-0 bg-gray-900 p-4 pr-20 font-mono text-sm text-green-400 outline-none resize-none sm:h-[420px] md:h-[600px]"
             />
           </div>
         )}
         {activeTab === "preview" && (
-          <div className="w-full h-[600px] p-6 bg-white rounded-lg border border-gray-200 overflow-y-auto text-gray-800 text-sm">
+          <div className="h-[320px] w-full overflow-y-auto rounded-lg border border-gray-200 bg-white p-4 text-sm text-gray-800 sm:h-[420px] sm:p-5 md:h-[600px] md:p-6">
             <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>{markdown}</ReactMarkdown>
           </div>
         )}

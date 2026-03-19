@@ -12,7 +12,8 @@
       "Bash(curl:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git -C \"/Users/huangyusong/myspace/mdpdf\" status --short)"
+      "Bash(git -C \"/Users/huangyusong/myspace/mdpdf\" status --short)",
+      "Bash(python3:*)"
     ]
   }
 }
