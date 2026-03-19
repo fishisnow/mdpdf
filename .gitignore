@@ -8,6 +8,10 @@ node_modules/
 out/
 dist/
 build/
+apps/*/.next/
+apps/*/dist/
+apps/*/build/
+apps/*/out/
 
 # Testing
 coverage/
@@ -27,6 +31,11 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+apps/*/.env
+apps/*/.env.local
+apps/*/.env.development.local
+apps/*/.env.test.local
+apps/*/.env.production.local
 
 # Vercel
 .vercel

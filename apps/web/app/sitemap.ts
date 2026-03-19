@@ -9,12 +9,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: "https://mdpdf.net/pdf-to-md",
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
       url: "https://mdpdf.net/md-to-pdf",
       lastModified: new Date(),
       changeFrequency: "weekly",

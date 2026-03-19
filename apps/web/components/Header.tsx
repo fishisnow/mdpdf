@@ -8,7 +8,6 @@ export default function Header() {
 
   const navItems = [
     { href: "/", label: "Home" },
-    { href: "/pdf-to-md", label: "PDF to MD" },
     { href: "/md-to-pdf", label: "MD to PDF" },
   ];
 

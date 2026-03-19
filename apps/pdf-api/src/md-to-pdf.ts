@@ -3,7 +3,7 @@ import type {
   ContentText,
   TableCell,
   TDocumentDefinitions,
-} from "pdfmake/interfaces";
+} from "../../../node_modules/@types/pdfmake/interfaces.d.ts";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
@@ -47,6 +47,7 @@ const require = createRequire(import.meta.url);
 function resolvePdfmakeRobotoFont(filename: string): string {
   const candidates: string[] = [
     path.join(process.cwd(), "node_modules", "pdfmake", "fonts", "Roboto", filename),
+    path.join(process.cwd(), "..", "..", "node_modules", "pdfmake", "fonts", "Roboto", filename),
   ];
 
   try {

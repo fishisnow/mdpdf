@@ -315,7 +315,7 @@ export default function MdToPdfPage() {
       {/* Related Link */}
       <div className="text-center">
         <p className="text-gray-600 mb-4">Need the opposite conversion?</p>
-        <Link href="/pdf-to-md" className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        <Link href="/" className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
           Try PDF to Markdown Converter →
         </Link>
       </div>
