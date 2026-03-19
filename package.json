@@ -1,20 +1,28 @@
 {
-  "name": "mdpdf-workspace",
+  "name": "mdpdf",
   "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "apps/*"
-  ],
   "scripts": {
-    "dev:web": "npm run dev --workspace web",
-    "build:web": "npm run build --workspace web",
-    "start:web": "npm run start --workspace web",
-    "typecheck:web": "npm run typecheck --workspace web",
-    "dev:pdf-api": "npm run dev --workspace pdf-api",
-    "build:pdf-api": "npm run build --workspace pdf-api",
-    "start:pdf-api": "npm run start --workspace pdf-api",
-    "typecheck:pdf-api": "npm run typecheck --workspace pdf-api",
-    "build": "npm run build:web && npm run build:pdf-api",
-    "typecheck": "npm run typecheck:web && npm run typecheck:pdf-api"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "^16.1.7",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "unpdf": "^1.4.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.1",
+    "@types/node": "^25.5.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.1",
+    "typescript": "^5.9.3"
   }
 }

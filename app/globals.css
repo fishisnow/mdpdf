@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+.print-document {
+  width: 100%;
+  max-width: 840px;
+  margin: 0 auto;
+  background: #fff;
+  color: #111827;
+}
+
+.print-document-shell {
+  background: #f9fafb;
+}
+
+.print-document h1,
+.print-document h2,
+.print-document h3,
+.print-document h4,
+.print-document h5,
+.print-document h6 {
+  page-break-after: avoid;
+}
+
+.print-document pre,
+.print-document blockquote,
+.print-document table,
+.print-document ul,
+.print-document ol {
+  page-break-inside: avoid;
+}
+
+.print-document code {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.print-document table {
+  border-collapse: collapse;
+}
+
+@media print {
+  @page {
+    size: auto;
+    margin: 16mm;
+  }
+
+  html,
+  body {
+    background: #fff;
+  }
+
+  html,
+  body {
+    background: #fff;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  .print-document-shell {
+    background: transparent;
+    border: 0;
+  }
+
+  .print-document {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .print-document a {
+    color: inherit;
+    text-decoration: underline;
+  }
+}
