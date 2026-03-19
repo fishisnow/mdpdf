@@ -6,7 +6,6 @@ import type {
 } from "../../../node_modules/@types/pdfmake/interfaces.d.ts";
 import { existsSync } from "node:fs";
 import path from "node:path";
-import { createRequire } from "node:module";
 
 type TokenLike = {
   type?: string;
@@ -37,26 +36,20 @@ type PdfMakeLike = {
   };
 };
 
+const PDF_FONT_FAMILY = "ArialUnicode";
+
 const INLINE_CODE_STYLE = {
-  font: "Roboto",
+  font: PDF_FONT_FAMILY,
   background: "#f3f4f6",
 };
 
-const require = createRequire(import.meta.url);
-
-function resolvePdfmakeRobotoFont(filename: string): string {
+function resolveBundledFont(filename: string): string {
   const candidates: string[] = [
-    path.join(process.cwd(), "node_modules", "pdfmake", "fonts", "Roboto", filename),
-    path.join(process.cwd(), "..", "..", "node_modules", "pdfmake", "fonts", "Roboto", filename),
+    path.join(process.cwd(), "apps", "pdf-api", "fonts", filename),
+    path.join(process.cwd(), "fonts", filename),
+    path.join(process.cwd(), "dist", "..", "fonts", filename),
+    path.join(process.cwd(), "..", "fonts", filename),
   ];
-
-  try {
-    const pdfmakePackagePath = require.resolve("pdfmake/package.json");
-    const pdfmakeRoot = path.dirname(pdfmakePackagePath);
-    candidates.push(path.join(pdfmakeRoot, "fonts", "Roboto", filename));
-  } catch {
-    // Ignore and continue with current candidates.
-  }
 
   for (const fontPath of candidates) {
     if (existsSync(fontPath)) {
@@ -64,16 +57,18 @@ function resolvePdfmakeRobotoFont(filename: string): string {
     }
   }
 
-  throw new Error(`Roboto font file not found: ${filename}`);
+  throw new Error(`Bundled font file not found: ${filename}`);
 }
 
-function getRobotoFontMap(): FontMap {
+function getPdfFontMap(): FontMap {
+  const cjkFont = resolveBundledFont("ArialUnicode.ttf");
+
   return {
-    Roboto: {
-      normal: resolvePdfmakeRobotoFont("Roboto-Regular.ttf"),
-      bold: resolvePdfmakeRobotoFont("Roboto-Medium.ttf"),
-      italics: resolvePdfmakeRobotoFont("Roboto-Italic.ttf"),
-      bolditalics: resolvePdfmakeRobotoFont("Roboto-MediumItalic.ttf"),
+    [PDF_FONT_FAMILY]: {
+      normal: cjkFont,
+      bold: cjkFont,
+      italics: cjkFont,
+      bolditalics: cjkFont,
     },
   };
 }
@@ -400,7 +395,7 @@ function createDocumentDefinition(content: Content[]): TDocumentDefinitions {
     content,
     pageMargins: [40, 48, 40, 48],
     defaultStyle: {
-      font: "Roboto",
+      font: PDF_FONT_FAMILY,
       fontSize: 11,
       lineHeight: 1.45,
       color: "#111827",
@@ -418,13 +413,13 @@ function createDocumentDefinition(content: Content[]): TDocumentDefinitions {
         italics: true,
       },
       codeLang: {
-        font: "Roboto",
+        font: PDF_FONT_FAMILY,
         fontSize: 9,
         color: "#4b5563",
         margin: [0, 0, 0, 2],
       },
       codeBadge: {
-        font: "Roboto",
+        font: PDF_FONT_FAMILY,
         fontSize: 8.5,
         bold: true,
         color: "#9ca3af",
@@ -432,7 +427,7 @@ function createDocumentDefinition(content: Content[]): TDocumentDefinitions {
         margin: [0, 0, 0, 6],
       },
       codeBlock: {
-        font: "Roboto",
+        font: PDF_FONT_FAMILY,
         fontSize: 10.5,
         color: "#f9fafb",
         lineHeight: 1.45,
@@ -464,7 +459,7 @@ export async function convertMarkdownToPdf(markdown: string): Promise<Buffer> {
     throw new Error("No printable content found in markdown");
   }
 
-  pdfmake.setFonts(getRobotoFontMap());
+  pdfmake.setFonts(getPdfFontMap());
   if ("setUrlAccessPolicy" in pdfmake && typeof (pdfmake as { setUrlAccessPolicy?: unknown }).setUrlAccessPolicy === "function") {
     (pdfmake as { setUrlAccessPolicy: (callback: (url: string) => boolean) => void }).setUrlAccessPolicy(() => false);
   }

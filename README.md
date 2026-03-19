@@ -2,8 +2,8 @@
 
 MdPdf 是一个文档转换工具仓库，当前采用 monorepo 结构，包含：
 
-- `apps/web`：Next.js 网站，当前对外提供 PDF to Markdown 和浏览器端 Markdown to PDF
-- `apps/pdf-api`：独立的 Node 服务边界，当前提供健康检查和预留的服务端 MD-to-PDF 接口
+- `apps/web`：Next.js 网站，当前对外提供 PDF to Markdown 和通过独立 `pdf-api` 服务的 Markdown to PDF
+- `apps/pdf-api`：独立的 Node 服务边界，提供健康检查和服务端 MD-to-PDF 接口
 
 当前目标是让网站继续部署在 Cloudflare Pages，同时为后续独立部署 `pdf-api` 预留同仓协作空间。
 
@@ -54,6 +54,14 @@ npm install
 
 ### 启动 web
 
+先配置 `apps/web/.env.local`：
+
+```bash
+NEXT_PUBLIC_PDF_API_BASE_URL=http://localhost:8788
+```
+
+然后启动：
+
 ```bash
 npm run dev:web
 ```
@@ -69,8 +77,10 @@ npm run dev:web
 
 ### 启动 pdf-api
 
+先配置环境变量：
+
 ```bash
-npm run dev:pdf-api
+CORS_ALLOWED_ORIGINS=http://localhost:3000 npm run dev:pdf-api
 ```
 
 默认端口：`8788`
@@ -93,13 +103,13 @@ curl http://localhost:8788/health
 终端 1：
 
 ```bash
-npm run dev:web
+NEXT_PUBLIC_PDF_API_BASE_URL=http://localhost:8788 npm run dev:web
 ```
 
 终端 2：
 
 ```bash
-npm run dev:pdf-api
+CORS_ALLOWED_ORIGINS=http://localhost:3000 npm run dev:pdf-api
 ```
 
 ## 常用命令
@@ -177,9 +187,11 @@ npm run build:web
 
 ### Cloudflare Pages 环境变量
 
-当前仓库没有强依赖的公开环境变量才能运行基础功能。
+需要在 `apps/web` 所对应的 Cloudflare Pages 项目中配置：
 
-如果后续接入分析、外部 API 或 `pdf-api` 地址，再在 Pages 项目里补充对应变量即可。
+- `NEXT_PUBLIC_PDF_API_BASE_URL`：已部署 `pdf-api` 的公开域名，例如 `https://pdf-api.example.com`
+
+这样 `/md-to-pdf` 页面会直接从浏览器调用独立 `pdf-api` 服务。
 
 ### 本地验证生产构建
 
@@ -211,11 +223,12 @@ npm run start:pdf-api
 
 - `PORT` 未设置时为 `8788`
 - 生产环境可通过 `PORT` 覆盖
+- `CORS_ALLOWED_ORIGINS` 用逗号分隔允许的前端来源，例如 `https://mdpdf.example.com,http://localhost:3000`
 
 例如：
 
 ```bash
-PORT=3001 npm run start:pdf-api
+PORT=3001 CORS_ALLOWED_ORIGINS=https://mdpdf.example.com npm run start:pdf-api
 ```
 
 ### 反向代理或网关建议
@@ -223,22 +236,22 @@ PORT=3001 npm run start:pdf-api
 如果未来要让 `apps/web` 调用 `apps/pdf-api`，建议：
 
 - 给 `pdf-api` 配置独立域名，例如 `api.mdpdf.net`
-- 在 web 端通过环境变量注入 API 地址
-- 保持浏览器端 MD-to-PDF 逻辑不变，逐步切换服务端能力
+- 在 web 端通过 `NEXT_PUBLIC_PDF_API_BASE_URL` 注入 API 地址
+- 在 `pdf-api` 端通过 `CORS_ALLOWED_ORIGINS` 精确允许 web 域名
 
 ## 当前能力边界
 
 ### apps/web
 
 - `/`：PDF to Markdown，当前继续使用 `apps/web/app/api/convert/route.ts`
-- `/md-to-pdf`：继续使用浏览器端 PDF 生成逻辑
-- `/api/md-to-pdf`：当前仍返回 410，明确提示用户使用页面端功能
+- `/md-to-pdf`：浏览器直接调用独立 `apps/pdf-api` 服务生成 PDF
+- `/api/md-to-pdf`：当前仍返回 410，占位说明 Cloudflare Pages 不承接 PDF 生成
 
 ### apps/pdf-api
 
 - 已提供 `/health`
-- 已提供 `POST /api/md-to-pdf` 占位接口
-- 未来可以逐步承接服务端 Markdown 转 PDF 能力
+- 已提供 `POST /api/md-to-pdf` 服务端 Markdown 转 PDF
+- 负责字体加载、CORS 控制与 PDF 输出
 
 ## SEO 与路由说明
 

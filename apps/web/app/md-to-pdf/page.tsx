@@ -5,10 +5,11 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { convertMarkdownToPdfInBrowser } from "@/lib/md-to-pdf-client";
 import { trackEvent } from "@/lib/analytics";
 
 type Tab = "write" | "preview";
+
+const PDF_API_BASE_URL = process.env.NEXT_PUBLIC_PDF_API_BASE_URL;
 
 const previewComponents: Components = {
   h1: ({ children }) => <h1 className="text-3xl font-bold text-gray-900 mb-4">{children}</h1>,
@@ -82,6 +83,11 @@ export default function MdToPdfPage() {
       return;
     }
 
+    if (!PDF_API_BASE_URL) {
+      setErrorMessage("PDF service is not configured. Please set NEXT_PUBLIC_PDF_API_BASE_URL.");
+      return;
+    }
+
     setIsConverting(true);
     setErrorMessage("");
 
@@ -92,7 +98,30 @@ export default function MdToPdfPage() {
         input_length: markdown.length,
       });
 
-      const blob = await convertMarkdownToPdfInBrowser(markdown);
+      const response = await fetch(`${PDF_API_BASE_URL}/api/md-to-pdf`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ markdown }),
+      });
+
+      if (!response.ok) {
+        let message = "Failed to convert. Please try again.";
+
+        try {
+          const data = (await response.json()) as { error?: unknown };
+          if (typeof data.error === "string" && data.error.trim()) {
+            message = data.error;
+          }
+        } catch {
+          // Ignore JSON parsing failures and use the fallback message.
+        }
+
+        throw new Error(message);
+      }
+
+      const blob = await response.blob();
       trackEvent("md_to_pdf_success", {
         file_name: `${safeFilename}.pdf`,
         input_length: markdown.length,
