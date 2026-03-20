@@ -1,22 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import UploadZone from "@/components/UploadZone";
 import MarkdownPreview from "@/components/MarkdownPreview";
 import ProgressBar from "@/components/ProgressBar";
 import { trackEvent } from "@/lib/analytics";
+import type { ConversionProgress } from "@/lib/pdf-to-md";
 
 type State = "idle" | "converting" | "done" | "error";
 
 const faqs = [
   {
     question: "How does MdPdf work?",
-    answer: "Simply upload your PDF document, and our system will extract the text while preserving its structure. The converter analyzes font sizes to identify headings, detects lists and tables, and generates clean Markdown output you can edit immediately."
+    answer: "Upload your PDF and MdPdf converts it inside your browser. The converter extracts text, infers headings from font sizes, detects lists, and produces Markdown without sending the full document to a heavy server-side parser."
   },
   {
     question: "Is it really free to use?",
-    answer: "Yes, absolutely! MdPdf is 100% free with no hidden charges. There are no watermarks, no file limits, and you can convert as many documents as you need."
+    answer: "Yes, absolutely! MdPdf is 100% free with no hidden charges. There are no watermarks, no file limits, and you can convert as many documents as you need within the 50MB browser upload limit."
   },
   {
     question: "Do I need to install any software?",
@@ -28,13 +29,72 @@ const faqs = [
   },
   {
     question: "What happens to my files after conversion?",
-    answer: "Your files are processed securely and are automatically deleted from our servers after conversion. We don't store or share any of your documents."
+    answer: "PDF to Markdown conversion stays in your browser by default, so your document does not need to be uploaded to our server for parsing."
   },
   {
     question: "Will the formatting be preserved?",
-    answer: "Our converter intelligently preserves document structure including headers (H1-H3), bullet points, numbered lists, and basic formatting. Complex layouts are simplified to ensure clean, editable Markdown."
+    answer: "Our converter preserves document structure including headers, bullet points, numbered lists, and paragraph breaks. Complex layouts, scanned PDFs, or encrypted files may still need manual cleanup."
   }
 ];
+
+function describeProgress(progress: ConversionProgress): { label: string; percent: number } {
+  if (progress.stage === "loading") {
+    return { label: "Reading file in your browser...", percent: 15 };
+  }
+
+  if (progress.stage === "parsing") {
+    const current = progress.currentPage ?? 0;
+    const total = progress.totalPages ?? 0;
+    const safeTotal = total > 0 ? total : 1;
+    const percent = 20 + Math.round((current / safeTotal) * 65);
+    return {
+      label: total > 0
+        ? `Parsing page ${current} of ${total} in a background worker...`
+        : "Parsing PDF pages in a background worker...",
+      percent,
+    };
+  }
+
+  return { label: "Generating Markdown...", percent: 95 };
+}
+
+function normalizeConversionError(message: string): string {
+  const lower = message.toLowerCase();
+
+  if (lower.includes("password") || lower.includes("encrypted")) {
+    return "This PDF is encrypted or password-protected and cannot be converted in the browser.";
+  }
+
+  if (
+    lower.includes("invalid") ||
+    lower.includes("corrupt") ||
+    lower.includes("formaterror") ||
+    lower.includes("unexpected response") ||
+    lower.includes("missing pdf")
+  ) {
+    return "This file does not look like a valid PDF, or it may be corrupted.";
+  }
+
+  if (
+    lower.includes("no selectable text") ||
+    lower.includes("no text") ||
+    lower.includes("image-based") ||
+    lower.includes("scanned")
+  ) {
+    return "This PDF appears to be scanned or image-based, so there may not be selectable text to convert.";
+  }
+
+  if (
+    lower.includes("worker crashed") ||
+    lower.includes("unknownerrorexception") ||
+    lower.includes("abortexception") ||
+    lower.includes("out of memory")
+  ) {
+    return "The browser could not finish parsing this PDF. Try a smaller file, a different browser, or a text-based PDF.";
+  }
+
+  return message || "Conversion failed";
+}
 
 export default function Home() {
   const [state, setState] = useState<State>("idle");
@@ -42,6 +102,9 @@ export default function Home() {
   const [filename, setFilename] = useState("");
   const [error, setError] = useState("");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [progress, setProgress] = useState<ConversionProgress>({ stage: "loading" });
+
+  const progressView = useMemo(() => describeProgress(progress), [progress]);
 
   const handleUpload = async (file: File) => {
     trackEvent("pdf_to_md_click", {
@@ -53,18 +116,16 @@ export default function Home() {
     setState("converting");
     setFilename(file.name);
     setError("");
-
-    const formData = new FormData();
-    formData.append("file", file);
+    setMarkdown("");
+    setProgress({ stage: "loading" });
 
     try {
-      const res = await fetch("/api/convert", { method: "POST", body: formData });
-      if (!res.ok) {
-        const msg = await res.text();
-        throw new Error(msg || "Conversion failed");
-      }
-      const text = await res.text();
+      const arrayBuffer = await file.arrayBuffer();
+      const { convertPdfToMarkdown } = await import("@/lib/pdf-to-md");
+      const text = await convertPdfToMarkdown(new Uint8Array(arrayBuffer), setProgress);
+
       setMarkdown(text);
+      setProgress({ stage: "rendering" });
       setState("done");
       trackEvent("pdf_to_md_success", {
         file_name: file.name,
@@ -72,7 +133,14 @@ export default function Home() {
         source_page: "home",
       });
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Unknown error";
+      console.error("PDF to Markdown conversion failed", {
+        fileName: file.name,
+        fileSize: file.size,
+        rawError: err,
+        message: err instanceof Error ? err.message : "Unknown error",
+      });
+
+      const message = normalizeConversionError(err instanceof Error ? err.message : "Unknown error");
       setError(message);
       setState("error");
       trackEvent("pdf_to_md_error", {
@@ -85,24 +153,24 @@ export default function Home() {
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-8 sm:py-10 md:py-12">
-      {/* Hero Section */}
       <div className="mb-8 text-center sm:mb-10">
         <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">MdPdf – Free Online Converter</h1>
         <p className="mx-auto max-w-2xl text-base text-gray-500 sm:text-lg">Fast, accurate, and free document conversion tools</p>
       </div>
 
-      {/* PDF to MD Tool - Direct Use */}
       <div className="mb-8 flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:gap-6 sm:p-6 md:p-8">
         <div className="mb-1 text-center sm:mb-2">
           <h2 className="text-xl font-bold text-gray-900">PDF to Markdown Converter</h2>
-          <p className="text-sm text-gray-500">Upload a PDF and get clean Markdown instantly</p>
+          <p className="text-sm text-gray-500">Convert PDF files to Markdown directly in your browser</p>
         </div>
         <UploadZone onUpload={handleUpload} disabled={state === "converting"} />
 
         {state === "converting" && (
           <div className="flex flex-col gap-2">
-            <p className="text-sm text-gray-500">Converting <span className="font-medium break-all">{filename}</span>…</p>
-            <ProgressBar progress={70} />
+            <p className="text-sm text-gray-500">
+              {progressView.label} <span className="font-medium break-all">{filename}</span>
+            </p>
+            <ProgressBar progress={progressView.percent} />
           </div>
         )}
 
@@ -127,7 +195,6 @@ export default function Home() {
         )}
       </div>
 
-      {/* Quick Link to MD to PDF Page */}
       <div className="mb-12 sm:mb-16">
         <Link
           href="/md-to-pdf"
@@ -146,29 +213,27 @@ export default function Home() {
         </Link>
       </div>
 
-      {/* Features Summary */}
       <section className="mb-12 sm:mb-16">
         <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">Why Choose MdPdf?</h2>
         <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
             <div className="mb-3 text-3xl">⚡</div>
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">Lightning Fast</h3>
-            <p className="text-sm leading-relaxed text-gray-600">Convert your documents in seconds. Our optimized processing pipeline delivers results quickly.</p>
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">Browser First</h3>
+            <p className="text-sm leading-relaxed text-gray-600">Large PDFs are parsed on your device, avoiding Cloudflare worker CPU limits and keeping the UI responsive.</p>
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
             <div className="mb-3 text-3xl">🎯</div>
             <h3 className="mb-2 text-lg font-semibold text-gray-900">High Accuracy</h3>
-            <p className="text-sm leading-relaxed text-gray-600">Smart layout detection preserves headings, lists, and formatting in your documents.</p>
+            <p className="text-sm leading-relaxed text-gray-600">Smart layout detection preserves headings, lists, and paragraph structure in text-based PDFs.</p>
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
             <div className="mb-3 text-3xl">🔒</div>
             <h3 className="mb-2 text-lg font-semibold text-gray-900">Privacy First</h3>
-            <p className="text-sm leading-relaxed text-gray-600">Your documents are processed securely and automatically deleted after conversion.</p>
+            <p className="text-sm leading-relaxed text-gray-600">Your PDF stays in the browser during conversion, so the main parsing path does not upload document contents to our server.</p>
           </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
       <section className="mb-12">
         <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">MdPdf FAQs</h2>
         <p className="mx-auto mb-8 max-w-2xl text-center text-gray-500">Everything you need to know about converting documents with MdPdf — fast, simple, and accurate.</p>

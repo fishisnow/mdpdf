@@ -1,55 +1,17 @@
-import React from "react";
-import { extractText, getDocumentProxy } from "unpdf";
+import { getDocumentProxy } from "unpdf";
+
+export interface ConversionProgress {
+  stage: "loading" | "parsing" | "rendering";
+  currentPage?: number;
+  totalPages?: number;
+}
 
 interface TextItem {
   text: string;
   x: number;
   y: number;
   width: number;
-  height: number;
   fontHeight: number;
-}
-
-export async function convertPdfToMarkdown(buffer: Buffer): Promise<string> {
-  const pdf = await getDocumentProxy(new Uint8Array(buffer));
-  const numPages = pdf.numPages;
-  const pages: string[] = [];
-
-  for (let i = 1; i <= numPages; i++) {
-    const page = await pdf.getPage(i);
-    const textContent = await page.getTextContent();
-    const viewport = page.getViewport({ scale: 1 });
-
-    const items: TextItem[] = textContent.items
-      .filter((item: any) => item.str && item.str.trim())
-      .map((item: any) => {
-        const tx = item.transform;
-        return {
-          text: item.str,
-          x: tx[4],
-          y: viewport.height - tx[5],
-          width: item.width,
-          height: item.height,
-          fontHeight: Math.abs(tx[3]) || item.height || 12,
-        };
-      });
-
-    if (items.length === 0) continue;
-
-    // Filter out footer items: bottom 10% of page, short text (page numbers, dates, etc.)
-    const footerY = viewport.height * 0.9;
-    const filtered = items.filter((item) => {
-      if (item.y < footerY) return true;
-      return item.text.trim().length > 20;
-    });
-
-    // Group items into lines by y-coordinate proximity
-    const lines = groupIntoLines(filtered);
-    const pageMarkdown = linesToMarkdown(lines);
-    pages.push(pageMarkdown);
-  }
-
-  return pages.join("\n\n---\n\n");
 }
 
 interface Line {
@@ -57,91 +19,180 @@ interface Line {
   y: number;
   text: string;
   avgFontHeight: number;
+  totalFontHeight: number;
 }
 
-function groupIntoLines(items: TextItem[]): Line[] {
+const LINE_Y_THRESHOLD = 3;
+const FOOTER_REGION_RATIO = 0.9;
+const SHORT_FOOTER_TEXT_LENGTH = 20;
+const BODY_LINE_MAX_LENGTH = 80;
+const PAGE_SEPARATOR = "\n\n---\n\n";
+const BULLET_PATTERN = /^[\u2022\u2023\u25E6\u2043\-*]\s+/;
+const HEADING_LEVEL_1_RATIO = 1.8;
+const HEADING_LEVEL_2_RATIO = 1.4;
+const HEADING_LEVEL_3_RATIO = 1.15;
+const PARAGRAPH_BREAK_RATIO = 1.2;
+
+export async function convertPdfToMarkdown(
+  data: Uint8Array,
+  onProgress?: (progress: ConversionProgress) => void,
+): Promise<string> {
+  if (data.byteLength === 0) {
+    throw new Error("The uploaded PDF is empty.");
+  }
+  onProgress?.({ stage: "loading" });
+
+  const pdf = await getDocumentProxy(data);
+  const pages: string[] = [];
+
+  for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+    onProgress?.({ stage: "parsing", currentPage: pageNumber, totalPages: pdf.numPages });
+
+    const page = await pdf.getPage(pageNumber);
+    const textContent = await page.getTextContent();
+    const viewport = page.getViewport({ scale: 1 });
+    const pageHeight = viewport.height;
+    const footerY = pageHeight * FOOTER_REGION_RATIO;
+    const items: TextItem[] = [];
+
+    for (const rawItem of textContent.items as Array<{
+      str?: string;
+      transform?: number[];
+      width?: number;
+      height?: number;
+    }>) {
+      const text = rawItem.str?.trim();
+      const transform = rawItem.transform;
+      if (!text || !transform) {
+        continue;
+      }
+
+      const y = pageHeight - transform[5];
+      if (y >= footerY && text.length <= SHORT_FOOTER_TEXT_LENGTH) {
+        continue;
+      }
+
+      items.push({
+        text,
+        x: transform[4],
+        y,
+        width: rawItem.width ?? 0,
+        fontHeight: Math.abs(transform[3]) || rawItem.height || 12,
+      });
+    }
+
+    if (items.length === 0) {
+      continue;
+    }
+
+    const lines = extractPageLines(items);
+    const pageMarkdown = linesToMarkdown(lines);
+    if (pageMarkdown) {
+      pages.push(pageMarkdown);
+    }
+  }
+
+  onProgress?.({ stage: "rendering", currentPage: pages.length, totalPages: pdf.numPages });
+
+  if (pages.length === 0) {
+    throw new Error("No selectable text was found in this PDF. It may be scanned, image-based, or empty.");
+  }
+
+  return pages.join(PAGE_SEPARATOR);
+}
+
+export function extractPageLines(items: TextItem[]): Line[] {
   const sorted = [...items].sort((a, b) => a.y - b.y || a.x - b.x);
   const lines: Line[] = [];
-  const Y_THRESHOLD = 3;
 
   for (const item of sorted) {
     const last = lines[lines.length - 1];
-    if (last && Math.abs(item.y - last.y) <= Y_THRESHOLD) {
-      const prevItem = last.items[last.items.length - 1];
-      const gap = item.x - (prevItem.x + prevItem.width);
-      const needsSpace = gap > prevItem.fontHeight * 0.2;
+    if (last && Math.abs(item.y - last.y) <= LINE_Y_THRESHOLD) {
+      const previousItem = last.items[last.items.length - 1];
+      const gap = item.x - (previousItem.x + previousItem.width);
+      const needsSpace = gap > previousItem.fontHeight * 0.2;
       last.items.push(item);
-      last.text += (needsSpace ? " " : "") + item.text;
-      last.avgFontHeight =
-        last.items.reduce((s, i) => s + i.fontHeight, 0) / last.items.length;
-    } else {
-      lines.push({
-        items: [item],
-        y: item.y,
-        text: item.text,
-        avgFontHeight: item.fontHeight,
-      });
+      last.text += `${needsSpace ? " " : ""}${item.text}`;
+      last.totalFontHeight += item.fontHeight;
+      last.avgFontHeight = last.totalFontHeight / last.items.length;
+      continue;
     }
+
+    lines.push({
+      items: [item],
+      y: item.y,
+      text: item.text,
+      avgFontHeight: item.fontHeight,
+      totalFontHeight: item.fontHeight,
+    });
   }
 
   return lines;
 }
 
-function linesToMarkdown(lines: Line[]): string {
-  if (lines.length === 0) return "";
-
-  const fontHeights = lines.map((l) => l.avgFontHeight);
-  const medianFont = median(fontHeights);
-
-  // Compute typical line spacing to detect paragraph breaks
-  const gaps: number[] = [];
-  for (let i = 1; i < lines.length; i++) {
-    const gap = lines[i].y - lines[i - 1].y;
-    if (gap > 0) gaps.push(gap);
+export function linesToMarkdown(lines: Line[]): string {
+  if (lines.length === 0) {
+    return "";
   }
-  const medianGap = gaps.length > 0 ? median(gaps) : medianFont * 1.5;
 
+  const fontHeights = new Array<number>(lines.length);
+  const gaps: number[] = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    fontHeights[i] = lines[i].avgFontHeight;
+    if (i === 0) {
+      continue;
+    }
+
+    const gap = lines[i].y - lines[i - 1].y;
+    if (gap > 0) {
+      gaps.push(gap);
+    }
+  }
+
+  const medianFont = median(fontHeights);
+  const medianGap = gaps.length > 0 ? median(gaps) : medianFont * 1.5;
   const result: string[] = [];
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const text = line.text.trim();
-    if (!text) continue;
-
-    const ratio = line.avgFontHeight / medianFont;
-    const isShortLine = text.length < 80;
-
-    let formatted: string;
-    let needsTrailingSpaces = false;
-
-    if (ratio >= 1.8 && isShortLine) {
-      formatted = `# ${text}`;
-    } else if (ratio >= 1.4 && isShortLine) {
-      formatted = `## ${text}`;
-    } else if (ratio >= 1.15 && isShortLine) {
-      formatted = `### ${text}`;
-    } else if (/^[\u2022\u2023\u25E6\u2043\-\*]\s/.test(text)) {
-      formatted = `- ${text.replace(/^[\u2022\u2023\u25E6\u2043\-\*]\s+/, "")}`;
-    } else {
-      formatted = text;
-      needsTrailingSpaces = true; // 普通文本需要尾部空格
+    if (!text) {
+      continue;
     }
 
-    // Insert blank line when gap to next line is larger than normal spacing,
-    // or when current line looks like a standalone entry (heading / toc / bullet)
+    const ratio = line.avgFontHeight / medianFont;
+    const isShortLine = text.length < BODY_LINE_MAX_LENGTH;
+    const isBullet = BULLET_PATTERN.test(text);
+
+    let formatted = text;
+    let needsTrailingSpaces = true;
+
+    if (ratio >= HEADING_LEVEL_1_RATIO && isShortLine) {
+      formatted = `# ${text}`;
+      needsTrailingSpaces = false;
+    } else if (ratio >= HEADING_LEVEL_2_RATIO && isShortLine) {
+      formatted = `## ${text}`;
+      needsTrailingSpaces = false;
+    } else if (ratio >= HEADING_LEVEL_3_RATIO && isShortLine) {
+      formatted = `### ${text}`;
+      needsTrailingSpaces = false;
+    } else if (isBullet) {
+      formatted = `- ${text.replace(BULLET_PATTERN, "")}`;
+      needsTrailingSpaces = false;
+    }
+
     let willHaveBlankLine = false;
     if (i < lines.length - 1) {
-      const gap = lines[i + 1].y - line.y;
-      const isLargeGap = gap > medianGap * 1.2;
+      const nextLine = lines[i + 1];
+      const gap = nextLine.y - line.y;
+      const isLargeGap = gap > medianGap * PARAGRAPH_BREAK_RATIO;
       const isStructural = formatted.startsWith("#") || formatted.startsWith("-");
-      const nextText = lines[i + 1].text.trim();
-      const isTocEntry = isShortLine && /\d+\s*$/.test(text) && nextText.length > 0;
+      const isTocEntry = isShortLine && /\d+\s*$/.test(text) && nextLine.text.trim().length > 0;
       willHaveBlankLine = isLargeGap || isStructural || isTocEntry;
     }
 
-    // 普通文本且后面没有空行时，加尾部两个空格强制 Markdown 换行
     result.push(needsTrailingSpaces && !willHaveBlankLine ? `${formatted}  ` : formatted);
-
     if (willHaveBlankLine) {
       result.push("");
     }
@@ -150,10 +201,10 @@ function linesToMarkdown(lines: Line[]): string {
   return result.join("\n");
 }
 
-function median(arr: number[]): number {
-  const sorted = [...arr].sort((a, b) => a - b);
-  const mid = Math.floor(sorted.length / 2);
-  return sorted.length % 2 !== 0
-    ? sorted[mid]
-    : (sorted[mid - 1] + sorted[mid]) / 2;
+function median(values: number[]): number {
+  const sorted = [...values].sort((a, b) => a - b);
+  const middle = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 0
+    ? (sorted[middle - 1] + sorted[middle]) / 2
+    : sorted[middle];
 }
