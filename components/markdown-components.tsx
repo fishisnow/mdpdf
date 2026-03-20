@@ -15,8 +15,9 @@ export const markdownComponents: Components = {
     </blockquote>
   ),
   hr: () => <hr className="my-5 border-gray-300" />,
-  code: ({ children, className }) => {
-    const isBlock = Boolean(className);
+  code: ({ children, className, node }) => {
+    const parentTag = node?.position ? (node as { tagName?: string }).tagName : undefined;
+    const isBlock = parentTag === "code" || node?.position?.start.line !== node?.position?.end.line || Boolean(className);
     if (!isBlock) {
       return (
         <code className="rounded bg-gray-200 px-1.5 py-0.5 font-mono text-sm text-gray-900">
@@ -31,13 +32,13 @@ export const markdownComponents: Components = {
         {language ? (
           <div className="mb-1 text-[11px] font-semibold tracking-wide text-gray-500">{language}</div>
         ) : null}
-        <code className="block overflow-x-auto rounded-lg bg-gray-900 p-4 font-mono text-sm leading-6 text-gray-100">
+        <code className="block overflow-x-auto rounded-lg bg-gray-900 p-4 font-mono text-sm leading-6 text-gray-100 whitespace-pre">
           {children}
         </code>
       </div>
     );
   },
-  pre: ({ children }) => <pre className="mb-0">{children}</pre>,
+  pre: ({ children }) => <pre className="mb-0 whitespace-pre-wrap">{children}</pre>,
   table: ({ children }) => (
     <div className="mb-4 overflow-x-auto">
       <table className="w-full border border-gray-300 text-sm">{children}</table>
