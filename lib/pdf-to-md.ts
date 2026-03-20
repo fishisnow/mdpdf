@@ -1,4 +1,32 @@
-import { getDocumentProxy } from "unpdf";
+import { getDocument, GlobalWorkerOptions, type PDFDocumentProxy } from "pdfjs-dist";
+import type { TextItem as PdfJsTextItem } from "pdfjs-dist/types/src/display/api";
+
+let workerInitialized = false;
+
+function ensurePdfJsWorker() {
+  if (workerInitialized || typeof window === "undefined") {
+    return;
+  }
+
+  GlobalWorkerOptions.workerSrc = new URL(
+    "pdfjs-dist/build/pdf.worker.min.mjs",
+    import.meta.url,
+  ).toString();
+  workerInitialized = true;
+}
+
+async function loadPdfDocument(data: Uint8Array): Promise<PDFDocumentProxy> {
+  ensurePdfJsWorker();
+  const loadingTask = getDocument({ data });
+
+  try {
+    return await loadingTask.promise;
+  } catch (error) {
+    await loadingTask.destroy();
+    throw error;
+  }
+}
+
 
 export interface ConversionProgress {
   stage: "loading" | "parsing" | "rendering";
@@ -42,63 +70,69 @@ export async function convertPdfToMarkdown(
   }
   onProgress?.({ stage: "loading" });
 
-  const pdf = await getDocumentProxy(data);
+  const pdf = await loadPdfDocument(data);
   const pages: string[] = [];
 
-  for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
-    onProgress?.({ stage: "parsing", currentPage: pageNumber, totalPages: pdf.numPages });
+  try {
+    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+      onProgress?.({ stage: "parsing", currentPage: pageNumber, totalPages: pdf.numPages });
 
-    const page = await pdf.getPage(pageNumber);
-    const textContent = await page.getTextContent();
-    const viewport = page.getViewport({ scale: 1 });
-    const pageHeight = viewport.height;
-    const footerY = pageHeight * FOOTER_REGION_RATIO;
-    const items: TextItem[] = [];
+      const page = await pdf.getPage(pageNumber);
+      const textContent = await page.getTextContent();
+      const viewport = page.getViewport({ scale: 1 });
+      const pageHeight = viewport.height;
+      const footerY = pageHeight * FOOTER_REGION_RATIO;
+      const items: TextItem[] = [];
 
-    for (const rawItem of textContent.items as Array<{
-      str?: string;
-      transform?: number[];
-      width?: number;
-      height?: number;
-    }>) {
-      const text = rawItem.str?.trim();
-      const transform = rawItem.transform;
-      if (!text || !transform) {
-        continue;
+      for (const rawItem of textContent.items as PdfJsTextItem[]) {
+        if (!rawItem || !("str" in rawItem) || !("transform" in rawItem)) {
+          continue;
+        }
+
+        const text = rawItem.str?.trim();
+        const transform = rawItem.transform;
+        if (!text || !transform) {
+          continue;
+        }
+
+        items.push({
+          text,
+          x: transform[4],
+          y: pageHeight - transform[5],
+          width: rawItem.width ?? 0,
+          fontHeight: Math.abs(transform[3]) || rawItem.height || 12,
+        });
       }
 
-      const y = pageHeight - transform[5];
-      if (y >= footerY && text.length <= SHORT_FOOTER_TEXT_LENGTH) {
-        continue;
-      }
+      const filteredItems = items.filter((item) => {
+        if (item.y < footerY) {
+          return true;
+        }
 
-      items.push({
-        text,
-        x: transform[4],
-        y,
-        width: rawItem.width ?? 0,
-        fontHeight: Math.abs(transform[3]) || rawItem.height || 12,
+        return item.text.length > SHORT_FOOTER_TEXT_LENGTH;
       });
+
+      if (filteredItems.length === 0) {
+        continue;
+      }
+
+      const lines = extractPageLines(filteredItems);
+      const pageMarkdown = linesToMarkdown(lines);
+      if (pageMarkdown) {
+        pages.push(pageMarkdown);
+      }
     }
 
-    if (items.length === 0) {
-      continue;
+    onProgress?.({ stage: "rendering", currentPage: pages.length, totalPages: pdf.numPages });
+
+    if (pages.length === 0) {
+      throw new Error("No selectable text was found in this PDF. It may be scanned, image-based, or empty.");
     }
 
-    const lines = extractPageLines(items);
-    const pageMarkdown = linesToMarkdown(lines);
-    if (pageMarkdown) {
-      pages.push(pageMarkdown);
-    }
+    return pages.join(PAGE_SEPARATOR);
+  } finally {
+    await pdf.destroy();
   }
-
-  onProgress?.({ stage: "rendering", currentPage: pages.length, totalPages: pdf.numPages });
-
-  if (pages.length === 0) {
-    throw new Error("No selectable text was found in this PDF. It may be scanned, image-based, or empty.");
-  }
-
-  return pages.join(PAGE_SEPARATOR);
 }
 
 export function extractPageLines(items: TextItem[]): Line[] {
