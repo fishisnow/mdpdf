@@ -1,5 +1,130 @@
 @import "tailwindcss";
 
+/* PDF 结果预览：HTML 串渲染（与 react-markdown 版式对齐），避免巨型 React 节点树 */
+.markdown-preview {
+  line-height: 1.75;
+  color: rgb(31 41 55);
+}
+
+.markdown-preview h1 {
+  margin-bottom: 1rem;
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: rgb(17 24 39);
+}
+
+.markdown-preview h2 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgb(17 24 39);
+}
+
+.markdown-preview h3 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: rgb(17 24 39);
+}
+
+.markdown-preview p {
+  margin-bottom: 0.75rem;
+}
+
+.markdown-preview ul {
+  margin-bottom: 1rem;
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.markdown-preview ol {
+  margin-bottom: 1rem;
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+}
+
+.markdown-preview li {
+  line-height: 1.75;
+}
+
+.markdown-preview blockquote {
+  margin: 1rem 0;
+  border-left: 4px solid rgb(209 213 219);
+  border-radius: 0 0.25rem 0.25rem 0;
+  background: rgb(249 250 251);
+  padding: 0.5rem 0 0.5rem 1rem;
+  color: rgb(75 85 99);
+  font-style: italic;
+}
+
+.markdown-preview hr {
+  margin: 1.25rem 0;
+  border-color: rgb(209 213 219);
+}
+
+.markdown-preview code {
+  border-radius: 0.25rem;
+  background: rgb(243 244 246);
+  padding: 0.125rem 0.375rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.875rem;
+  color: rgb(17 24 39);
+}
+
+.markdown-preview pre {
+  margin-bottom: 1rem;
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(229 231 235);
+  background: rgb(249 250 251);
+  padding: 0.75rem 1rem;
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgb(31 41 55);
+  white-space: pre-wrap;
+}
+
+.markdown-preview pre code {
+  background: transparent;
+  padding: 0;
+  font-size: 13px;
+  color: rgb(31 41 55);
+}
+
+.markdown-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid rgb(209 213 219);
+  font-size: 0.875rem;
+}
+
+.markdown-preview thead {
+  background: rgb(243 244 246);
+}
+
+.markdown-preview th,
+.markdown-preview td {
+  border: 1px solid rgb(209 213 219);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.markdown-preview th {
+  font-weight: 600;
+}
+
+.markdown-preview a {
+  color: rgb(37 99 235);
+  text-decoration: underline;
+}
+
+.markdown-preview a:hover {
+  color: rgb(29 78 216);
+}
+
 .print-document {
   width: 100%;
   max-width: 840px;
@@ -44,23 +169,28 @@
     margin: 16mm;
   }
 
-  html,
-  body {
-    background: #fff;
-  }
-
-  html,
-  body {
-    background: #fff;
+  /* 避免 flex/min-height 与 overflow 链导致打印预览只显示一屏、无法反映全文 */
+  html {
+    height: auto !important;
+    overflow: visible !important;
   }
 
   body {
+    display: block !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
     margin: 0;
+    background: #fff;
   }
 
   .print-document-shell {
     background: transparent;
     border: 0;
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
   }
 
   .print-document {
@@ -68,10 +198,22 @@
     margin: 0;
     padding: 0;
     box-shadow: none;
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    display: block !important;
   }
 
   .print-document a {
     color: inherit;
     text-decoration: underline;
+  }
+
+  /* Markdown HTML 预览：contain/overflow 会限制打印排版引擎可见区域 */
+  .markdown-preview {
+    contain: none !important;
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
   }
 }

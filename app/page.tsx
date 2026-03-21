@@ -103,6 +103,7 @@ export default function Home() {
   const [error, setError] = useState("");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [progress, setProgress] = useState<ConversionProgress>({ stage: "loading" });
+  const [conversionId, setConversionId] = useState(0);
 
   const progressView = useMemo(() => describeProgress(progress), [progress]);
 
@@ -127,6 +128,7 @@ export default function Home() {
       setMarkdown(text);
       setProgress({ stage: "rendering" });
       setState("done");
+      setConversionId((n) => n + 1);
       trackEvent("pdf_to_md_success", {
         file_name: file.name,
         output_length: text.length,
@@ -182,6 +184,7 @@ export default function Home() {
 
         {state === "done" && (
           <MarkdownPreview
+            key={conversionId}
             markdown={markdown}
             filename={filename}
             onDownload={({ filename: downloadName, markdownLength }) => {

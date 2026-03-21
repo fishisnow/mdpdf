@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import { markdownComponents } from "@/components/markdown-components";
+import { startTransition, useCallback, useEffect, useRef, useState } from "react";
+import MarkdownHtmlPreview from "@/components/MarkdownHtmlPreview";
+import SourceTextarea from "@/components/SourceTextarea";
 
 interface Props {
   markdown: string;
@@ -11,21 +10,9 @@ interface Props {
   onDownload?: (payload: { filename: string; markdownLength: number }) => void;
 }
 
-type Tab = "source" | "preview";
 type CopyState = "idle" | "copied";
 
-function MarkdownContent({ markdown, className }: { markdown: string; className: string }) {
-  return (
-    <div className={className}>
-      <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-        {markdown}
-      </ReactMarkdown>
-    </div>
-  );
-}
-
 export default function MarkdownPreview({ markdown, filename, onDownload }: Props) {
-  const [activeTab, setActiveTab] = useState<Tab>("preview");
   const [copyState, setCopyState] = useState<CopyState>("idle");
   const [isFullscreen, setIsFullscreen] = useState(false);
   const viewerRef = useRef<HTMLDivElement | null>(null);
@@ -52,11 +39,14 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
     });
   };
 
-  const syncFullscreenState = () => {
-    setIsFullscreen(document.fullscreenElement === viewerRef.current);
-  };
+  const syncFullscreenState = useCallback(() => {
+    const active = document.fullscreenElement === viewerRef.current;
+    startTransition(() => {
+      setIsFullscreen(active);
+    });
+  }, []);
 
-  const handleFullscreenToggle = () => {
+  const handleFullscreenToggle = useCallback(() => {
     const el = viewerRef.current;
     if (!el) {
       return;
@@ -67,14 +57,9 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
       return;
     }
 
-    setIsFullscreen(true);
     const req = el.requestFullscreen({ navigationUI: "hide" });
-    if (req !== undefined) {
-      req.catch(() => {
-        setIsFullscreen(false);
-      });
-    }
-  };
+    req?.catch(() => {});
+  }, []);
 
   useEffect(() => {
     document.addEventListener("fullscreenchange", syncFullscreenState);
@@ -82,7 +67,11 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
     return () => {
       document.removeEventListener("fullscreenchange", syncFullscreenState);
     };
-  }, []);
+  }, [syncFullscreenState]);
+
+  const paneShellClass =
+    "flex min-h-0 flex-col " +
+    (isFullscreen ? "min-h-0 flex-1" : "h-[320px] sm:h-[420px] md:h-[600px]");
 
   return (
     <div className="flex flex-col gap-4">
@@ -99,6 +88,7 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
             </button>
           )}
           <button
+            type="button"
             onClick={handleDownload}
             className="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-700 sm:w-auto"
           >
@@ -109,47 +99,27 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
 
       <div
         ref={viewerRef}
-        className={`flex flex-col ${isFullscreen ? "box-border size-full min-h-0 bg-white p-4 sm:p-6" : ""}`}
+        className="flex min-h-0 flex-col [&:fullscreen]:box-border [&:fullscreen]:size-full [&:fullscreen]:min-h-0 [&:fullscreen]:bg-white [&:fullscreen]:p-4 sm:[&:fullscreen]:p-6"
       >
-        {!isFullscreen && (
-          <div className="overflow-x-auto border-b border-gray-200">
-            <div className="flex min-w-max gap-1">
-              <button
-                type="button"
-                onClick={() => setActiveTab("preview")}
-                className={`px-4 py-2 text-sm font-medium transition-colors ${
-                  activeTab === "preview"
-                    ? "border-b-2 border-blue-600 text-blue-600"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                Preview
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab("source")}
-                className={`px-4 py-2 text-sm font-medium transition-colors ${
-                  activeTab === "source"
-                    ? "border-b-2 border-blue-600 text-blue-600"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                Source
-              </button>
-            </div>
-          </div>
-        )}
-
         {isFullscreen && (
           <div className="mb-3 flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-gray-200 pb-3">
             <span className="text-sm font-medium text-gray-700">Source & Preview</span>
-            <button
-              type="button"
-              onClick={handleFullscreenToggle}
-              className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50"
-            >
-              Exit fullscreen
-            </button>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={handleDownload}
+                className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-blue-700"
+              >
+                Download .md
+              </button>
+              <button
+                type="button"
+                onClick={handleFullscreenToggle}
+                className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50"
+              >
+                Exit fullscreen
+              </button>
+            </div>
           </div>
         )}
 
@@ -157,62 +127,26 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
           className={
             isFullscreen
               ? "grid min-h-0 flex-1 grid-cols-1 gap-4 pt-2 md:grid-cols-2 md:gap-6 md:pt-4"
-              : "w-full pt-4"
+              : "grid w-full grid-cols-1 gap-4 pt-4 md:grid-cols-2 md:gap-6"
           }
         >
-          {isFullscreen ? (
-            <>
-              <div className="flex min-h-0 flex-col">
-                <div className="mb-2 flex items-center justify-between gap-2">
-                  <span className="text-xs font-medium uppercase tracking-wide text-gray-500">Source</span>
-                  <button
-                    type="button"
-                    onClick={handleCopy}
-                    className="rounded bg-gray-700 px-3 py-1 text-xs text-gray-300 transition-colors hover:bg-gray-600"
-                  >
-                    {copyState === "copied" ? "Copied!" : "Copy"}
-                  </button>
-                </div>
-                <textarea
-                  readOnly
-                  value={markdown}
-                  className="min-h-[min(60vh,520px)] w-full flex-1 resize-none rounded-lg border-0 bg-gray-900 p-4 font-mono text-sm text-green-400 outline-none md:min-h-0"
-                />
-              </div>
-              <div className="flex min-h-0 flex-col">
-                <span className="mb-2 text-xs font-medium uppercase tracking-wide text-gray-500">Preview</span>
-                <MarkdownContent
-                  markdown={markdown}
-                  className="min-h-0 flex-1 overflow-y-auto rounded-lg border border-gray-200 bg-white p-4 text-sm text-gray-800"
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              {activeTab === "source" && (
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={handleCopy}
-                    className="absolute right-3 top-3 z-10 rounded bg-gray-700 px-3 py-1 text-xs text-gray-300 transition-colors hover:bg-gray-600"
-                  >
-                    {copyState === "copied" ? "Copied!" : "Copy"}
-                  </button>
-                  <textarea
-                    readOnly
-                    value={markdown}
-                    className="h-[320px] w-full resize-none rounded-lg border-0 bg-gray-900 p-4 pr-20 font-mono text-sm text-green-400 outline-none sm:h-[420px] md:h-[600px]"
-                  />
-                </div>
-              )}
-              {activeTab === "preview" && (
-                <MarkdownContent
-                  markdown={markdown}
-                  className="h-[320px] w-full overflow-y-auto rounded-lg border border-gray-200 bg-white p-4 text-sm text-gray-800 sm:h-[420px] sm:p-5 md:h-[600px] md:p-6"
-                />
-              )}
-            </>
-          )}
+          <div className={paneShellClass}>
+            <div className="mb-2 flex items-center justify-between gap-2">
+              <span className="text-xs font-medium uppercase tracking-wide text-gray-500">Source</span>
+              <button
+                type="button"
+                onClick={handleCopy}
+                className="rounded bg-gray-700 px-3 py-1 text-xs text-gray-300 transition-colors hover:bg-gray-600"
+              >
+                {copyState === "copied" ? "Copied!" : "Copy"}
+              </button>
+            </div>
+            <SourceTextarea markdown={markdown} />
+          </div>
+          <div className={paneShellClass}>
+            <span className="mb-2 text-xs font-medium uppercase tracking-wide text-gray-500">Preview</span>
+            <MarkdownHtmlPreview markdown={markdown} />
+          </div>
         </div>
       </div>
     </div>

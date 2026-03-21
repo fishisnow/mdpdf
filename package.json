@@ -9,15 +9,18 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "dompurify": "^3.3.3",
+    "marked": "^17.0.5",
     "next": "^16.1.7",
-    "react": "^19.2.4",
     "pdfjs-dist": "^5.5.207",
+    "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.1",
+    "@types/dompurify": "^3.0.5",
     "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
