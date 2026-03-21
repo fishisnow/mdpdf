@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="bg-white border-t border-gray-100 mt-auto">
       <div className="max-w-5xl mx-auto px-4 py-8">
-        <div className="flex flex-col items-center justify-center gap-4 text-center">
+        <div className="flex flex-wrap items-center justify-center gap-4 text-center">
           <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-gray-500 sm:gap-6">
             <Link href="/privacy-policy" className="hover:text-gray-700 transition-colors">
               Privacy Policy
