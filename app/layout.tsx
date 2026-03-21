@@ -6,14 +6,23 @@ import Footer from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "PDF to MD & MD to PDF Converter – Free Online Tool",
-  description: "Convert PDF to MD or MD to PDF instantly with MdPdf. Free, fast, and accurate online converter for seamless Markdown and PDF conversion. No signup required.",
+  title: "MdPdf - PDF to MD & MD to PDF Converter",
+  description: "MdPdf is a free pdf to md converter. Convert pdf to md online and turn PDF files into clean markdown quickly and accurately.",
+  keywords: [
+    "MdPdf",
+    "pdf to md",
+    "convert pdf to md",
+    "pdf to md converter",
+    "pdf to markdown",
+    "md to pdf",
+    "md to pdf converter",
+  ],
   alternates: {
     canonical: "https://mdpdf.net",
   },
   openGraph: {
-    title: "PDF to MD & MD to PDF Converter – Free Online Tool",
-    description: "Convert PDF to MD and MD to PDF instantly with MdPdf. Fast, accurate, and free online converter.",
+    title: "MdPdf - PDF to MD & MD to PDF Converter",
+    description: "MdPdf is a free pdf to md converter. Convert pdf to md online and turn PDF files into clean markdown quickly and accurately.",
     url: "https://mdpdf.net",
     siteName: "MdPdf",
     type: "website",

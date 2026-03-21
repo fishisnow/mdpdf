@@ -110,13 +110,13 @@ export default function MdToPdfPage() {
   return (
     <main className="mx-auto max-w-5xl px-4 py-8 sm:py-10 md:py-12">
       <nav className="mb-6 print:hidden sm:mb-8">
-        <Link href="/" className="text-sm text-blue-600 hover:underline">← Back to MdPdf</Link>
+        <Link href="/" className="text-sm text-blue-600 hover:underline">← PDF to MD Converter</Link>
       </nav>
 
       <div className="mb-8 text-center print:hidden sm:mb-10">
-        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">Markdown to PDF</h1>
+        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">MD to PDF Converter</h1>
         <p className="mx-auto max-w-3xl text-base text-gray-500 sm:text-lg">
-          Preview a print-friendly document in your browser, then use the native print dialog to save it as PDF.
+          Write, preview, and export Markdown to PDF directly in your browser.
         </p>
       </div>
 
@@ -229,15 +229,15 @@ export default function MdToPdfPage() {
       </div>
 
       <section className="mb-12 print:hidden sm:mb-16">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">Why Use Our Markdown to PDF Tool?</h2>
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">Why Use Our MD to PDF Converter?</h2>
         <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
             <h3 className="mb-2 text-lg font-semibold text-gray-900">Native browser flow</h3>
-            <p className="text-sm leading-relaxed text-gray-600">Render Markdown in the page, then save through your browser's built-in print dialog.</p>
+            <p className="text-sm leading-relaxed text-gray-600">Render Markdown in the page, then export it through your browser's built-in print dialog.</p>
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
             <h3 className="mb-2 text-lg font-semibold text-gray-900">Preview before saving</h3>
-            <p className="text-sm leading-relaxed text-gray-600">Use the same rendered document for on-screen review and printed output.</p>
+            <p className="text-sm leading-relaxed text-gray-600">Use the same rendered document for on-screen review before saving it as a PDF.</p>
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
             <h3 className="mb-2 text-lg font-semibold text-gray-900">Frontend only</h3>
