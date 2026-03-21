@@ -1,8 +1,7 @@
 import { NextRequest } from "next/server";
-import { convertPdfToMarkdown } from "@/lib/pdf-to-md";
 
 export const runtime = "nodejs";
-export const maxDuration = 60;
+export const maxDuration = 10;
 
 export async function POST(req: NextRequest) {
   try {
@@ -17,14 +16,15 @@ export async function POST(req: NextRequest) {
       return new Response("File must be a PDF", { status: 400 });
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const markdown = await convertPdfToMarkdown(buffer);
-
-    return new Response(markdown, {
-      headers: { "Content-Type": "text/plain; charset=utf-8" },
-    });
-  } catch (err) {
-    console.error("Conversion error:", err);
-    return new Response("Conversion failed", { status: 500 });
+    return new Response(
+      "PDF to Markdown conversion now runs in the browser by default. Please use the web UI to convert this file locally.",
+      {
+        status: 410,
+        headers: { "Content-Type": "text/plain; charset=utf-8" },
+      },
+    );
+  } catch (error) {
+    console.error("Compatibility convert route error:", error);
+    return new Response("This compatibility endpoint is no longer available.", { status: 500 });
   }
 }

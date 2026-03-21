@@ -16,28 +16,22 @@ export const markdownComponents: Components = {
   ),
   hr: () => <hr className="my-5 border-gray-300" />,
   code: ({ children, className }) => {
-    const isBlock = Boolean(className);
-    if (!isBlock) {
-      return (
-        <code className="rounded bg-gray-200 px-1.5 py-0.5 font-mono text-sm text-gray-900">
-          {children}
-        </code>
-      );
+    const language = className?.replace(/^language-/, "").toUpperCase();
+    if (language) {
+      return <code className={`${className} bg-transparent p-0 text-[13px] text-gray-800`}>{children}</code>;
     }
 
-    const language = className?.replace(/^language-/, "").toUpperCase();
     return (
-      <div className="mb-4">
-        {language ? (
-          <div className="mb-1 text-[11px] font-semibold tracking-wide text-gray-500">{language}</div>
-        ) : null}
-        <code className="block overflow-x-auto rounded-lg bg-gray-900 p-4 font-mono text-sm leading-6 text-gray-100">
-          {children}
-        </code>
-      </div>
+      <code className="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-sm text-gray-900">
+        {children}
+      </code>
     );
   },
-  pre: ({ children }) => <pre className="mb-0">{children}</pre>,
+  pre: ({ children }) => (
+    <pre className="mb-4 overflow-x-auto rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 font-mono text-[13px] leading-6 text-gray-800 whitespace-pre-wrap">
+      {children}
+    </pre>
+  ),
   table: ({ children }) => (
     <div className="mb-4 overflow-x-auto">
       <table className="w-full border border-gray-300 text-sm">{children}</table>
