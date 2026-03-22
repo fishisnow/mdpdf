@@ -3,6 +3,7 @@ export default function robots() {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: ["/privacy-policy", "/terms-of-service"],
     },
     sitemap: "https://mdpdf.net/sitemap.xml",
   };
