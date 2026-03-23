@@ -53,6 +53,7 @@ interface Line {
 interface MarkdownBlock {
   kind: "lines" | "code";
   lines: Line[];
+  paragraphBoundaries?: number[];  // Indices where paragraph breaks should be inserted
 }
 
 interface CodeCandidate {
@@ -73,6 +74,12 @@ interface LineMetadata {
 interface CodeSpan {
   start: number;
   end: number;
+}
+
+interface Paragraph {
+  lines: Line[];
+  startIndex: number;
+  endIndex: number;
 }
 
 const LINE_Y_THRESHOLD = 3;
@@ -98,18 +105,31 @@ const MAX_CODE_SPAN_NEIGHBOR_DISTANCE = 3;
 const MAX_CODE_SPAN_CODELIKE_RUN = 6;
 const MAX_CODE_SPAN_PRELUDE_LINES = 1;
 const DEBUG_CODE_DETECTION = true;
+const PARAGRAPH_GAP_RATIO = 1.5;  // Gap threshold to split paragraphs
+const CODE_DENSITY_THRESHOLD = 0.4;  // 40% of lines need code signals to be a code block
 const INLINE_CODE_PATTERNS = [
   /^\s*#/,
   /^\s*(?:import|from|export|const|let|var|def|class|function)\b/,
   /^\s*(?:pip|npm|pnpm|yarn|poetry|python|node|uv)\b/,
   /=>|::|\b[A-Za-z_][A-Za-z0-9_]*\(/,
   /[{}()[\]=]/,
+  /^\s*(?:if|elif|else|for|while|try|except|finally|with|async|await|return)\b/,
+  /^["'][^"']*["']?$/,  // String literal lines like "text..." or 'text...'
+  /^\)\s*---$/,         // Closing paren with delimiter like ") ---"
 ];
 const STRONG_CODE_PATTERNS = [
   /^\s*from\s+\S+\s+import\s+/,
   /^\s*import\s+\S+/,
   /^\s*pip\s+install\b/,
   /^\s*#/,
+  /^\s*def\s+\w+\s*\(/,
+  /^\s*class\s+\w+/,
+  /^\s*print\s*\(/,
+  /^\s*return\s+/,
+  /^\s*(?:if|elif|else|for|while|try|except|finally|with|async|await)\s+/,
+  /^\s*(?:if|elif|else|for|while|try|except|finally|with|async|await)\s*:/,
+  /^"""/,  // Python docstring
+  /^'''/,  // Python docstring
 ];
 
 export async function convertPdfToMarkdown(
@@ -122,9 +142,11 @@ export async function convertPdfToMarkdown(
   onProgress?.({ stage: "loading" });
 
   const pdf = await loadPdfDocument(data);
-  const pages: string[] = [];
+  const allPageLines: Line[][] = [];
+  const allFontHeights: number[] = [];
 
   try {
+    // First pass: extract all lines and collect font heights across entire PDF
     for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
       onProgress?.({ stage: "parsing", currentPage: pageNumber, totalPages: pdf.numPages });
 
@@ -169,7 +191,21 @@ export async function convertPdfToMarkdown(
       }
 
       const lines = extractPageLines(filteredItems);
-      const pageMarkdown = linesToMarkdown(lines);
+      allPageLines.push(lines);
+
+      // Collect font heights from this page
+      for (const line of lines) {
+        allFontHeights.push(line.avgFontHeight);
+      }
+    }
+
+    // Calculate global median font across entire PDF
+    const globalMedianFont = allFontHeights.length > 0 ? median(allFontHeights) : 12;
+
+    // Second pass: convert to markdown using global median
+    const pages: string[] = [];
+    for (const lines of allPageLines) {
+      const pageMarkdown = linesToMarkdown(lines, globalMedianFont);
       if (pageMarkdown) {
         pages.push(pageMarkdown);
       }
@@ -216,7 +252,7 @@ export function extractPageLines(items: TextItem[]): Line[] {
   return lines;
 }
 
-export function linesToMarkdown(lines: Line[]): string {
+export function linesToMarkdown(lines: Line[], globalMedianFont?: number): string {
   if (lines.length === 0) {
     return "";
   }
@@ -236,7 +272,8 @@ export function linesToMarkdown(lines: Line[]): string {
     }
   }
 
-  const medianFont = median(fontHeights);
+  // Use global median if provided, otherwise calculate from current page
+  const medianFont = globalMedianFont ?? median(fontHeights);
   const medianGap = gaps.length > 0 ? median(gaps) : medianFont * 1.5;
   const blocks = groupLinesIntoMarkdownBlocks(lines, medianFont);
   const result: string[] = [];
@@ -244,11 +281,53 @@ export function linesToMarkdown(lines: Line[]): string {
   for (const block of blocks) {
     if (block.kind === "code") {
       result.push("```");
+
+      // Calculate base indentation (minimum x position in this code block)
+      let minX = Infinity;
+      let avgCharWidth = 0;
+      let charCount = 0;
+
       for (const line of block.lines) {
-        const text = line.text.replace(/\s+$/, "");
-        if (text) {
-          result.push(text);
+        if (line.items.length > 0 && line.text.trim()) {
+          const lineX = line.items[0].x;
+          if (lineX < minX) {
+            minX = lineX;
+          }
+
+          // Estimate average character width from this code block
+          for (const item of line.items) {
+            if (item.text && item.width > 0) {
+              avgCharWidth += item.width / item.text.length;
+              charCount++;
+            }
+          }
         }
+      }
+
+      // Fallback to 6 pixels per char if we can't calculate
+      const charWidth = charCount > 0 ? avgCharWidth / charCount : 6;
+
+      // Convert indentation to spaces and insert paragraph breaks
+      for (let lineIndex = 0; lineIndex < block.lines.length; lineIndex++) {
+        // Check if we need to insert a paragraph break before this line
+        if (block.paragraphBoundaries?.includes(lineIndex)) {
+          result.push("");  // Add blank line at paragraph boundary
+        }
+
+        const line = block.lines[lineIndex];
+        const text = line.text.replace(/\s+$/, "");
+        if (!text) {
+          result.push("");  // Preserve blank lines in code
+          continue;
+        }
+
+        // Calculate relative indentation
+        const lineX = line.items[0]?.x ?? minX;
+        const relativeIndent = Math.max(0, lineX - minX);
+        const indentSpaces = Math.round(relativeIndent / charWidth);
+        const indent = " ".repeat(indentSpaces);
+
+        result.push(indent + text);
       }
       result.push("```");
       result.push("");
@@ -310,34 +389,260 @@ export function linesToMarkdown(lines: Line[]): string {
 }
 
 function groupLinesIntoMarkdownBlocks(lines: Line[], medianFont: number): MarkdownBlock[] {
-  const metadata = buildLineMetadata(lines, medianFont);
-  const spans = mergeCodeSpans(expandCodeAnchors(metadata, medianFont), metadata, medianFont);
+  // Split lines into paragraphs based on gaps
+  const paragraphs = splitIntoParagraphs(lines, medianFont);
+
+  // Classify each paragraph as code or text
+  const blocks: MarkdownBlock[] = [];
+
+  for (const paragraph of paragraphs) {
+    const isCodeBlock = isParagraphCodeBlock(paragraph, medianFont);
+
+    if (isCodeBlock) {
+      blocks.push({ kind: "code", lines: paragraph.lines });
+    } else {
+      blocks.push({ kind: "lines", lines: paragraph.lines });
+    }
+  }
+
+  // Merge consecutive code blocks
+  const mergedBlocks = mergeConsecutiveCodeBlocks(blocks);
 
   if (DEBUG_CODE_DETECTION) {
-    debugCodeDetection(metadata, spans);
+    debugParagraphDetection(paragraphs, mergedBlocks);
   }
 
-  if (spans.length === 0) {
-    return [{ kind: "lines", lines: [...lines] }];
+  return mergedBlocks.filter((block) => block.lines.length > 0);
+}
+
+function splitIntoParagraphs(lines: Line[], medianFont: number): Paragraph[] {
+  if (lines.length === 0) {
+    return [];
   }
 
-  const markdownBlocks: MarkdownBlock[] = [];
-  let cursor = 0;
+  const paragraphs: Paragraph[] = [];
+  let currentParagraph: Line[] = [];
+  let paragraphStartIndex = 0;
+  let emptyLineCount = 0;  // Track empty lines between paragraphs
 
-  for (const span of spans) {
-    if (span.start > cursor) {
-      markdownBlocks.push({ kind: "lines", lines: lines.slice(cursor, span.start) });
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const text = line.text.trim();
+
+    // Empty lines always create paragraph breaks
+    if (!text) {
+      if (currentParagraph.length > 0) {
+        paragraphs.push({
+          lines: currentParagraph,
+          startIndex: paragraphStartIndex,
+          endIndex: i - 1,
+        });
+        currentParagraph = [];
+        emptyLineCount = 1;
+      } else {
+        emptyLineCount++;
+      }
+      paragraphStartIndex = i + 1;
+      continue;
     }
 
-    markdownBlocks.push({ kind: "code", lines: lines.slice(span.start, span.end + 1) });
-    cursor = span.end + 1;
+    // If we had empty lines, add them as a separator paragraph
+    if (emptyLineCount > 0 && paragraphs.length > 0) {
+      // Create empty line objects to represent the gap
+      const emptyLines: Line[] = [];
+      for (let j = 0; j < emptyLineCount; j++) {
+        emptyLines.push({
+          items: [],
+          y: line.y - (emptyLineCount - j) * medianFont,
+          text: "",
+          avgFontHeight: medianFont,
+          totalFontHeight: medianFont,
+        });
+      }
+      paragraphs.push({
+        lines: emptyLines,
+        startIndex: paragraphStartIndex - emptyLineCount,
+        endIndex: paragraphStartIndex - 1,
+      });
+      emptyLineCount = 0;
+    }
+
+    // Check for large gap from previous line
+    if (currentParagraph.length > 0) {
+      const previousLine = currentParagraph[currentParagraph.length - 1];
+      const gap = line.y - previousLine.y;
+      const threshold = medianFont * PARAGRAPH_GAP_RATIO;
+
+      if (gap > threshold) {
+        paragraphs.push({
+          lines: currentParagraph,
+          startIndex: paragraphStartIndex,
+          endIndex: i - 1,
+        });
+        currentParagraph = [];
+        paragraphStartIndex = i;
+      }
+    }
+
+    currentParagraph.push(line);
   }
 
-  if (cursor < lines.length) {
-    markdownBlocks.push({ kind: "lines", lines: lines.slice(cursor) });
+  // Add the last paragraph
+  if (currentParagraph.length > 0) {
+    paragraphs.push({
+      lines: currentParagraph,
+      startIndex: paragraphStartIndex,
+      endIndex: lines.length - 1,
+    });
   }
 
-  return markdownBlocks.filter((block) => block.lines.length > 0);
+  return paragraphs;
+}
+
+function isParagraphCodeBlock(paragraph: Paragraph, medianFont: number): boolean {
+  const { lines } = paragraph;
+
+  if (lines.length === 0) {
+    return false;
+  }
+
+  // Count lines with code signals
+  let codeSignalCount = 0;
+  let totalNonEmptyLines = 0;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const text = line.text.trim();
+
+    if (!text) {
+      continue;
+    }
+
+    totalNonEmptyLines++;
+
+    // Check if line has strong code patterns
+    const hasStrongPattern = STRONG_CODE_PATTERNS.some((pattern) => pattern.test(text));
+    if (hasStrongPattern) {
+      codeSignalCount++;
+      continue;
+    }
+
+    // Check if line has inline code patterns
+    const hasInlinePattern = INLINE_CODE_PATTERNS.some((pattern) => pattern.test(text));
+    if (hasInlinePattern) {
+      codeSignalCount++;
+      continue;
+    }
+
+    // Check if line looks code-like
+    if (looksCodeLikeText(text)) {
+      codeSignalCount++;
+      continue;
+    }
+
+    // Check for monospace font (smaller than median)
+    const fontRatio = line.avgFontHeight / medianFont;
+    if (fontRatio < (1 - CODE_FONT_RATIO_TOLERANCE)) {
+      codeSignalCount += 0.5;  // Half point for small font alone
+    }
+  }
+
+  if (totalNonEmptyLines === 0) {
+    return false;
+  }
+
+  const codeDensity = codeSignalCount / totalNonEmptyLines;
+
+  // If density is high enough, it's a code block
+  if (codeDensity >= CODE_DENSITY_THRESHOLD) {
+    return true;
+  }
+
+  // Even if density is low, if ALL lines have strong patterns, it's code
+  const allStrongPatterns = lines.every((line) => {
+    const text = line.text.trim();
+    return !text || STRONG_CODE_PATTERNS.some((pattern) => pattern.test(text));
+  });
+
+  if (allStrongPatterns && totalNonEmptyLines >= CODE_BLOCK_MIN_LINES) {
+    return true;
+  }
+
+  return false;
+}
+
+function debugParagraphDetection(paragraphs: Paragraph[], blocks: MarkdownBlock[]): void {
+  const summary = paragraphs.map((paragraph, index) => {
+    const block = blocks[index];
+    const lines = paragraph.lines.map((line) => line.text);
+
+    return {
+      paragraphIndex: index,
+      blockKind: block?.kind || "unknown",
+      lineCount: paragraph.lines.length,
+      lines: lines,
+    };
+  });
+
+  console.info("[pdf-paragraph-detection]", summary);
+}
+
+function mergeConsecutiveCodeBlocks(blocks: MarkdownBlock[]): MarkdownBlock[] {
+  if (blocks.length === 0) {
+    return [];
+  }
+
+  const merged: MarkdownBlock[] = [];
+  let currentBlock: MarkdownBlock = {
+    kind: blocks[0].kind,
+    lines: [...blocks[0].lines],
+    paragraphBoundaries: []
+  };
+
+  for (let i = 1; i < blocks.length; i++) {
+    const block = blocks[i];
+
+    // If current is code and next is empty lines, check if the block after is also code
+    if (currentBlock.kind === "code" && block.lines.every(line => !line.text.trim())) {
+      // This is an empty paragraph between blocks
+      const nextBlock = blocks[i + 1];
+
+      if (nextBlock && nextBlock.kind === "code") {
+        // Mark the boundary before merging
+        const boundaryIndex = currentBlock.lines.length;
+        currentBlock.paragraphBoundaries = currentBlock.paragraphBoundaries || [];
+        currentBlock.paragraphBoundaries.push(boundaryIndex);
+
+        // Merge: code + empty + code → single code block
+        currentBlock.lines = [...currentBlock.lines, ...nextBlock.lines];
+        i++;  // Skip the next code block since we already merged it
+        continue;
+      }
+    }
+
+    // If current and next are both code blocks (directly adjacent), merge them
+    if (currentBlock.kind === "code" && block.kind === "code") {
+      // Mark the boundary before merging
+      const boundaryIndex = currentBlock.lines.length;
+      currentBlock.paragraphBoundaries = currentBlock.paragraphBoundaries || [];
+      currentBlock.paragraphBoundaries.push(boundaryIndex);
+
+      currentBlock.lines = [...currentBlock.lines, ...block.lines];
+    } else {
+      // Different types, push current and start new
+      merged.push(currentBlock);
+      currentBlock = {
+        kind: block.kind,
+        lines: [...block.lines],
+        paragraphBoundaries: []
+      };
+    }
+  }
+
+  // Don't forget the last block
+  merged.push(currentBlock);
+
+  return merged;
 }
 
 function buildLineMetadata(lines: Line[], medianFont: number): LineMetadata[] {
@@ -842,6 +1147,16 @@ function classifyLine(lines: Line[], index: number, medianFont: number): CodeCan
 function looksCodeLikeText(text: string): boolean {
   if (!text) {
     return false;
+  }
+
+  // String literal lines (e.g., "text..." or 'text...')
+  if (/^["']/.test(text)) {
+    return true;
+  }
+
+  // Closing patterns that often appear on their own line (e.g., ") ---", "}")
+  if (/^\)\s*---$/.test(text)) {
+    return true;
   }
 
   if (/^[(){}\[\],.:]+$/.test(text) || /^[)\]}]/.test(text) || /^\|/.test(text)) {
