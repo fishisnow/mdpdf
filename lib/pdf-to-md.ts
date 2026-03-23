@@ -106,16 +106,18 @@ const MAX_CODE_SPAN_CODELIKE_RUN = 6;
 const MAX_CODE_SPAN_PRELUDE_LINES = 1;
 const DEBUG_CODE_DETECTION = true;
 const PARAGRAPH_GAP_RATIO = 1.5;  // Gap threshold to split paragraphs
-const CODE_DENSITY_THRESHOLD = 0.4;  // 40% of lines need code signals to be a code block
+const CODE_DENSITY_THRESHOLD = 0.3;  // 30% of lines need code signals to be a code block
 const INLINE_CODE_PATTERNS = [
   /^\s*#/,
-  /^\s*(?:import|from|export|const|let|var|def|class|function)\b/,
-  /^\s*(?:pip|npm|pnpm|yarn|poetry|python|node|uv)\b/,
-  /=>|::|\b[A-Za-z_][A-Za-z0-9_]*\(/,
-  /[{}()[\]=]/,
-  /^\s*(?:if|elif|else|for|while|try|except|finally|with|async|await|return)\b/,
-  /^["'][^"']*["']?$/,  // String literal lines like "text..." or 'text...'
-  /^\)\s*---$/,         // Closing paren with delimiter like ") ---"
+  /^\s*import\s+/,
+  /^\s*from\s+\S+\s+import/,  // Must be "from X import" pattern
+  /^\s*(?:export|const|let|var|def|class|function)\s+/,
+  /^\s*(?:pip|npm|pnpm|yarn|poetry|python|node|uv)\s+/,
+  /=>|::/,  // Arrow functions or scope resolution
+  /^\s*(?:if|elif|else|while|try|except|finally|with|async|await|return)\s+/,  // No 'for' - too common in prose
+  /^["']{3}/,  // Triple quotes (Python docstrings)
+  /^\s*\|/,  // Pipe operator
+  /^[{[]/,  // Lines starting with dict/list/object literal
 ];
 const STRONG_CODE_PATTERNS = [
   /^\s*from\s+\S+\s+import\s+/,
@@ -274,12 +276,21 @@ export function linesToMarkdown(lines: Line[], globalMedianFont?: number): strin
 
   // Use global median if provided, otherwise calculate from current page
   const medianFont = globalMedianFont ?? median(fontHeights);
+
+  // Also calculate page-level median for local context
+  const pageMedianFont = median(fontHeights);
+
   const medianGap = gaps.length > 0 ? median(gaps) : medianFont * 1.5;
-  const blocks = groupLinesIntoMarkdownBlocks(lines, medianFont);
+  const blocks = groupLinesIntoMarkdownBlocks(lines, medianFont, pageMedianFont);
   const result: string[] = [];
 
   for (const block of blocks) {
     if (block.kind === "code") {
+      // Ensure there's a blank line before code block if result is not empty
+      if (result.length > 0 && result[result.length - 1] !== "") {
+        result.push("");
+      }
+
       result.push("```");
 
       // Calculate base indentation (minimum x position in this code block)
@@ -348,16 +359,19 @@ export function linesToMarkdown(lines: Line[], globalMedianFont?: number): strin
       let formatted = text;
       let needsTrailingSpaces = true;
 
-      if (ratio >= HEADING_LEVEL_1_RATIO && isShortLine) {
+      // Check if this line contains code fence markers
+      const hasCodeFence = /^```/.test(text);
+
+      if (ratio >= HEADING_LEVEL_1_RATIO && isShortLine && !hasCodeFence) {
         formatted = `# ${text}`;
         needsTrailingSpaces = false;
-      } else if (ratio >= HEADING_LEVEL_2_RATIO && isShortLine) {
+      } else if (ratio >= HEADING_LEVEL_2_RATIO && isShortLine && !hasCodeFence) {
         formatted = `## ${text}`;
         needsTrailingSpaces = false;
-      } else if (ratio >= HEADING_LEVEL_3_RATIO && isShortLine) {
+      } else if (ratio >= HEADING_LEVEL_3_RATIO && isShortLine && !hasCodeFence) {
         formatted = `### ${text}`;
         needsTrailingSpaces = false;
-      } else if (isBullet) {
+      } else if (isBullet && !hasCodeFence) {
         formatted = `- ${text.replace(BULLET_PATTERN, "")}`;
         needsTrailingSpaces = false;
       }
@@ -385,23 +399,91 @@ export function linesToMarkdown(lines: Line[], globalMedianFont?: number): strin
     result.pop();
   }
 
-  return result.join("\n");
+  // Fix unmatched code fences in the result
+  let inCodeFence = false;
+  const fixedResult: string[] = [];
+
+  for (let i = 0; i < result.length; i++) {
+    const line = result[i];
+    fixedResult.push(line);
+
+    // Track code fence state
+    if (/^```/.test(line.trim())) {
+      inCodeFence = !inCodeFence;
+    }
+  }
+
+  // If we end with an unclosed code fence, close it
+  if (inCodeFence) {
+    fixedResult.push("```");
+  }
+
+  // Ensure code blocks at the end are properly closed
+  const lastNonEmpty = fixedResult.filter(line => line.trim()).pop();
+  if (lastNonEmpty === "```") {
+    // Last line is code block closing - add back an empty line
+    fixedResult.push("");
+  }
+
+  return fixedResult.join("\n");
 }
 
-function groupLinesIntoMarkdownBlocks(lines: Line[], medianFont: number): MarkdownBlock[] {
+function groupLinesIntoMarkdownBlocks(lines: Line[], globalMedianFont: number, pageMedianFont: number): MarkdownBlock[] {
+  if (DEBUG_CODE_DETECTION) {
+    console.info("[page-processing]", {
+      totalLines: lines.length,
+      globalMedianFont: globalMedianFont.toFixed(2),
+      pageMedianFont: pageMedianFont.toFixed(2),
+      fontDiff: (globalMedianFont - pageMedianFont).toFixed(2),
+    });
+  }
+
   // Split lines into paragraphs based on gaps
-  const paragraphs = splitIntoParagraphs(lines, medianFont);
+  const paragraphs = splitIntoParagraphs(lines, pageMedianFont);
 
   // Classify each paragraph as code or text
   const blocks: MarkdownBlock[] = [];
 
   for (const paragraph of paragraphs) {
-    const isCodeBlock = isParagraphCodeBlock(paragraph, medianFont);
+    const isCodeBlock = isParagraphCodeBlock(paragraph, pageMedianFont);
 
     if (isCodeBlock) {
       blocks.push({ kind: "code", lines: paragraph.lines });
     } else {
       blocks.push({ kind: "lines", lines: paragraph.lines });
+    }
+  }
+
+  // Post-process: check for text paragraphs sandwiched between code blocks
+  for (let i = 0; i < blocks.length; i++) {
+    const block = blocks[i];
+    if (block.kind === "lines" && block.lines.length <= 3) {
+      const prevBlock = i > 0 ? blocks[i - 1] : null;
+      const nextBlock = i < blocks.length - 1 ? blocks[i + 1] : null;
+
+      // If surrounded by code blocks, check if this is likely a continuation
+      if (prevBlock?.kind === "code" && nextBlock?.kind === "code") {
+        const allLinesLookLikeContinuation = block.lines.every(line => {
+          const text = line.text.trim();
+          if (!text) return true;
+
+          // Continuation patterns: closing parens, dashes, etc.
+          if (/^[)\]}]/.test(text) || /---$/.test(text) || /^\).*---$/.test(text)) {
+            return true;
+          }
+
+          // Short lines that might be split fragments
+          if (text.length < 50 && !/\b(the|is|are|was|were|this|that|these|those)\b/.test(text)) {
+            return true;
+          }
+
+          return false;
+        });
+
+        if (allLinesLookLikeContinuation) {
+          block.kind = "code";  // Convert to code block
+        }
+      }
     }
   }
 
@@ -473,7 +555,11 @@ function splitIntoParagraphs(lines: Line[], medianFont: number): Paragraph[] {
       const gap = line.y - previousLine.y;
       const threshold = medianFont * PARAGRAPH_GAP_RATIO;
 
-      if (gap > threshold) {
+      // Don't split if previous line is a # comment and current line looks like continuation
+      const previousIsComment = /^\s*#/.test(previousLine.text.trim());
+      const currentLooksContinuation = /^[a-z]/.test(text) || /^\)/.test(text) || /^---/.test(text) || text.length < 50;
+
+      if (gap > threshold && !(previousIsComment && currentLooksContinuation)) {
         paragraphs.push({
           lines: currentParagraph,
           startIndex: paragraphStartIndex,
@@ -506,9 +592,65 @@ function isParagraphCodeBlock(paragraph: Paragraph, medianFont: number): boolean
     return false;
   }
 
+  // PRIORITY CHECK: If any line starts with #, the whole paragraph is code
+  const hasCommentLine = lines.some(line => {
+    const text = line.text.trim();
+    return text && /^\s*#/.test(text);
+  });
+
+  if (hasCommentLine) {
+    return true;
+  }
+
+  // PRIORITY CHECK: If first non-empty line is a class or function definition, likely code
+  const firstNonEmptyLine = lines.find(line => line.text.trim());
+  if (firstNonEmptyLine) {
+    const text = firstNonEmptyLine.text.trim();
+    if (/^\s*(?:class|def|async\s+def)\s+\w+/.test(text)) {
+      return true;
+    }
+  }
+
+  // PRIORITY CHECK: If paragraph contains triple-quoted strings, likely code
+  let inTripleQuote = false;
+  let tripleQuoteLineCount = 0;
+  for (const line of lines) {
+    const text = line.text.trim();
+    if (!text) continue;
+
+    // Check for triple quote delimiters
+    const hasTripleQuote = /"""/.test(text) || /'''/.test(text);
+    if (hasTripleQuote) {
+      // Count opening/closing quotes
+      const tripleDoubleCount = (text.match(/"""/g) || []).length;
+      const tripleSingleCount = (text.match(/'''/g) || []).length;
+
+      if (tripleDoubleCount % 2 === 1) {
+        inTripleQuote = !inTripleQuote;
+      }
+      if (tripleSingleCount % 2 === 1) {
+        inTripleQuote = !inTripleQuote;
+      }
+    }
+
+    if (inTripleQuote || hasTripleQuote) {
+      tripleQuoteLineCount++;
+    }
+  }
+
+  // If >30% of lines are in triple-quoted strings, likely code with embedded text
+  if (tripleQuoteLineCount > lines.length * 0.3) {
+    return true;
+  }
+
   // Count lines with code signals
   let codeSignalCount = 0;
   let totalNonEmptyLines = 0;
+  let proseSignalCount = 0;
+  const debugInfo: any[] = [];
+
+  // Track triple-quote state while iterating
+  inTripleQuote = false;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
@@ -520,30 +662,78 @@ function isParagraphCodeBlock(paragraph: Paragraph, medianFont: number): boolean
 
     totalNonEmptyLines++;
 
-    // Check if line has strong code patterns
+    // Update triple-quote state
+    const hasTripleQuote = /"""/.test(text) || /'''/.test(text);
+    if (hasTripleQuote) {
+      const tripleDoubleCount = (text.match(/"""/g) || []).length;
+      const tripleSingleCount = (text.match(/'''/g) || []).length;
+
+      if (tripleDoubleCount % 2 === 1) {
+        inTripleQuote = !inTripleQuote;
+      }
+      if (tripleSingleCount % 2 === 1) {
+        inTripleQuote = !inTripleQuote;
+      }
+    }
+
+    let lineCodeScore = 0;
+    let lineReason = "";
+
+    // Check if line has strong code patterns (highest priority)
     const hasStrongPattern = STRONG_CODE_PATTERNS.some((pattern) => pattern.test(text));
     if (hasStrongPattern) {
+      lineCodeScore = 1;
+      lineReason = "strong pattern";
       codeSignalCount++;
+      // Don't check for prose if it's a strong code pattern (like # comments)
+      if (DEBUG_CODE_DETECTION && lineCodeScore > 0) {
+        debugInfo.push({
+          text: text.substring(0, 60),
+          score: lineCodeScore,
+          reason: lineReason,
+        });
+      }
       continue;
+    }
+
+    // Check for prose signals (natural language indicators)
+    // Only count as prose if it's clearly a full sentence
+    const wordCount = text.split(/\s+/).length;
+    const hasMultipleCommonWords = (text.match(/\b(the|a|an|is|are|was|were|in|on|at|to|for|of|and|or|but|with|from|by|this|that|these|those|which|what|when|where|how|why)\b/gi) || []).length >= 2;
+    const endsWithSentencePunctuation = /[.!?]$/.test(text);
+    const isLongSentence = wordCount > 12 && text.length > 70;
+
+    // Don't count as prose if inside triple quotes (it's code content)
+    if (inTripleQuote) {
+      // Skip prose detection for lines inside triple-quoted strings
+    } else {
+      // Only count as prose if it looks like a complete sentence
+      if (hasMultipleCommonWords && endsWithSentencePunctuation && wordCount > 5) {
+        proseSignalCount++;
+      } else if (isLongSentence && hasMultipleCommonWords) {
+        proseSignalCount++;
+      }
     }
 
     // Check if line has inline code patterns
     const hasInlinePattern = INLINE_CODE_PATTERNS.some((pattern) => pattern.test(text));
     if (hasInlinePattern) {
+      lineCodeScore = 1;
+      lineReason = "inline pattern";
       codeSignalCount++;
-      continue;
-    }
-
-    // Check if line looks code-like
-    if (looksCodeLikeText(text)) {
+    } else if (looksCodeLikeText(text)) {
+      lineCodeScore = 1;
+      lineReason = "looksCodeLike";
       codeSignalCount++;
-      continue;
     }
+    // Note: Removed font-based scoring - too inconsistent across different PDFs
 
-    // Check for monospace font (smaller than median)
-    const fontRatio = line.avgFontHeight / medianFont;
-    if (fontRatio < (1 - CODE_FONT_RATIO_TOLERANCE)) {
-      codeSignalCount += 0.5;  // Half point for small font alone
+    if (DEBUG_CODE_DETECTION && lineCodeScore > 0) {
+      debugInfo.push({
+        text: text.substring(0, 60),
+        score: lineCodeScore,
+        reason: lineReason,
+      });
     }
   }
 
@@ -552,10 +742,44 @@ function isParagraphCodeBlock(paragraph: Paragraph, medianFont: number): boolean
   }
 
   const codeDensity = codeSignalCount / totalNonEmptyLines;
+  const proseDensity = proseSignalCount / totalNonEmptyLines;
+
+  const isCode = proseDensity <= 0.6 && codeDensity >= CODE_DENSITY_THRESHOLD;
+
+  if (DEBUG_CODE_DETECTION && (isCode || debugInfo.length > 0)) {
+    console.info("[paragraph-code-check]", {
+      totalLines: totalNonEmptyLines,
+      codeSignals: codeSignalCount,
+      proseSignals: proseSignalCount,
+      codeDensity: codeDensity.toFixed(2),
+      proseDensity: proseDensity.toFixed(2),
+      tripleQuoteLines: tripleQuoteLineCount,
+      isCode,
+      debugInfo,
+    });
+  }
+
+  // If majority of lines look like prose, it's not code
+  if (proseDensity > 0.6) {
+    return false;
+  }
 
   // If density is high enough, it's a code block
   if (codeDensity >= CODE_DENSITY_THRESHOLD) {
     return true;
+  }
+
+  // Special case: If code signals are weak but we have strong structural indicators
+  // (assignment, function calls, brackets) along with triple quotes, likely code
+  const hasStrongStructure = lines.some(line => {
+    const text = line.text.trim();
+    return /^[A-Za-z_][A-Za-z0-9_]*\s*=/.test(text) ||  // Assignment
+           /^[A-Za-z_][A-Za-z0-9_]*\([^)]*\)/.test(text) ||  // Function call
+           /^\[/.test(text) || /^\{/.test(text);  // Bracket/brace start
+  });
+
+  if (hasStrongStructure && tripleQuoteLineCount > 0 && codeDensity >= 0.15) {
+    return true;  // Lower threshold (15%) if has strong structure + triple quotes
   }
 
   // Even if density is low, if ALL lines have strong patterns, it's code
@@ -1149,37 +1373,63 @@ function looksCodeLikeText(text: string): boolean {
     return false;
   }
 
-  // String literal lines (e.g., "text..." or 'text...')
-  if (/^["']/.test(text)) {
+  // Triple-quoted strings (Python docstrings)
+  if (/^["']{3}/.test(text)) {
     return true;
   }
 
-  // Closing patterns that often appear on their own line (e.g., ") ---", "}")
-  if (/^\)\s*---$/.test(text)) {
+  // Single quoted identifiers (common in code, rare in prose)
+  if (/^['"][A-Za-z_][A-Za-z0-9_]*['"]$/.test(text)) {
     return true;
   }
 
-  if (/^[(){}\[\],.:]+$/.test(text) || /^[)\]}]/.test(text) || /^\|/.test(text)) {
+  // Lines that are ONLY punctuation (closing braces, etc.)
+  if (/^[)}\]]+$/.test(text)) {
     return true;
   }
 
-  if (/^[A-Za-z_][A-Za-z0-9_]*\([^)]*\)$/.test(text)) {
+  // Dict/object/array literals
+  if (/^[{[]/.test(text)) {
     return true;
   }
 
-  if (/=>|::/.test(text)) {
+  // Pipe operators (standalone or at start)
+  if (/^\s*\|/.test(text) || /\|\s*$/.test(text)) {
     return true;
   }
 
-  if (/=/.test(text) || /[{}[\]]/.test(text)) {
+  // Assignment patterns (must not be part of prose)
+  if (/^[A-Za-z_][A-Za-z0-9_]*\s*=\s*[^=]/.test(text) && !/ = /.test(text)) {
+    // Matches: var=value or var= but NOT "I = something" (with spaces around =)
     return true;
   }
 
-  if (/^[A-Za-z_][A-Za-z0-9_]*\s*=/.test(text)) {
+  // Function calls with typical syntax
+  if (/^[A-Za-z_][A-Za-z0-9_]*\([^)]*\)/.test(text)) {
     return true;
   }
 
-  return /^[A-Za-z0-9]+(?:_[A-Za-z0-9]+)+$/.test(text);
+  // Method chaining (dot notation)
+  if (/\.[A-Za-z_][A-Za-z0-9_]*\(/.test(text)) {
+    return true;
+  }
+
+  // Arrow functions or lambda
+  if (/=>|->|\blambda\b/.test(text)) {
+    return true;
+  }
+
+  // Variable names with multiple underscores (common in code, rare in prose)
+  if (/^[A-Za-z0-9]+(?:_[A-Za-z0-9]+){2,}$/.test(text)) {
+    return true;
+  }
+
+  // Lines that start with common code-specific characters
+  if (/^[\t ]*[@$]/.test(text)) {
+    return true;
+  }
+
+  return false;
 }
 
 function isShortCommandLikeText(text: string): boolean {
