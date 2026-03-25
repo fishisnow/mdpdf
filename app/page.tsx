@@ -198,7 +198,7 @@ export default function Home() {
         )}
       </div>
 
-      <div className="mb-12 sm:mb-16">
+      <div className="mb-12 grid gap-4 sm:mb-16 sm:grid-cols-2">
         <Link
           href="/md-to-pdf"
           className="group block rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:border-indigo-200 hover:shadow-md sm:p-6"
@@ -211,6 +211,22 @@ export default function Home() {
             </div>
             <div>
               <span className="font-semibold text-gray-900 transition-colors group-hover:text-indigo-600">MD to PDF Converter →</span>
+            </div>
+          </div>
+        </Link>
+
+        <Link
+          href="/pdf-to-image"
+          className="group block rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:border-blue-200 hover:shadow-md sm:p-6"
+        >
+          <div className="flex items-start gap-3 sm:items-center">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-100">
+              <svg className="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7h16M4 12h16M4 17h10" />
+              </svg>
+            </div>
+            <div>
+              <span className="font-semibold text-gray-900 transition-colors group-hover:text-blue-600">PDF to JPG/PNG →</span>
             </div>
           </div>
         </Link>

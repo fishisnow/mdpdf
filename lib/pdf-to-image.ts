@@ -1,0 +1,179 @@
+import { zipSync, strToU8 } from "fflate";
+
+export type ImageFormat = "jpg" | "png";
+export type QualityPreset = "standard" | "high" | "ultra";
+
+export interface ConvertToImageOptions {
+  format: ImageFormat;
+  pages: number[];
+  qualityPreset: QualityPreset;
+  jpgQuality: number;
+  fileName: string;
+  onProgress?: (current: number, total: number) => void;
+}
+
+export interface ConvertToImageResult {
+  mimeType: string;
+  fileName: string;
+  bytes: Uint8Array;
+}
+
+const PRESET_SCALE: Record<QualityPreset, number> = {
+  standard: 1.5,
+  high: 2,
+  ultra: 3,
+};
+
+function stripExtension(name: string): string {
+  return name.replace(/\.[^.]+$/, "");
+}
+
+function padPage(page: number): string {
+  return String(page).padStart(3, "0");
+}
+
+function parseBlobAsBytes(blob: Blob): Promise<Uint8Array> {
+  return blob.arrayBuffer().then((ab) => new Uint8Array(ab));
+}
+
+function toBlob(canvas: HTMLCanvasElement, format: ImageFormat, jpgQuality: number): Promise<Blob> {
+  const mimeType = format === "png" ? "image/png" : "image/jpeg";
+
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) {
+          reject(new Error("Failed to export image blob."));
+          return;
+        }
+        resolve(blob);
+      },
+      mimeType,
+      format === "jpg" ? jpgQuality : undefined,
+    );
+  });
+}
+
+export function parsePageRanges(input: string, maxPages: number): number[] {
+  const value = input.trim();
+
+  if (!value) {
+    return Array.from({ length: maxPages }, (_, index) => index + 1);
+  }
+
+  const pages = new Set<number>();
+  const chunks = value.split(",").map((part) => part.trim()).filter(Boolean);
+
+  for (const chunk of chunks) {
+    if (chunk.includes("-")) {
+      const [rawStart, rawEnd] = chunk.split("-").map((part) => part.trim());
+      const start = Number(rawStart);
+      const end = Number(rawEnd);
+
+      if (!Number.isInteger(start) || !Number.isInteger(end) || start < 1 || end < 1 || start > end) {
+        throw new Error(`Invalid range: ${chunk}`);
+      }
+
+      for (let page = start; page <= end; page += 1) {
+        if (page <= maxPages) pages.add(page);
+      }
+      continue;
+    }
+
+    const page = Number(chunk);
+    if (!Number.isInteger(page) || page < 1) {
+      throw new Error(`Invalid page number: ${chunk}`);
+    }
+    if (page <= maxPages) pages.add(page);
+  }
+
+  const sorted = Array.from(pages).sort((a, b) => a - b);
+  if (sorted.length === 0) {
+    throw new Error("No valid pages selected.");
+  }
+  return sorted;
+}
+
+function cloneBytes(input: Uint8Array): Uint8Array {
+  const cloned = new Uint8Array(input.byteLength);
+  cloned.set(input);
+  return cloned;
+}
+
+async function loadPdfJs() {
+  const pdfjs = await import("pdfjs-dist");
+  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+  return pdfjs;
+}
+
+export async function getPdfPageCount(bytes: Uint8Array): Promise<number> {
+  const { getDocument } = await loadPdfJs();
+  const loadingTask = getDocument({ data: cloneBytes(bytes) });
+  const pdf = await loadingTask.promise;
+  const count = pdf.numPages;
+  await pdf.destroy();
+  return count;
+}
+
+export async function convertPdfToImages(
+  pdfBytes: Uint8Array,
+  options: ConvertToImageOptions,
+): Promise<ConvertToImageResult[]> {
+  const { getDocument } = await loadPdfJs();
+  const loadingTask = getDocument({ data: cloneBytes(pdfBytes) });
+  const pdf = await loadingTask.promise;
+
+  const baseName = stripExtension(options.fileName || "document");
+  const scale = PRESET_SCALE[options.qualityPreset];
+
+  try {
+    const results: ConvertToImageResult[] = [];
+
+    for (let index = 0; index < options.pages.length; index += 1) {
+      const pageNumber = options.pages[index];
+      const page = await pdf.getPage(pageNumber);
+      const viewport = page.getViewport({ scale });
+
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+      if (!context) {
+        throw new Error("Unable to create canvas context.");
+      }
+
+      canvas.width = Math.max(1, Math.floor(viewport.width));
+      canvas.height = Math.max(1, Math.floor(viewport.height));
+
+      await page.render({ canvas: canvas as unknown as HTMLCanvasElement, canvasContext: context, viewport }).promise;
+      const blob = await toBlob(canvas, options.format, options.jpgQuality);
+      const bytes = await parseBlobAsBytes(blob);
+      const ext = options.format === "png" ? "png" : "jpg";
+
+      results.push({
+        mimeType: blob.type,
+        fileName: `${baseName}_p${padPage(pageNumber)}.${ext}`,
+        bytes,
+      });
+
+      canvas.width = 0;
+      canvas.height = 0;
+      page.cleanup();
+      options.onProgress?.(index + 1, options.pages.length);
+    }
+
+    return results;
+  } finally {
+    await pdf.destroy();
+  }
+}
+
+export function buildZipFromImages(images: ConvertToImageResult[]): Uint8Array {
+  const files: Record<string, Uint8Array> = {
+    "README.txt": strToU8("Generated by MdPdf (client-side conversion)."),
+  };
+
+  for (const item of images) {
+    files[item.fileName] = item.bytes;
+  }
+
+  return zipSync(files, { level: 6 });
+}
