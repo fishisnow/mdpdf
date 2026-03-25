@@ -210,13 +210,13 @@ export default function Home() {
               </svg>
             </div>
             <div>
-              <span className="font-semibold text-gray-900 transition-colors group-hover:text-indigo-600">MD to PDF Converter →</span>
+              <span className="font-semibold text-gray-900 transition-colors group-hover:text-indigo-600">MD to PDF →</span>
             </div>
           </div>
         </Link>
 
         <Link
-          href="/pdf-to-image"
+          href="/pdf-to-jpg"
           className="group block rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:border-blue-200 hover:shadow-md sm:p-6"
         >
           <div className="flex items-start gap-3 sm:items-center">
@@ -226,7 +226,7 @@ export default function Home() {
               </svg>
             </div>
             <div>
-              <span className="font-semibold text-gray-900 transition-colors group-hover:text-blue-600">PDF to JPG/PNG →</span>
+              <span className="font-semibold text-gray-900 transition-colors group-hover:text-blue-600">PDF to JPG →</span>
             </div>
           </div>
         </Link>
