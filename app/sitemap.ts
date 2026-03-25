@@ -9,6 +9,10 @@ const routes = [
     url: "https://mdpdf.net/md-to-pdf",
     priority: 0.9,
   },
+  {
+    url: "https://mdpdf.net/pdf-to-jpg",
+    priority: 0.9,
+  },
 ] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
