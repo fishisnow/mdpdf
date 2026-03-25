@@ -1,59 +1,56 @@
 # MdPdf
 
-MdPdf 是一个普通单应用结构的 Next.js 项目，提供两种文档转换能力：
+MdPdf is a fast, browser-based document converter for turning PDFs into clean Markdown and exporting Markdown into polished, print-ready PDFs. It is built for creators, developers, and AI/documentation workflows that need content to stay easy to edit, reuse, and publish.
 
-- `PDF to Markdown`：上传 PDF，在站内完成解析并导出 Markdown
-- `Markdown to PDF`：在浏览器中渲染打印友好的 HTML，然后通过系统原生打印对话框保存为 PDF
+## Features
 
-## 仓库结构
+- Convert `PDF -> Markdown` directly in the browser
+- Convert `Markdown -> PDF` with a live preview and the browser's native print dialog
+- Keep document workflows simple for editing, copying, and reusing content
+- Use a single Next.js app for both tools
 
-```text
-.
-├── app/                # Next.js App Router 页面与接口
-├── components/         # 页面组件
-├── lib/                # 转换与分析逻辑
-├── public/             # 静态资源
-├── package.json
-├── package-lock.json
-├── next.config.ts
-├── postcss.config.mjs
-└── tsconfig.json
-```
+## How It Works
 
-## 技术栈
+### PDF to Markdown
 
-- Next.js 16
-- React 19
-- TypeScript
-- Tailwind CSS 4
-- `unpdf`：PDF to Markdown
-- `react-markdown` + `remark-gfm`：Markdown 预览与打印文档渲染
+Open `http://localhost:3000/`, upload a PDF, and let the app extract Markdown in the browser UI. The converted content can then be previewed, copied, or downloaded as a `.md` file.
 
-## 本地开发
+### Markdown to PDF
 
-### 环境要求
+Open `http://localhost:3000/md-to-pdf` and follow this flow:
+
+1. Write or paste Markdown into the editor
+2. Review the live preview
+3. Click `Print / Save as PDF`
+4. Choose `Save as PDF` in the browser's native print dialog
+
+The page temporarily updates `document.title` before printing so browsers that support it can suggest a better default filename.
+
+## Quick Start
+
+### Requirements
 
 - Node.js 20+
 - npm 10+
 
-### 安装依赖
+### Install
 
 ```bash
 npm install
 ```
 
-### 启动开发环境
+### Run locally
 
 ```bash
 npm run dev
 ```
 
-启动后访问：
+Then open:
 
-- `http://localhost:3000/`：PDF to Markdown
-- `http://localhost:3000/md-to-pdf`：Markdown to PDF
+- `http://localhost:3000/` for PDF to Markdown
+- `http://localhost:3000/md-to-pdf` for Markdown to PDF
 
-## 常用命令
+## Available Scripts
 
 ```bash
 npm run dev
@@ -62,62 +59,35 @@ npm run start
 npm run typecheck
 ```
 
-## Markdown to PDF 工作方式
+## Tech Stack
 
-`/md-to-pdf` 不依赖独立服务，也不需要额外环境变量。
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- `pdfjs-dist` for PDF parsing
+- `react-markdown` and `remark-gfm` for Markdown rendering
+- `marked` and `dompurify` for HTML generation and sanitization
 
-使用方式：
+## Architecture Notes
 
-1. 在编辑器中输入或粘贴 Markdown
-2. 切换到 Preview 检查排版效果
-3. 点击 `Print / Save as PDF`
-4. 在浏览器原生打印对话框中选择 `Save as PDF`
+MdPdf runs as a single Next.js application with both conversion workflows exposed through the web UI.
 
-页面会在打印前临时设置 `document.title`，以便浏览器在支持时使用更合适的默认文件名。
+- `PDF -> Markdown` runs client-side in the browser
+- `Markdown -> PDF` renders HTML in the browser and relies on the native print flow to save as PDF
 
-## 部署说明
+## Privacy and Network Behavior
 
-当前项目可直接作为单个 Next.js 应用部署。
+The core document conversion flows run in the browser after the page loads. This keeps the editing, rendering, and export experience local to the web UI.
 
-### Cloudflare Pages 构建配置
+## Deployment
 
-建议配置如下：
+This project can be deployed as a standard Next.js application.
 
-- Framework preset: `Next.js`
-- Root directory: `/`
-- Build command: `npm install && npm run build`
-- Build output directory: `.next`
-- Node.js version: `20` 或更高
+## Contributing
 
-### 部署前自检
+Issues and pull requests are welcome. If you plan to change conversion behavior, UI copy, or deployment-related behavior, keep the browser-first workflow and current architecture notes in sync with the code.
 
-```bash
-npm install
-npm run typecheck
-npm run build
-```
+## License
 
-## 隐私与架构说明
-
-### PDF to Markdown
-
-首页上传的 PDF 仍通过站内接口处理，用于提取 Markdown 内容。
-
-### Markdown to PDF
-
-`/md-to-pdf` 的打印与保存流程在浏览器内完成，不依赖单独的 PDF API 服务。你的 Markdown 内容仅用于当前页面渲染和本地打印预览。
-
-### 兼容性占位接口
-
-`app/api/md-to-pdf/route.ts` 仍保留 `410 Gone` 响应，用于明确提示旧调用方：Markdown to PDF 已迁移为浏览器端打印流程。
-
-## 关键文件
-
-- `package.json`：项目脚本与依赖
-- `app/page.tsx`：PDF to Markdown 页面
-- `app/md-to-pdf/page.tsx`：Markdown to PDF 页面
-- `app/api/convert/route.ts`：PDF to Markdown API
-- `app/api/md-to-pdf/route.ts`：旧接口兼容占位响应
-- `components/MarkdownPreview.tsx`：PDF to Markdown 结果预览
-- `components/markdown-components.tsx`：共享 Markdown 渲染配置
-- `app/globals.css`：全局与打印样式
+This project is licensed under the MIT License. See `LICENSE` for details.

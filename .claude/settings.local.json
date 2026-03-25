@@ -16,7 +16,9 @@
       "Bash(python3:*)",
       "Bash(npm test:*)",
       "Bash(npm view:*)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(\"/Users/huangyusong/myspace/mdpdf/app/favicon-source.svg\":*)",
+      "Bash(magick -background none \"/Users/huangyusong/myspace/mdpdf/app/favicon-source.svg\" -define icon:auto-resize=64,48,32,16 \"/Users/huangyusong/myspace/mdpdf/app/favicon.ico\")"
     ]
   }
 }
