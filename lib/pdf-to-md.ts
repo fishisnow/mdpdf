@@ -83,8 +83,9 @@ interface Paragraph {
 }
 
 const LINE_Y_THRESHOLD = 3;
+const HEADER_REGION_RATIO = 0.1;
 const FOOTER_REGION_RATIO = 0.9;
-const SHORT_FOOTER_TEXT_LENGTH = 20;
+const SHORT_HEADER_FOOTER_TEXT_LENGTH = 20;
 const BODY_LINE_MAX_LENGTH = 80;
 const PAGE_SEPARATOR = "\n\n---\n\n";
 const BULLET_PATTERN = /^[\u2022\u2023\u25E6\u2043\-*]\s+/;
@@ -157,6 +158,7 @@ export async function convertPdfToMarkdown(
       const operatorList = await page.getOperatorList();
       const viewport = page.getViewport({ scale: 1 });
       const pageHeight = viewport.height;
+      const headerY = pageHeight * HEADER_REGION_RATIO;
       const footerY = pageHeight * FOOTER_REGION_RATIO;
       const items: TextItem[] = [];
 
@@ -181,11 +183,12 @@ export async function convertPdfToMarkdown(
       }
 
       const filteredItems = items.filter((item) => {
-        if (item.y < footerY) {
+        const inBodyRegion = item.y >= headerY && item.y < footerY;
+        if (inBodyRegion) {
           return true;
         }
 
-        return item.text.length > SHORT_FOOTER_TEXT_LENGTH;
+        return item.text.length > SHORT_HEADER_FOOTER_TEXT_LENGTH;
       });
 
       if (filteredItems.length === 0) {
