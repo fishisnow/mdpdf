@@ -17,6 +17,20 @@ export const metadata: Metadata = {
     url: "https://mdpdf.net",
     siteName: "MdPdf",
     type: "website",
+    images: [
+      {
+        url: "https://mdpdf.net/pdf-to-md.png",
+        width: 1982,
+        height: 1256,
+        alt: "Free PDF to MD converter online - convert PDF to Markdown with MdPdf",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Free PDF to MD & MD to PDF Converter Online | mdpdf.net",
+    description: "MdPdf is a free pdf to md converter. Convert pdf to md online and turn PDF files into clean markdown quickly and accurately.",
+    images: ["https://mdpdf.net/pdf-to-md.png"],
   },
 };
 
