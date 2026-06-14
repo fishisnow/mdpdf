@@ -14,18 +14,29 @@ export default function Footer() {
               <Link href="/terms-of-service" className="hover:text-gray-700 transition-colors">
                 Terms of Service
               </Link>
+              <span className="text-gray-300">•</span>
+              <a
+                href="http://pixae.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-gray-700 transition-colors"
+              >
+                AI Image Creator
+              </a>
+              <span className="text-gray-300">•</span>
+              <a
+                href="https://pixae.app/ai-tools/text-to-video"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-gray-700 transition-colors"
+              >
+                AI Video Generator
+              </a>
             </div>
             <p className="text-sm text-gray-400">
               © 2026 MdPdf. All rights reserved.
             </p>
           </div>
-          <a href="https://newtool.site/item/mdpdf" target="_blank" rel="noopener noreferrer">
-            <img
-              src="https://newtool.site/badges/newtool-light.svg"
-              alt="Featured on NewTool.site"
-              className="h-10 w-auto"
-            />
-          </a>
         </div>
       </div>
     </footer>
