@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
 import UploadZone from "@/components/UploadZone";
 import MarkdownPreview from "@/components/MarkdownPreview";
+import MoreTools from "@/components/MoreTools";
 import ProgressBar from "@/components/ProgressBar";
 import { trackEvent } from "@/lib/analytics";
 import {
@@ -183,7 +183,7 @@ export default function Home() {
   };
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-8 sm:py-10 md:py-12">
+    <main className="mx-auto w-full max-w-[90rem] px-4 py-8 sm:px-6 sm:py-10 md:py-12">
       <div className="mb-8 text-center sm:mb-10">
         <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">MdPdf - PDF to MD Converter</h1>
         <p className="mx-auto max-w-2xl text-base text-gray-500 sm:text-lg">Turn hard-to-edit PDFs into clean Markdown, then use our MD to PDF Converter when you need to export back.</p>
@@ -227,39 +227,7 @@ export default function Home() {
         )}
       </div>
 
-      <div className="mb-12 grid gap-4 sm:mb-16 sm:grid-cols-2">
-        <Link
-          href="/md-to-pdf"
-          className="group block rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:border-indigo-200 hover:shadow-md sm:p-6"
-        >
-          <div className="flex items-start gap-3 sm:items-center">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-indigo-100">
-              <svg className="h-5 w-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-              </svg>
-            </div>
-            <div>
-              <span className="font-semibold text-gray-900 transition-colors group-hover:text-indigo-600">MD to PDF →</span>
-            </div>
-          </div>
-        </Link>
-
-        <Link
-          href="/pdf-to-jpg"
-          className="group block rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:border-blue-200 hover:shadow-md sm:p-6"
-        >
-          <div className="flex items-start gap-3 sm:items-center">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-100">
-              <svg className="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7h16M4 12h16M4 17h10" />
-              </svg>
-            </div>
-            <div>
-              <span className="font-semibold text-gray-900 transition-colors group-hover:text-blue-600">PDF to JPG →</span>
-            </div>
-          </div>
-        </Link>
-      </div>
+      <MoreTools currentHref="/" heading="More tools" />
 
       <section className="mb-12 sm:mb-16">
         <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">Why Choose MdPdf?</h2>

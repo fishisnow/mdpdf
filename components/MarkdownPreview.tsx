@@ -3,6 +3,7 @@
 import { startTransition, useCallback, useEffect, useRef, useState } from "react";
 import MarkdownHtmlPreview from "@/components/MarkdownHtmlPreview";
 import SourceTextarea from "@/components/SourceTextarea";
+import ViewModeToggle, { type ResultViewMode } from "@/components/ViewModeToggle";
 
 interface Props {
   markdown: string;
@@ -15,7 +16,9 @@ type CopyState = "idle" | "copied";
 export default function MarkdownPreview({ markdown, filename, onDownload }: Props) {
   const [copyState, setCopyState] = useState<CopyState>("idle");
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [viewMode, setViewMode] = useState<ResultViewMode>("split");
   const viewerRef = useRef<HTMLDivElement | null>(null);
+  const isSplit = viewMode === "split";
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(markdown);
@@ -71,13 +74,20 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
 
   const paneShellClass =
     "flex min-h-0 flex-col " +
-    (isFullscreen ? "min-h-0 flex-1" : "h-[320px] sm:h-[420px] md:h-[600px]");
+    (isFullscreen
+      ? "min-h-0 flex-1"
+      : isSplit
+        ? "h-[480px] sm:h-[620px] md:h-[860px]"
+        : "h-[580px] sm:h-[740px] md:h-[980px]");
+
+  const viewToggle = <ViewModeToggle value={viewMode} onChange={setViewMode} />;
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-lg font-semibold text-gray-700">Result</h2>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
+          {viewToggle}
           {!isFullscreen && (
             <button
               type="button"
@@ -105,6 +115,7 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
           <div className="mb-3 flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-gray-200 pb-3">
             <span className="text-sm font-medium text-gray-700">Source & Preview</span>
             <div className="flex flex-wrap items-center gap-2">
+              {viewToggle}
               <button
                 type="button"
                 onClick={handleDownload}
@@ -125,26 +136,38 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
 
         <div
           className={
-            isFullscreen
-              ? "grid min-h-0 flex-1 grid-cols-1 gap-4 pt-2 md:grid-cols-2 md:gap-6 md:pt-4"
-              : "grid w-full grid-cols-1 gap-4 pt-4 md:grid-cols-2 md:gap-6"
+            (isFullscreen ? "grid min-h-0 flex-1 gap-4 pt-2 md:gap-6 md:pt-4" : "grid w-full gap-4 pt-4 md:gap-6") +
+            (isSplit ? " grid-cols-1 md:grid-cols-2" : " grid-cols-1")
           }
         >
+          {isSplit && (
+            <div className={paneShellClass}>
+              <div className="mb-2 flex items-center justify-between gap-2">
+                <span className="text-xs font-medium uppercase tracking-wide text-gray-500">Source</span>
+                <button
+                  type="button"
+                  onClick={handleCopy}
+                  className="rounded bg-gray-700 px-3 py-1 text-xs text-gray-300 transition-colors hover:bg-gray-600"
+                >
+                  {copyState === "copied" ? "Copied!" : "Copy"}
+                </button>
+              </div>
+              <SourceTextarea markdown={markdown} />
+            </div>
+          )}
           <div className={paneShellClass}>
             <div className="mb-2 flex items-center justify-between gap-2">
-              <span className="text-xs font-medium uppercase tracking-wide text-gray-500">Source</span>
-              <button
-                type="button"
-                onClick={handleCopy}
-                className="rounded bg-gray-700 px-3 py-1 text-xs text-gray-300 transition-colors hover:bg-gray-600"
-              >
-                {copyState === "copied" ? "Copied!" : "Copy"}
-              </button>
+              <span className="text-xs font-medium uppercase tracking-wide text-gray-500">Preview</span>
+              {!isSplit && (
+                <button
+                  type="button"
+                  onClick={handleCopy}
+                  className="rounded bg-gray-700 px-3 py-1 text-xs text-gray-300 transition-colors hover:bg-gray-600"
+                >
+                  {copyState === "copied" ? "Copied!" : "Copy"}
+                </button>
+              )}
             </div>
-            <SourceTextarea markdown={markdown} />
-          </div>
-          <div className={paneShellClass}>
-            <span className="mb-2 text-xs font-medium uppercase tracking-wide text-gray-500">Preview</span>
             <MarkdownHtmlPreview markdown={markdown} />
           </div>
         </div>

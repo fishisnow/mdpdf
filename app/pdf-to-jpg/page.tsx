@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useState } from "react";
 import UploadZone from "@/components/UploadZone";
+import MoreTools from "@/components/MoreTools";
 import ProgressBar from "@/components/ProgressBar";
 import {
   buildZipFromImages,
@@ -154,7 +154,7 @@ export default function PdfToImagePage() {
   };
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-8 sm:py-10 md:py-12">
+    <main className="mx-auto w-full max-w-[90rem] px-4 py-8 sm:px-6 sm:py-10 md:py-12">
       <div className="mb-8 text-center sm:mb-10">
         <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">PDF to JPG Converter Free Online</h1>
         <p className="mx-auto max-w-2xl text-base text-gray-500 sm:text-lg">Convert PDF to JPG or PDF to PNG directly in your browser. Fast exports, private processing, and multi-page downloads as ZIP files.</p>
@@ -364,17 +364,7 @@ export default function PdfToImagePage() {
         </div>
       </section>
 
-      <div className="mt-12 text-center sm:mt-16">
-        <p className="mb-4 text-gray-600">Need another document workflow?</p>
-        <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link href="/" className="inline-flex max-w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-6 py-3 text-center text-gray-700 transition-colors hover:bg-gray-50">
-            Open PDF to Markdown
-          </Link>
-          <Link href="/md-to-pdf" className="inline-flex max-w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-6 py-3 text-center text-gray-700 transition-colors hover:bg-gray-50">
-            Open MD to PDF
-          </Link>
-        </div>
-      </div>
+      <MoreTools currentHref="/pdf-to-jpg" />
     </main>
   );
 }

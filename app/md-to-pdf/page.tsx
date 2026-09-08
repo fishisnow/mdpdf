@@ -4,6 +4,8 @@ import dynamic from "next/dynamic";
 import { startTransition, useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { trackEvent } from "@/lib/analytics";
+import ViewModeToggle, { type ResultViewMode } from "@/components/ViewModeToggle";
+import MoreTools from "@/components/MoreTools";
 
 const MarkdownHtmlPreview = dynamic(() => import("@/components/MarkdownHtmlPreview"), {
   ssr: false,
@@ -52,7 +54,9 @@ export default function MdToPdfPage() {
   const [filename, setFilename] = useState("document");
   const [errorMessage, setErrorMessage] = useState("");
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [viewMode, setViewMode] = useState<ResultViewMode>("split");
   const viewerRef = useRef<HTMLDivElement | null>(null);
+  const isSplit = viewMode === "split";
 
   const getSafeFilename = (value: string): string => {
     const trimmed = value.replace(/\.pdf$/i, "").trim();
@@ -126,7 +130,11 @@ export default function MdToPdfPage() {
   };
 
   /** 两列共用同一总高度（含栏目标题），避免左右边框底不齐 */
-  const splitColumnHeights = isFullscreen ? "min-h-0 flex-1" : "h-[320px] sm:h-[360px] md:h-[400px]";
+  const splitColumnHeights = isFullscreen
+    ? "min-h-0 flex-1"
+    : isSplit
+      ? "h-[480px] sm:h-[620px] md:h-[860px]"
+      : "h-[580px] sm:h-[740px] md:h-[980px]";
   const editorColumnClass = `flex min-h-0 flex-col print:hidden ${splitColumnHeights}`;
   const previewColumnClass = `flex min-h-0 flex-col print:h-auto print:min-h-0 print:max-h-none print:overflow-visible ${splitColumnHeights}`;
 
@@ -135,9 +143,9 @@ export default function MdToPdfPage() {
     (isFullscreen ? "min-h-0" : "");
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-8 print:block print:h-auto print:max-h-none print:overflow-visible sm:py-10 md:py-12">
+    <main className="mx-auto w-full max-w-[90rem] px-4 py-8 print:block print:h-auto print:max-h-none print:overflow-visible sm:px-6 sm:py-10 md:py-12">
       <nav className="mb-6 print:hidden sm:mb-8">
-        <Link href="/" className="text-sm text-blue-600 hover:underline">← PDF to MD Converter</Link>
+        <Link href="/" className="text-sm text-blue-600 hover:underline">← Home</Link>
       </nav>
 
       <div className="mb-8 text-center print:hidden sm:mb-10">
@@ -165,6 +173,7 @@ export default function MdToPdfPage() {
             <div className="mb-3 flex shrink-0 flex-col gap-3 border-b border-gray-200 pb-3 print:hidden sm:flex-row sm:items-center sm:justify-between sm:gap-4">
               <span className="text-sm font-medium text-gray-700">Write & Preview</span>
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end sm:gap-2">
+                <ViewModeToggle value={viewMode} onChange={setViewMode} />
                 <div className="flex min-w-0 flex-wrap items-center gap-2">
                   <label className="shrink-0 text-xs text-gray-600 sm:text-sm" htmlFor="md-pdf-filename-fs">
                     Filename
@@ -218,11 +227,13 @@ export default function MdToPdfPage() {
           <div
             className={
               (isFullscreen
-                ? "grid min-h-0 flex-1 grid-cols-1 gap-4 pt-1 md:grid-cols-2 md:gap-6 md:pt-2"
-                : "grid min-h-0 grid-cols-1 gap-4 md:grid-cols-2 md:gap-6") +
-              " print:overflow-visible print:h-auto print:max-h-none"
+                ? "grid min-h-0 flex-1 gap-4 pt-1 md:gap-6 md:pt-2"
+                : "grid min-h-0 gap-4 md:gap-6") +
+              (isSplit ? " grid-cols-1 md:grid-cols-2" : " grid-cols-1") +
+              " print:grid-cols-1 print:h-auto print:max-h-none print:overflow-visible"
             }
           >
+            {isSplit && (
             <div className={editorColumnClass}>
               <span className="mb-2 shrink-0 text-xs font-medium uppercase tracking-wide text-gray-500">Write Markdown</span>
               <textarea
@@ -239,6 +250,7 @@ export default function MdToPdfPage() {
                 className="min-h-0 w-full flex-1 resize-none rounded-lg border border-gray-200 bg-gray-50 p-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:p-4"
               />
             </div>
+            )}
 
             <div className={previewColumnClass}>
               <span className="mb-2 shrink-0 text-xs font-medium uppercase tracking-wide text-gray-500 print:hidden">Preview</span>
@@ -269,6 +281,7 @@ export default function MdToPdfPage() {
                 <span className="shrink-0 text-sm text-gray-400">.pdf</span>
               </div>
               <div className="flex flex-wrap items-center justify-end gap-2 sm:justify-end sm:gap-3">
+                <ViewModeToggle value={viewMode} onChange={setViewMode} />
                 <button
                   type="button"
                   onClick={handleFullscreenToggle}
@@ -352,11 +365,8 @@ export default function MdToPdfPage() {
         </div>
       </section>
 
-      <div className="text-center print:hidden">
-        <p className="mb-4 text-gray-600">Need the opposite conversion?</p>
-        <Link href="/" className="inline-flex max-w-full items-center justify-center rounded-lg bg-blue-600 px-6 py-3 text-center text-white transition-colors hover:bg-blue-700">
-          Try PDF to Markdown Converter →
-        </Link>
+      <div className="print:hidden">
+        <MoreTools currentHref="/md-to-pdf" />
       </div>
     </main>
   );

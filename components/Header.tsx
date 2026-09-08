@@ -2,15 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { SITE_TOOLS } from "@/lib/tools";
 
 export default function Header() {
   const pathname = usePathname();
 
-  const navItems = [
-    { href: "/", label: "Home" },
-    { href: "/md-to-pdf", label: "MD to PDF" },
-    { href: "/pdf-to-jpg", label: "PDF to JPG" },
-  ];
+  const navItems = SITE_TOOLS.map((tool) => ({
+    href: tool.href,
+    label: tool.navLabel,
+  }));
 
   return (
     <header className="border-b border-gray-100 bg-white">
