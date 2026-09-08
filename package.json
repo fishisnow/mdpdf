@@ -6,9 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "postinstall": "node scripts/copy-pdf-inspector-wasm.mjs",
+    "predev": "node scripts/copy-pdf-inspector-wasm.mjs",
+    "prebuild": "node scripts/copy-pdf-inspector-wasm.mjs"
   },
   "dependencies": {
+    "@firecrawl/pdf-inspector-wasm": "^1.17.0",
     "dompurify": "^3.3.3",
     "fflate": "^0.8.2",
     "marked": "^17.0.5",

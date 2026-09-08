@@ -1,12 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import UploadZone from "@/components/UploadZone";
 import MarkdownPreview from "@/components/MarkdownPreview";
 import ProgressBar from "@/components/ProgressBar";
 import { trackEvent } from "@/lib/analytics";
-import type { ConversionProgress } from "@/lib/pdf-to-md";
+import {
+  convertPdfToMarkdown,
+  preloadPdfInspectorEngine,
+  type ConversionProgress,
+} from "@/lib/pdf-to-md";
 
 type State = "idle" | "converting" | "done" | "error";
 
@@ -42,17 +46,12 @@ function describeProgress(progress: ConversionProgress): { label: string; percen
     return { label: "Reading file in your browser...", percent: 15 };
   }
 
+  if (progress.stage === "initializing") {
+    return { label: "Parsing PDF pages in a background worker...", percent: 38 };
+  }
+
   if (progress.stage === "parsing") {
-    const current = progress.currentPage ?? 0;
-    const total = progress.totalPages ?? 0;
-    const safeTotal = total > 0 ? total : 1;
-    const percent = 20 + Math.round((current / safeTotal) * 65);
-    return {
-      label: total > 0
-        ? `Parsing page ${current} of ${total} in a background worker...`
-        : "Parsing PDF pages in a background worker...",
-      percent,
-    };
+    return { label: "Parsing PDF pages in a background worker...", percent: 78 };
   }
 
   return { label: "Generating Markdown...", percent: 95 };
@@ -79,6 +78,7 @@ function normalizeConversionError(message: string): string {
     lower.includes("no selectable text") ||
     lower.includes("no text") ||
     lower.includes("image-based") ||
+    lower.includes("imagebased") ||
     lower.includes("scanned")
   ) {
     return "This PDF appears to be scanned or image-based, so there may not be selectable text to convert.";
@@ -86,6 +86,7 @@ function normalizeConversionError(message: string): string {
 
   if (
     lower.includes("worker crashed") ||
+    lower.includes("failed to load pdf-inspector") ||
     lower.includes("unknownerrorexception") ||
     lower.includes("abortexception") ||
     lower.includes("out of memory")
@@ -107,6 +108,12 @@ export default function Home() {
 
   const progressView = useMemo(() => describeProgress(progress), [progress]);
 
+  useEffect(() => {
+    void preloadPdfInspectorEngine().catch((preloadError: unknown) => {
+      console.warn("PDF conversion engine preload failed", preloadError);
+    });
+  }, []);
+
   const handleUpload = async (file: File) => {
     trackEvent("pdf_to_md_click", {
       file_name: file.name,
@@ -120,21 +127,43 @@ export default function Home() {
     setMarkdown("");
     setProgress({ stage: "loading" });
 
+    const startedAt = performance.now();
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const { convertPdfToMarkdown } = await import("@/lib/pdf-to-md");
-      const text = await convertPdfToMarkdown(new Uint8Array(arrayBuffer), setProgress);
+      const convertStartedAt = performance.now();
+      const conversion = await convertPdfToMarkdown(new Uint8Array(arrayBuffer), setProgress);
+      const convertMs = Math.round(performance.now() - convertStartedAt);
+      const totalMs = Math.round(performance.now() - startedAt);
 
-      setMarkdown(text);
+      console.info("[pdf-to-md timing]", {
+        engine: "pdf-inspector",
+        fileName: file.name,
+        fileSizeKb: Math.round(file.size / 1024),
+        convertMs,
+        engineMs: Math.round(conversion.processingTimeMs),
+        totalMs,
+        pageCount: conversion.pageCount,
+        pdfType: conversion.pdfType,
+        markdownChars: conversion.markdown.length,
+      });
+
+      setMarkdown(conversion.markdown);
       setProgress({ stage: "rendering" });
       setState("done");
       setConversionId((n) => n + 1);
       trackEvent("pdf_to_md_success", {
         file_name: file.name,
-        output_length: text.length,
+        output_length: conversion.markdown.length,
         source_page: "home",
       });
     } catch (err: unknown) {
+      console.info("[pdf-to-md timing]", {
+        engine: "pdf-inspector",
+        fileName: file.name,
+        fileSizeKb: Math.round(file.size / 1024),
+        totalMs: Math.round(performance.now() - startedAt),
+        ok: false,
+      });
       console.error("PDF to Markdown conversion failed", {
         fileName: file.name,
         fileSize: file.size,
