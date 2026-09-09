@@ -1,6 +1,7 @@
 "use client";
 
 import { memo } from "react";
+import JsonCopyButton from "@/components/JsonCopyButton";
 import JsonDeleteButton from "@/components/JsonDeleteButton";
 import type { JsonPath } from "@/lib/json-preview";
 
@@ -59,6 +60,9 @@ function JsonNode({
               {index < value.length - 1 ? "," : ""}
               {"\n"}
             </span>
+            {typeof item === "string" ? (
+              <JsonCopyButton value={item} ariaLabel={`Copy item ${index}`} />
+            ) : null}
           </div>
         ))}
         {pad}
@@ -87,6 +91,9 @@ function JsonNode({
             {index < entries.length - 1 ? "," : ""}
             {"\n"}
           </span>
+          {typeof nested === "string" ? (
+            <JsonCopyButton value={nested} ariaLabel={`Copy ${key}`} />
+          ) : null}
         </div>
       ))}
       {pad}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import JsonCopyButton from "@/components/JsonCopyButton";
 import JsonDeleteButton from "@/components/JsonDeleteButton";
 import type { JsonPath } from "@/lib/json-preview";
 
@@ -86,6 +87,12 @@ function JsonTreeNode({
             </span>
           )}
         </button>
+        {typeof value === "string" && (
+          <JsonCopyButton
+            value={value}
+            ariaLabel={typeof name === "number" ? `Copy item ${name}` : name !== undefined ? `Copy ${String(name)}` : "Copy value"}
+          />
+        )}
         {canDelete && onDelete && (
           <JsonDeleteButton
             ariaLabel={typeof name === "number" ? `Delete item ${name}` : `Delete ${String(name)}`}
