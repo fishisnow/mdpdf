@@ -125,6 +125,16 @@
   color: rgb(29 78 216);
 }
 
+.markdown-preview a.md-cite {
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.markdown-preview a.md-cite:hover {
+  text-decoration: underline;
+}
+
 .print-document {
   width: 100%;
   max-width: 840px;

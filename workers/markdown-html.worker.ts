@@ -1,16 +1,13 @@
 /// <reference lib="webworker" />
 
-import { marked } from "marked";
+import { parseMarkdownDocument } from "@/lib/markdown-to-html";
 
-marked.setOptions({ gfm: true, breaks: true });
-
-self.onmessage = (e: MessageEvent<{ markdown: string }>) => {
+self.onmessage = (e: MessageEvent<{ markdown: string; numberedCitations?: boolean }>) => {
   try {
-    const html = marked.parse(e.data.markdown, { async: false });
-    if (typeof html !== "string") {
-      throw new Error("Unexpected async markdown parse");
-    }
-    self.postMessage({ ok: true as const, html });
+    const { html, citations } = parseMarkdownDocument(e.data.markdown, {
+      numberedCitations: e.data.numberedCitations,
+    });
+    self.postMessage({ ok: true as const, html, citations });
   } catch (err) {
     self.postMessage({
       ok: false as const,

@@ -6,6 +6,7 @@ import Link from "next/link";
 import ViewModeToggle, { type ResultViewMode } from "@/components/ViewModeToggle";
 import MoreTools from "@/components/MoreTools";
 import { trackEvent } from "@/lib/analytics";
+import type { MarkdownCitation } from "@/lib/markdown-citations";
 import { downloadTextFile, workspacePaneHeight } from "@/lib/tools";
 
 const MarkdownHtmlPreview = dynamic(() => import("@/components/MarkdownHtmlPreview"), {
@@ -21,10 +22,12 @@ const DEFAULT_MARKDOWN = `# Markdown Preview
 
 Write on the left. The rendered document updates as you type.
 
+The FDA approved a higher-dose semaglutide product under the National Priority Voucher program [FDA Approves Fourth Product Under National Priority ...](https://www.fda.gov/news-events/press-announcements/fda-approves-fourth-product-under-national-priority-voucher-program-higher-dose-semaglutide).
+
 ## Lists and emphasis
 
 - **Bold**, *italic*, and \`inline code\`
-- [Links](https://mdpdf.net) stay clickable in the preview
+- Numbered citations turn Markdown links into [1], [2]
 - Task-style notes work as regular lists
 
 ## Code
@@ -43,6 +46,10 @@ function greet(name: string) {
 | MD to PDF | Export the same document as PDF |
 
 > Everything runs in your browser. Nothing is uploaded.
+
+## References
+
+This References heading is part of the source document. Generated citations appear in a separate list below the preview.
 `;
 
 const PREVIEW_CLASS =
@@ -63,7 +70,7 @@ const faqs = [
   },
   {
     question: "Which Markdown features are supported?",
-    answer: "GitHub-flavored Markdown is supported, including headings, lists, tables, code blocks, and blockquotes.",
+    answer: "GitHub-flavored Markdown is supported, including headings, lists, tables, code blocks, and blockquotes. With Numbered citations on, [title](url) links render as [1], [2]. Generated references appear in a separate list below the preview, so any References already in the source stay in the document.",
   },
 ] as const;
 
@@ -73,6 +80,8 @@ export default function MarkdownPreviewPage() {
   const [copyState, setCopyState] = useState<"idle" | "copied">("idle");
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [viewMode, setViewMode] = useState<ResultViewMode>("split");
+  const [numberedCitations, setNumberedCitations] = useState(true);
+  const [citations, setCitations] = useState<MarkdownCitation[]>([]);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const viewerRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -111,6 +120,10 @@ export default function MarkdownPreviewPage() {
     downloadTextFile(markdown, `${safe}.md`, "text/markdown");
     trackEvent("markdown_preview_download", { file_name: `${safe}.md`, input_length: markdown.length });
   };
+
+  const handleCitationsChange = useCallback((next: MarkdownCitation[]) => {
+    setCitations(next);
+  }, []);
 
   const handleOpenFile = async (file: File) => {
     const text = await file.text();
@@ -204,6 +217,15 @@ export default function MarkdownPreviewPage() {
                 placeholder="preview"
               />
               <span className="shrink-0 text-sm text-gray-400">.md</span>
+              <label className="inline-flex items-center gap-2 text-sm text-gray-700">
+                <input
+                  type="checkbox"
+                  checked={numberedCitations}
+                  onChange={(event) => setNumberedCitations(event.target.checked)}
+                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                Numbered citations
+              </label>
             </div>
             {toolbar}
           </div>
@@ -228,10 +250,38 @@ export default function MarkdownPreviewPage() {
             <div className={previewColumnClass}>
               <span className="mb-2 shrink-0 text-xs font-medium uppercase tracking-wide text-gray-500">Preview</span>
               <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
-                <MarkdownHtmlPreview markdown={markdown} className={PREVIEW_CLASS} />
+                <MarkdownHtmlPreview
+                  markdown={markdown}
+                  className={PREVIEW_CLASS}
+                  numberedCitations={numberedCitations}
+                  onCitationsChange={handleCitationsChange}
+                />
               </div>
             </div>
           </div>
+
+          {numberedCitations && citations.length > 0 && (
+            <aside className="mt-4 shrink-0 rounded-lg border border-gray-200 bg-gray-50">
+              <div className="border-b border-gray-200 px-4 py-2">
+                <span className="text-xs font-medium uppercase tracking-wide text-gray-500">Generated references</span>
+              </div>
+              <ol className="max-h-48 space-y-2 overflow-auto px-4 py-3 text-sm text-gray-800">
+                {citations.map((citation) => (
+                  <li key={`${citation.index}-${citation.href}`} className="leading-6">
+                    <span className="mr-1.5 font-semibold text-gray-700">[{citation.index}]</span>
+                    <a
+                      href={citation.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
+                      {citation.label}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </aside>
+          )}
         </div>
       </div>
 

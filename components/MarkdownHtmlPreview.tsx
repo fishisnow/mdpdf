@@ -1,7 +1,8 @@
 "use client";
 
 import { memo, useEffect, useMemo, useState } from "react";
-import { parseMarkdownToHtmlUnsafe } from "@/lib/markdown-to-html";
+import type { MarkdownCitation } from "@/lib/markdown-citations";
+import { parseMarkdownDocument } from "@/lib/markdown-to-html";
 import { sanitizeMarkdownHtml } from "@/lib/sanitize-markdown-html";
 
 /** 超过此长度在 Worker 中解析 Markdown，避免阻塞主线程（全屏、滚动等） */
@@ -15,14 +16,29 @@ function previewRootClass(extra?: string) {
 }
 
 const MarkdownHtmlPreview = memo(
-  function MarkdownHtmlPreview({ markdown, className }: { markdown: string; className?: string }) {
-    const smallHtml = useMemo(() => {
+  function MarkdownHtmlPreview({
+    markdown,
+    className,
+    numberedCitations = false,
+    onCitationsChange,
+  }: {
+    markdown: string;
+    className?: string;
+    numberedCitations?: boolean;
+    onCitationsChange?: (citations: MarkdownCitation[]) => void;
+  }) {
+    const smallDoc = useMemo(() => {
       if (markdown.length > WORKER_THRESHOLD) return null;
-      return sanitizeMarkdownHtml(parseMarkdownToHtmlUnsafe(markdown));
-    }, [markdown]);
+      const parsed = parseMarkdownDocument(markdown, { numberedCitations });
+      return { html: sanitizeMarkdownHtml(parsed.html), citations: parsed.citations };
+    }, [markdown, numberedCitations]);
 
     const [largeHtml, setLargeHtml] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+      if (smallDoc) onCitationsChange?.(smallDoc.citations);
+    }, [smallDoc, onCitationsChange]);
 
     useEffect(() => {
       if (markdown.length <= WORKER_THRESHOLD) {
@@ -33,15 +49,19 @@ const MarkdownHtmlPreview = memo(
 
       setLargeHtml(null);
       setError(null);
+      onCitationsChange?.([]);
       let cancelled = false;
       let worker: Worker | null = null;
 
       const runOnMainWhenIdle = () => {
         if (cancelled) return;
         try {
-          const raw = parseMarkdownToHtmlUnsafe(markdown);
-          const safe = sanitizeMarkdownHtml(raw);
-          if (!cancelled) setLargeHtml(safe);
+          const parsed = parseMarkdownDocument(markdown, { numberedCitations });
+          const safe = sanitizeMarkdownHtml(parsed.html);
+          if (!cancelled) {
+            setLargeHtml(safe);
+            onCitationsChange?.(parsed.citations);
+          }
         } catch (e) {
           if (!cancelled) setError(e instanceof Error ? e.message : "Preview failed");
         }
@@ -57,13 +77,16 @@ const MarkdownHtmlPreview = memo(
         };
       }
 
-      worker.onmessage = (e: MessageEvent<{ ok: boolean; html?: string; error?: string }>) => {
+      worker.onmessage = (
+        e: MessageEvent<{ ok: boolean; html?: string; citations?: MarkdownCitation[]; error?: string }>,
+      ) => {
         if (cancelled) return;
         worker?.terminate();
         worker = null;
         if (e.data.ok && e.data.html !== undefined) {
           try {
             setLargeHtml(sanitizeMarkdownHtml(e.data.html));
+            onCitationsChange?.(e.data.citations ?? []);
           } catch {
             setError("Preview sanitize failed");
           }
@@ -79,7 +102,7 @@ const MarkdownHtmlPreview = memo(
       };
 
       try {
-        worker.postMessage({ markdown });
+        worker.postMessage({ markdown, numberedCitations });
       } catch {
         requestIdleCallback(runOnMainWhenIdle);
       }
@@ -88,10 +111,10 @@ const MarkdownHtmlPreview = memo(
         cancelled = true;
         worker?.terminate();
       };
-    }, [markdown]);
+    }, [markdown, numberedCitations, onCitationsChange]);
 
     if (markdown.length <= WORKER_THRESHOLD) {
-      return <div className={previewRootClass(className)} dangerouslySetInnerHTML={{ __html: smallHtml ?? "" }} />;
+      return <div className={previewRootClass(className)} dangerouslySetInnerHTML={{ __html: smallDoc?.html ?? "" }} />;
     }
 
     if (error) {
@@ -108,7 +131,11 @@ const MarkdownHtmlPreview = memo(
 
     return <div className={previewRootClass(className)} dangerouslySetInnerHTML={{ __html: largeHtml }} />;
   },
-  (prev, next) => prev.markdown === next.markdown && prev.className === next.className,
+  (prev, next) =>
+    prev.markdown === next.markdown &&
+    prev.className === next.className &&
+    prev.numberedCitations === next.numberedCitations &&
+    prev.onCitationsChange === next.onCitationsChange,
 );
 
 export default MarkdownHtmlPreview;
