@@ -57,7 +57,7 @@ function ToolIcon({ href, className }: { href: SiteToolHref; className: string }
       </svg>
     );
   }
-  if (href === "/markdown-preview") {
+  if (href === "/md-viewer") {
     return (
       <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -65,7 +65,7 @@ function ToolIcon({ href, className }: { href: SiteToolHref; className: string }
       </svg>
     );
   }
-  if (href === "/json-preview") {
+  if (href === "/json-viewer") {
     return (
       <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />

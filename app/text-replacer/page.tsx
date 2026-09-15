@@ -1,7 +1,6 @@
 "use client";
 
 import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
 import ViewModeToggle, { type ResultViewMode } from "@/components/ViewModeToggle";
 import MoreTools from "@/components/MoreTools";
 import { trackEvent } from "@/lib/analytics";
@@ -12,22 +11,26 @@ const DEFAULT_TEXT = `Hello\\nWorld\\nColumn A\\tColumn B`;
 
 const faqs = [
   {
-    question: "How do I turn \\n into real line breaks?",
+    question: "How do I turn \\n into real line breaks in Text Replacer?",
     answer:
-      "Keep Find as \\n and Replace as \\n, with “Interpret escapes in replace” turned on. Find stays literal, so it matches the two characters backslash and n. Replace then inserts a real newline.",
+      "In Text Replacer, keep Find as \\n and Replace as \\n, with “Interpret escapes in replace” turned on. Find stays literal, so it matches the two characters backslash and n. Replace then inserts a real newline.",
   },
   {
-    question: "What escape sequences work in Replace?",
+    question: "What escape sequences work in Text Replacer?",
     answer: "With interpret-replace enabled, \\n becomes a newline, \\t a tab, \\r a carriage return, and \\\\ a backslash.",
   },
   {
     question: "Does Text Replacer upload my text?",
-    answer: "No. Find, replace, and preview all run in your browser.",
+    answer: "No. Text Replacer runs find, replace, and preview in your browser.",
   },
   {
-    question: "When should I use regex?",
+    question: "When should I use regex in Text Replacer?",
     answer:
-      "Turn on Use regex to treat Find as a JavaScript regular expression. For example, Find (\\d+) and Replace [$1] wraps each number in brackets. Greedy matching (the default) lets .* consume as much as possible; uncheck it to match the shortest span instead. In regex mode, \\n matches a real newline; to match the two characters backslash and n, use \\\\n.",
+      "Turn on Use regex in Text Replacer to treat Find as a JavaScript regular expression. For example, Find (\\d+) and Replace [$1] wraps each number in brackets. Greedy matching (the default) lets .* consume as much as possible; uncheck it to match the shortest span instead. In regex mode, \\n matches a real newline; to match the two characters backslash and n, use \\\\n.",
+  },
+  {
+    question: "Is Text Replacer free?",
+    answer: "Yes. It is free to use in the browser, with no account required.",
   },
 ] as const;
 
@@ -172,16 +175,10 @@ export default function TextReplacerPage() {
 
   return (
     <main className="mx-auto w-full max-w-[90rem] px-4 py-8 sm:px-6 sm:py-10 md:py-12">
-      <nav className="mb-6 sm:mb-8">
-        <Link href="/" className="text-sm text-blue-600 hover:underline">
-          ← Home
-        </Link>
-      </nav>
-
       <div className="mb-8 text-center sm:mb-10">
         <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">Text Replacer</h1>
-        <p className="mx-auto max-w-3xl text-base text-gray-500 sm:text-lg">
-          Paste text, choose what to replace, and preview the result. The default setup turns literal \n into real line breaks.
+        <p className="mx-auto text-base text-gray-500 sm:text-lg md:whitespace-nowrap">
+          Free Text Replacer for find and replace, including turning \n into line breaks.
         </p>
       </div>
 
@@ -400,6 +397,10 @@ export default function TextReplacerPage() {
         </div>
       </div>
 
+      <p className="mx-auto mb-12 max-w-4xl text-center text-sm leading-relaxed text-gray-600 sm:mb-16 sm:text-base">
+        Use this Text Replacer to find and replace text without leaving the browser. Paste source on the left, set Find and Replace, and the result updates as you type. Copy or download the output; nothing is uploaded.
+      </p>
+
       <section className="mb-12 sm:mb-16">
         <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">Why use Text Replacer?</h2>
         <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
@@ -415,7 +416,7 @@ export default function TextReplacerPage() {
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
             <h3 className="mb-2 text-lg font-semibold text-gray-900">Stays in the browser</h3>
-            <p className="text-sm leading-relaxed text-gray-600">Open a local file, copy the result, or download a .txt file without uploading anything.</p>
+            <p className="text-sm leading-relaxed text-gray-600">Open a local file in Text Replacer, copy the result, or download a .txt file without uploading anything.</p>
           </div>
         </div>
       </section>
@@ -432,7 +433,7 @@ export default function TextReplacerPage() {
                 <span className="font-medium text-gray-900">{faq.question}</span>
                 <span className="ml-auto shrink-0 text-xl text-gray-400">{openFaq === index ? "−" : "+"}</span>
               </button>
-              {openFaq === index && <div className="px-4 pb-4 text-sm leading-relaxed text-gray-600 sm:px-6">{faq.answer}</div>}
+              <div className={openFaq === index ? "px-4 pb-4 text-sm leading-relaxed text-gray-600 sm:px-6" : "hidden"}>{faq.answer}</div>
             </div>
           ))}
         </div>

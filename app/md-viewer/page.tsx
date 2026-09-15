@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import { startTransition, useCallback, useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import ViewModeToggle, { type ResultViewMode } from "@/components/ViewModeToggle";
 import MoreTools from "@/components/MoreTools";
 import { trackEvent } from "@/lib/analytics";
@@ -18,9 +17,9 @@ const MarkdownHtmlPreview = dynamic(() => import("@/components/MarkdownHtmlPrevi
   ),
 });
 
-const DEFAULT_MARKDOWN = `# Markdown Preview
+const DEFAULT_MARKDOWN = `# MD Viewer
 
-Write on the left. The rendered document updates as you type.
+Write on the left. The MD Viewer updates as you type.
 
 The FDA approved a higher-dose semaglutide product under the National Priority Voucher program [FDA Approves Fourth Product Under National Priority ...](https://www.fda.gov/news-events/press-announcements/fda-approves-fourth-product-under-national-priority-voucher-program-higher-dose-semaglutide).
 
@@ -42,7 +41,7 @@ function greet(name: string) {
 
 | Tool | What it does |
 | --- | --- |
-| Markdown Preview | Live render while you edit |
+| MD Viewer | Live render while you edit |
 | MD to PDF | Export the same document as PDF |
 
 > Everything runs in your browser. Nothing is uploaded.
@@ -57,20 +56,25 @@ const PREVIEW_CLASS =
 
 const faqs = [
   {
-    question: "Does Markdown Preview upload my text?",
+    question: "Does MD Viewer upload my text?",
     answer: "No. The editor and renderer run in your browser, so your Markdown stays on your device.",
   },
   {
-    question: "How is this different from MD to PDF?",
-    answer: "Markdown Preview is for writing and checking rendered Markdown. Use MD to PDF when you are ready to save the document through the browser print dialog.",
+    question: "How is MD Viewer different from MD to PDF?",
+    answer: "MD Viewer is for writing and checking rendered Markdown. Use MD to PDF when you are ready to save the document through the browser print dialog.",
   },
   {
-    question: "Can I open an existing .md file?",
+    question: "Can I open an existing .md file in MD Viewer?",
     answer: "Yes. Use Open file to load a Markdown file from your computer, then keep editing it in the split view.",
   },
   {
-    question: "Which Markdown features are supported?",
-    answer: "GitHub-flavored Markdown is supported, including headings, lists, tables, code blocks, and blockquotes. With Numbered citations on, [title](url) links render as [1], [2]. Generated references appear in a separate list below the preview, so any References already in the source stay in the document.",
+    question: "Which Markdown features does MD Viewer support?",
+    answer:
+      "MD Viewer supports GitHub-flavored Markdown, including headings, lists, tables, code blocks, and blockquotes. With Numbered citations on, [title](url) links render as [1], [2]. Generated references appear in a separate list below the preview, so any References already in the source stay in the document.",
+  },
+  {
+    question: "Is MD Viewer free?",
+    answer: "Yes. It is free to use in the browser, with no account required.",
   },
 ] as const;
 
@@ -173,16 +177,10 @@ export default function MarkdownPreviewPage() {
 
   return (
     <main className="mx-auto w-full max-w-[90rem] px-4 py-8 sm:px-6 sm:py-10 md:py-12">
-      <nav className="mb-6 sm:mb-8">
-        <Link href="/" className="text-sm text-blue-600 hover:underline">
-          ← Home
-        </Link>
-      </nav>
-
       <div className="mb-8 text-center sm:mb-10">
-        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">Markdown Preview</h1>
-        <p className="mx-auto max-w-3xl text-base text-gray-500 sm:text-lg">
-          Write Markdown and see a live preview. Switch between split and preview, then copy or download the source.
+        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">MD Viewer</h1>
+        <p className="mx-auto text-base text-gray-500 sm:text-lg md:whitespace-nowrap">
+          Free MD Viewer for live Markdown preview in your browser.
         </p>
       </div>
 
@@ -285,16 +283,20 @@ export default function MarkdownPreviewPage() {
         </div>
       </div>
 
+      <p className="mx-auto mb-12 max-w-4xl text-center text-sm leading-relaxed text-gray-600 sm:mb-16 sm:text-base">
+        Use this MD Viewer to write and check Markdown without leaving the browser. Paste source on the left, and the preview renders headings, lists, tables, and code as you type. Copy or download the file when you are done; nothing is uploaded.
+      </p>
+
       <section className="mb-12 sm:mb-16">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">Why use Markdown Preview?</h2>
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">Why use MD Viewer?</h2>
         <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
             <h3 className="mb-2 text-lg font-semibold text-gray-900">Live rendering</h3>
-            <p className="text-sm leading-relaxed text-gray-600">Headings, lists, tables, and code blocks update as you type so you can catch formatting issues early.</p>
+            <p className="text-sm leading-relaxed text-gray-600">MD Viewer updates headings, lists, tables, and code as you type so you can catch formatting issues early.</p>
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
             <h3 className="mb-2 text-lg font-semibold text-gray-900">Split or preview</h3>
-            <p className="text-sm leading-relaxed text-gray-600">Keep the source beside the rendered page, or hide the editor when you only need to read the preview.</p>
+            <p className="text-sm leading-relaxed text-gray-600">Keep the source beside the rendered output, or hide the editor when you only need to read the preview.</p>
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
             <h3 className="mb-2 text-lg font-semibold text-gray-900">Stays on your device</h3>
@@ -304,7 +306,7 @@ export default function MarkdownPreviewPage() {
       </section>
 
       <section className="mb-12 sm:mb-16">
-        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">Markdown Preview FAQs</h2>
+        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">MD Viewer FAQs</h2>
         <div className="mx-auto max-w-3xl space-y-4">
           {faqs.map((faq, index) => (
             <div key={faq.question} className="overflow-hidden rounded-lg border border-gray-200 bg-white">
@@ -315,13 +317,13 @@ export default function MarkdownPreviewPage() {
                 <span className="font-medium text-gray-900">{faq.question}</span>
                 <span className="ml-auto shrink-0 text-xl text-gray-400">{openFaq === index ? "−" : "+"}</span>
               </button>
-              {openFaq === index && <div className="px-4 pb-4 text-sm leading-relaxed text-gray-600 sm:px-6">{faq.answer}</div>}
+              <div className={openFaq === index ? "px-4 pb-4 text-sm leading-relaxed text-gray-600 sm:px-6" : "hidden"}>{faq.answer}</div>
             </div>
           ))}
         </div>
       </section>
 
-      <MoreTools currentHref="/markdown-preview" />
+      <MoreTools currentHref="/md-viewer" />
     </main>
   );
 }

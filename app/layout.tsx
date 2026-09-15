@@ -6,14 +6,14 @@ import Footer from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Free PDF to MD & MD to PDF Converter Online | mdpdf.net",
-  description: "MdPdf is a free pdf to md converter. Convert pdf to md online and turn PDF files into clean markdown quickly and accurately.",
+  title: "pdf to md - free pdf to md converter online | mdpdf.net",
+  description: "Free pdf to md converter. Convert pdf to md online in your browser and turn PDF files into clean Markdown.",
   alternates: {
     canonical: "https://mdpdf.net",
   },
   openGraph: {
-    title: "Free PDF to MD & MD to PDF Converter Online | mdpdf.net",
-    description: "MdPdf is a free pdf to md converter. Convert pdf to md online and turn PDF files into clean markdown quickly and accurately.",
+    title: "pdf to md - free pdf to md converter online | mdpdf.net",
+    description: "Free pdf to md converter. Convert pdf to md online in your browser and turn PDF files into clean Markdown.",
     url: "https://mdpdf.net",
     siteName: "MdPdf",
     type: "website",
@@ -28,8 +28,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Free PDF to MD & MD to PDF Converter Online | mdpdf.net",
-    description: "MdPdf is a free pdf to md converter. Convert pdf to md online and turn PDF files into clean markdown quickly and accurately.",
+    title: "pdf to md - free pdf to md converter online | mdpdf.net",
+    description: "Free pdf to md converter. Convert pdf to md online in your browser and turn PDF files into clean Markdown.",
     images: ["https://mdpdf.net/pdf-to-md.png"],
   },
 };

@@ -14,11 +14,11 @@ const routes = [
     priority: 0.9,
   },
   {
-    url: "https://mdpdf.net/markdown-preview",
+    url: "https://mdpdf.net/md-viewer",
     priority: 0.8,
   },
   {
-    url: "https://mdpdf.net/json-preview",
+    url: "https://mdpdf.net/json-viewer",
     priority: 0.8,
   },
   {

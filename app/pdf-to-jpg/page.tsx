@@ -19,27 +19,27 @@ const faqs = [
   {
     question: "How do I convert PDF to JPG online?",
     answer:
-      "Upload your PDF, choose the pages you want, keep JPG selected, then click Convert and Download. A single page downloads as a JPG file, while multiple pages are bundled into a ZIP.",
+      "Upload your PDF, choose the pages you want, keep JPG selected, then click Convert and Download. pdf to jpg saves one page as a JPG file, while multiple pages are bundled into a ZIP.",
   },
   {
-    question: "Can I convert only selected PDF pages?",
+    question: "Can pdf to jpg convert selected pages?",
     answer:
-      "Yes. Enter page ranges such as 1-3,5,8 in the Pages field to export only the pages you need. If you leave the field blank, the tool converts all pages in the PDF.",
+      "Yes. Enter page ranges such as 1-3,5,8 in the Pages field. If you leave the field blank, pdf to jpg converts every page in the PDF.",
   },
   {
     question: "Should I choose JPG or PNG?",
     answer:
-      "Choose JPG when you want smaller files for faster sharing. Choose PNG when you want sharper text, diagrams, screenshots, or other pages where image clarity matters more than file size.",
+      "Use pdf to jpg when you want smaller files for faster sharing. Choose PNG when you want sharper text, diagrams, screenshots, or other pages where image clarity matters more than file size.",
   },
   {
-    question: "Are my PDF files uploaded to a server?",
+    question: "Does pdf to jpg upload my files?",
     answer:
-      "No. This PDF to JPG converter runs in your browser, so your file stays on your device during conversion. That keeps the workflow fast and gives you better privacy than upload-first tools.",
+      "No. This pdf to jpg converter runs in your browser, so your file stays on your device during conversion. That keeps the workflow fast and gives you better privacy than upload-first tools.",
   },
   {
     question: "Why do multiple converted pages download as a ZIP?",
     answer:
-      "Each selected page becomes its own image file. When you convert more than one page, the tool packages them into a ZIP so you can download everything in one step.",
+      "Each selected page becomes its own image file. When pdf to jpg converts more than one page, the tool packages them into a ZIP so you can download everything in one step.",
   },
 ] as const;
 
@@ -157,7 +157,7 @@ export default function PdfToImagePage() {
     <main className="mx-auto w-full max-w-[90rem] px-4 py-8 sm:px-6 sm:py-10 md:py-12">
       <div className="mb-8 text-center sm:mb-10">
         <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">PDF to JPG Converter Free Online</h1>
-        <p className="mx-auto max-w-2xl text-base text-gray-500 sm:text-lg">Convert PDF to JPG or PDF to PNG directly in your browser. Fast exports, private processing, and multi-page downloads as ZIP files.</p>
+        <p className="mx-auto text-base text-gray-500 sm:text-lg md:whitespace-nowrap">Convert PDF to JPG or PNG in your browser, without uploading files.</p>
       </div>
 
       <div className="flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:gap-6 sm:p-6 md:p-8">
@@ -266,7 +266,7 @@ export default function PdfToImagePage() {
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
             <h3 className="mb-2 text-lg font-semibold text-gray-900">Flexible page exports</h3>
-            <p className="text-sm leading-relaxed text-gray-600">Convert one page or many pages, export JPG or PNG, and download multi-page results as a ZIP so each page is easy to reuse.</p>
+            <p className="text-sm leading-relaxed text-gray-600">Convert one page or many with pdf to jpg, export JPG or PNG, and download multi-page results as a ZIP so each page is easy to reuse.</p>
           </div>
         </div>
       </section>
@@ -300,7 +300,7 @@ export default function PdfToImagePage() {
               <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white">4</span>
               <div>
                 <p className="font-medium text-gray-900">Convert and download</p>
-                <p className="text-sm text-gray-600">Click Convert and Download to create your images. A single converted page downloads directly, while multiple pages are delivered in one ZIP file.</p>
+                <p className="text-sm text-gray-600">Click Convert and Download to run pdf to jpg. A single page downloads directly, while multiple pages are delivered in one ZIP file.</p>
               </div>
             </li>
           </ol>
@@ -313,15 +313,15 @@ export default function PdfToImagePage() {
           <div className="grid gap-5 md:grid-cols-2">
             <div>
               <h3 className="mb-2 text-lg font-semibold text-gray-900">Share document pages faster</h3>
-              <p className="text-sm leading-relaxed text-gray-600">Convert PDF pages into JPG images when you want to send previews in chat, email, support tickets, or social posts without attaching the full PDF.</p>
+              <p className="text-sm leading-relaxed text-gray-600">Use pdf to jpg when you want to send page previews in chat, email, support tickets, or social posts without attaching the full PDF.</p>
             </div>
             <div>
               <h3 className="mb-2 text-lg font-semibold text-gray-900">Export slides or reports as images</h3>
-              <p className="text-sm leading-relaxed text-gray-600">Use this tool to turn presentation slides, reports, invoices, or handouts into separate images that are easier to reuse in docs, decks, or image galleries.</p>
+              <p className="text-sm leading-relaxed text-gray-600">Turn slides, reports, invoices, or handouts into separate images that are easier to reuse in docs or decks.</p>
             </div>
             <div>
               <h3 className="mb-2 text-lg font-semibold text-gray-900">Save only the pages you need</h3>
-              <p className="text-sm leading-relaxed text-gray-600">If you only need a cover page, signature page, chart, or appendix, enter a page range and convert just those pages instead of exporting the entire file.</p>
+              <p className="text-sm leading-relaxed text-gray-600">If you only need a cover, signature page, chart, or appendix, enter a range and run pdf to jpg on just those pages.</p>
             </div>
             <div>
               <h3 className="mb-2 text-lg font-semibold text-gray-900">Use PNG for sharper visuals</h3>
@@ -358,7 +358,7 @@ export default function PdfToImagePage() {
                 <span className="font-medium text-gray-900">{faq.question}</span>
                 <span className="ml-auto shrink-0 text-xl text-gray-400">{openFaq === index ? "−" : "+"}</span>
               </button>
-              {openFaq === index && <div className="px-4 pb-4 text-sm leading-relaxed text-gray-600 sm:px-6">{faq.answer}</div>}
+              <div className={openFaq === index ? "px-4 pb-4 text-sm leading-relaxed text-gray-600 sm:px-6" : "hidden"}>{faq.answer}</div>
             </div>
           ))}
         </div>

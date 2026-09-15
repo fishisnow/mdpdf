@@ -1,7 +1,6 @@
 "use client";
 
 import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
 import ViewModeToggle, { type ResultViewMode } from "@/components/ViewModeToggle";
 import MoreTools from "@/components/MoreTools";
 import JsonFormattedView from "@/components/JsonFormattedView";
@@ -24,8 +23,8 @@ const DEFAULT_JSON = `{
   "private": true,
   "tools": [
     { "id": "pdf-to-md", "ready": true },
-    { "id": "markdown-preview", "ready": true },
-    { "id": "json-preview", "ready": true }
+    { "id": "md-viewer", "ready": true },
+    { "id": "json-viewer", "ready": true }
   ],
   "privacy": {
     "runsInBrowser": true,
@@ -37,20 +36,25 @@ type PreviewKind = "formatted" | "tree";
 
 const faqs = [
   {
-    question: "Is my JSON uploaded?",
+    question: "Does JSON Viewer upload my JSON?",
     answer: "No. Parsing, formatting, and the tree view all run in your browser.",
   },
   {
-    question: "What does Format do?",
+    question: "What does Format do in JSON Viewer?",
     answer: "Format pretty-prints valid JSON with 2-space indentation. Minify removes extra whitespace so the payload is compact.",
   },
   {
-    question: "When should I use the tree view?",
-    answer: "Use Tree when you want to expand nested objects and arrays one level at a time. Use Formatted when you want the full pretty-printed document. In both views you can delete a property or array item; the source on the left updates to match.",
+    question: "When should I use the JSON Viewer tree view?",
+    answer:
+      "Use the JSON Viewer tree when you want to expand nested objects and arrays one level at a time. Use Formatted when you want the full pretty-printed document. In both views you can delete a property or array item; the source on the left updates to match.",
   },
   {
-    question: "What happens if the JSON is invalid?",
-    answer: "The preview shows the parse error, including line and column when the browser reports a position. Format and Minify stay disabled until the JSON is valid.",
+    question: "What happens if JSON Viewer finds invalid JSON?",
+    answer: "JSON Viewer shows the parse error, including line and column when the browser reports a position. Format and Minify stay disabled until the JSON is valid.",
+  },
+  {
+    question: "Is JSON Viewer free?",
+    answer: "Yes. It is free to use in the browser, with no account required.",
   },
 ] as const;
 
@@ -148,16 +152,10 @@ export default function JsonPreviewPage() {
 
   return (
     <main className="mx-auto w-full max-w-[90rem] px-4 py-8 sm:px-6 sm:py-10 md:py-12">
-      <nav className="mb-6 sm:mb-8">
-        <Link href="/" className="text-sm text-blue-600 hover:underline">
-          ← Home
-        </Link>
-      </nav>
-
       <div className="mb-8 text-center sm:mb-10">
-        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">JSON Preview</h1>
-        <p className="mx-auto max-w-3xl text-base text-gray-500 sm:text-lg">
-          Validate JSON, pretty-print it, minify it, and inspect nested data as a collapsible tree. Nothing leaves your browser.
+        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">JSON Viewer</h1>
+        <p className="mx-auto text-base text-gray-500 sm:text-lg md:whitespace-nowrap">
+          Free JSON Viewer to validate, format, and inspect JSON in your browser.
         </p>
       </div>
 
@@ -341,12 +339,16 @@ export default function JsonPreviewPage() {
         </div>
       </div>
 
+      <p className="mx-auto mb-12 max-w-4xl text-center text-sm leading-relaxed text-gray-600 sm:mb-16 sm:text-base">
+        Use this JSON Viewer to check JSON as you type. Paste a payload on the left to pretty-print it or show a collapsible tree. Copy or download the result; nothing is uploaded.
+      </p>
+
       <section className="mb-12 sm:mb-16">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">Why use JSON Preview?</h2>
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">Why use JSON Viewer?</h2>
         <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
             <h3 className="mb-2 text-lg font-semibold text-gray-900">Validate as you type</h3>
-            <p className="text-sm leading-relaxed text-gray-600">See whether the payload is valid JSON immediately, with line and column details when a parse error includes a position.</p>
+            <p className="text-sm leading-relaxed text-gray-600">JSON Viewer shows whether the payload is valid immediately, with line and column details when a parse error includes a position.</p>
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
             <h3 className="mb-2 text-lg font-semibold text-gray-900">Format or inspect</h3>
@@ -354,13 +356,13 @@ export default function JsonPreviewPage() {
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
             <h3 className="mb-2 text-lg font-semibold text-gray-900">Private by default</h3>
-            <p className="text-sm leading-relaxed text-gray-600">Open a local .json file, copy the result, and download it again without sending the content to a server.</p>
+            <p className="text-sm leading-relaxed text-gray-600">Open a local .json file, copy the result, and download it again without sending content to a server.</p>
           </div>
         </div>
       </section>
 
       <section className="mb-12 sm:mb-16">
-        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">JSON Preview FAQs</h2>
+        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">JSON Viewer FAQs</h2>
         <div className="mx-auto max-w-3xl space-y-4">
           {faqs.map((faq, index) => (
             <div key={faq.question} className="overflow-hidden rounded-lg border border-gray-200 bg-white">
@@ -371,13 +373,13 @@ export default function JsonPreviewPage() {
                 <span className="font-medium text-gray-900">{faq.question}</span>
                 <span className="ml-auto shrink-0 text-xl text-gray-400">{openFaq === index ? "−" : "+"}</span>
               </button>
-              {openFaq === index && <div className="px-4 pb-4 text-sm leading-relaxed text-gray-600 sm:px-6">{faq.answer}</div>}
+              <div className={openFaq === index ? "px-4 pb-4 text-sm leading-relaxed text-gray-600 sm:px-6" : "hidden"}>{faq.answer}</div>
             </div>
           ))}
         </div>
       </section>
 
-      <MoreTools currentHref="/json-preview" />
+      <MoreTools currentHref="/json-viewer" />
     </main>
   );
 }

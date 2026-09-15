@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import { startTransition, useCallback, useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { trackEvent } from "@/lib/analytics";
 import ViewModeToggle, { type ResultViewMode } from "@/components/ViewModeToggle";
 import MoreTools from "@/components/MoreTools";
@@ -44,6 +43,25 @@ console.log(hello);
 
 End of document.`;
 
+const faqs = [
+  {
+    question: "Does md to pdf upload my Markdown?",
+    answer: "No. md to pdf runs in your browser. The print dialog saves the PDF on your device.",
+  },
+  {
+    question: "How do I save the file with md to pdf?",
+    answer: "Click Save as PDF. md to pdf opens the browser print dialog—choose Save as PDF as the destination.",
+  },
+  {
+    question: "Can I preview before I export?",
+    answer: "Yes. The live preview in this md to pdf converter updates as you type so you can review headings, lists, and tables first.",
+  },
+  {
+    question: "Is it free?",
+    answer: "Yes. md to pdf is free to use in the browser, with no account required.",
+  },
+] as const;
+
 /** 嵌在带边框的 shell 内：用 !padding 覆盖 MarkdownHtmlPreview 默认大内边距，避免「边框离正文过远」 */
 const MD_TO_PDF_PREVIEW_CLASS =
   "h-full min-h-0 flex-1 overflow-auto rounded-none border-0 bg-white !p-3 sm:!p-4 !shadow-none";
@@ -55,6 +73,7 @@ export default function MdToPdfPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [viewMode, setViewMode] = useState<ResultViewMode>("split");
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
   const viewerRef = useRef<HTMLDivElement | null>(null);
   const isSplit = viewMode === "split";
 
@@ -144,14 +163,10 @@ export default function MdToPdfPage() {
 
   return (
     <main className="mx-auto w-full max-w-[90rem] px-4 py-8 print:block print:h-auto print:max-h-none print:overflow-visible sm:px-6 sm:py-10 md:py-12">
-      <nav className="mb-6 print:hidden sm:mb-8">
-        <Link href="/" className="text-sm text-blue-600 hover:underline">← Home</Link>
-      </nav>
-
       <div className="mb-8 text-center print:hidden sm:mb-10">
         <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">MD to PDF Converter</h1>
-        <p className="mx-auto max-w-3xl text-base text-gray-500 sm:text-lg">
-          Write, preview, and export Markdown to PDF directly in your browser.
+        <p className="mx-auto text-base text-gray-500 sm:text-lg md:whitespace-nowrap">
+          Free md to pdf in your browser—write, preview, and export Markdown as a PDF.
         </p>
       </div>
 
@@ -318,12 +333,16 @@ export default function MdToPdfPage() {
         )}
       </div>
 
+      <p className="mx-auto mb-12 max-w-4xl text-center text-sm leading-relaxed text-gray-600 print:hidden sm:mb-16 sm:text-base">
+        Use this md to pdf converter to write Markdown on the left and review the layout on the right. When the preview looks right, the browser print dialog saves a PDF without uploading the file.
+      </p>
+
       <section className="mb-12 print:hidden sm:mb-16">
         <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">Why Use Our MD to PDF Converter?</h2>
         <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
             <h3 className="mb-2 text-lg font-semibold text-gray-900">Native browser flow</h3>
-            <p className="text-sm leading-relaxed text-gray-600">Render Markdown in the page, then export it through your browser's built-in print dialog.</p>
+            <p className="text-sm leading-relaxed text-gray-600">md to pdf renders Markdown in the page, then exports it through your browser's built-in print dialog.</p>
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
             <h3 className="mb-2 text-lg font-semibold text-gray-900">Preview before saving</h3>
@@ -331,13 +350,13 @@ export default function MdToPdfPage() {
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
             <h3 className="mb-2 text-lg font-semibold text-gray-900">Frontend only</h3>
-            <p className="text-sm leading-relaxed text-gray-600">Your Markdown stays in the browser for the print workflow, with no separate PDF API dependency.</p>
+            <p className="text-sm leading-relaxed text-gray-600">md to pdf stays in the browser for the print workflow, with no separate PDF API dependency.</p>
           </div>
         </div>
       </section>
 
       <section className="mb-12 print:hidden sm:mb-16">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">How to Save Markdown as PDF</h2>
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">How to convert md to pdf</h2>
         <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6 md:p-8">
           <ol className="space-y-4">
             <li className="flex items-start gap-4">
@@ -358,10 +377,30 @@ export default function MdToPdfPage() {
               <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white">3</span>
               <div>
                 <p className="font-medium text-gray-900">Save as PDF</p>
-                <p className="text-sm text-gray-600">Open the browser print dialog and choose Save as PDF or your preferred print destination.</p>
+                <p className="text-sm text-gray-600">Open the browser print dialog and choose Save as PDF to finish md to pdf.</p>
               </div>
             </li>
           </ol>
+        </div>
+      </section>
+
+      <section className="mb-12 print:hidden sm:mb-16">
+        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">md to pdf FAQs</h2>
+        <div className="mx-auto max-w-3xl space-y-4">
+          {faqs.map((faq, index) => (
+            <div key={faq.question} className="overflow-hidden rounded-lg border border-gray-200 bg-white">
+              <button
+                className="flex w-full items-start justify-between gap-4 px-4 py-4 text-left transition-colors hover:bg-gray-50 sm:px-6"
+                onClick={() => setOpenFaq(openFaq === index ? null : index)}
+              >
+                <span className="font-medium text-gray-900">{faq.question}</span>
+                <span className="ml-auto shrink-0 text-xl text-gray-400">{openFaq === index ? "−" : "+"}</span>
+              </button>
+              <div className={openFaq === index ? "px-4 pb-4 text-sm leading-relaxed text-gray-600 sm:px-6" : "hidden"}>
+                {faq.answer}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
