@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { SITE_TOOLS, type SiteToolHref } from "@/lib/tools";
 
 const accentClass: Record<(typeof SITE_TOOLS)[number]["accent"], { box: string; icon: string; hover: string; title: string }> = {
@@ -86,12 +87,13 @@ function ToolIcon({ href, className }: { href: SiteToolHref; className: string }
   );
 }
 
-export default function MoreTools({ currentHref, heading = "More tools" }: { currentHref: SiteToolHref; heading?: string }) {
+export default function MoreTools({ currentHref }: { currentHref: SiteToolHref }) {
+  const t = useTranslations();
   const tools = SITE_TOOLS.filter((tool) => tool.href !== currentHref);
 
   return (
     <section className="mt-12 mb-12 sm:mt-16 sm:mb-16">
-      <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">{heading}</h2>
+      <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">{t("common.moreTools")}</h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {tools.map((tool) => {
           const colors = accentClass[tool.accent];
@@ -107,9 +109,9 @@ export default function MoreTools({ currentHref, heading = "More tools" }: { cur
                 </div>
                 <div className="min-w-0">
                   <span className={`block font-semibold text-gray-900 transition-colors ${colors.title}`}>
-                    {tool.cardTitle} →
+                    {t(`tools.${tool.id}.card`)} →
                   </span>
-                  <p className="mt-1 text-sm leading-relaxed text-gray-500">{tool.description}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-gray-500">{t(`tools.${tool.id}.description`)}</p>
                 </div>
               </div>
             </Link>

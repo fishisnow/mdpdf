@@ -1,0 +1,537 @@
+{
+  "common": {
+    "language": "語言",
+    "moreTools": "更多工具",
+    "copy": "複製",
+    "copied": "已複製",
+    "download": "下載",
+    "downloadMd": "下載 .md",
+    "openFile": "開啟檔案",
+    "filename": "檔名",
+    "fullscreen": "全螢幕",
+    "exit": "離開",
+    "exitFullscreen": "離開全螢幕",
+    "preview": "預覽",
+    "source": "原始碼",
+    "markdown": "Markdown",
+    "json": "JSON",
+    "writeMarkdown": "撰寫 Markdown",
+    "writeAndPreview": "撰寫與預覽",
+    "sourceAndPreview": "原始碼與預覽",
+    "result": "結果",
+    "original": "原文",
+    "saveAsPdf": "儲存為 PDF",
+    "opening": "正在開啟…",
+    "loadingPreview": "正在載入預覽…",
+    "convertAndDownload": "轉換並下載",
+    "converting": "正在轉換...",
+    "backToHome": "← 返回 MdPdf",
+    "privacyPolicy": "隱私權政策",
+    "termsOfService": "服務條款",
+    "copyright": "© {year} MdPdf。保留所有權利。",
+    "collapse": "摺疊",
+    "expand": "展開"
+  },
+  "tools": {
+    "home": {
+      "nav": "首頁",
+      "card": "PDF 轉 MD",
+      "description": "在瀏覽器中將 PDF 轉成乾淨、可編輯的 Markdown。"
+    },
+    "mdToPdf": {
+      "nav": "MD 轉 PDF",
+      "card": "MD 轉 PDF",
+      "description": "撰寫 Markdown，並透過列印對話框匯出為 PDF。"
+    },
+    "pdfToJpg": {
+      "nav": "PDF 轉 JPG",
+      "card": "PDF 轉 JPG",
+      "description": "不必上傳，就能將 PDF 頁面轉成 JPG 或 PNG 圖片。"
+    },
+    "mdViewer": {
+      "nav": "MD 檢視器",
+      "card": "MD 檢視器",
+      "description": "即時 MD 檢視器，支援分割或全寬呈現 Markdown 預覽。"
+    },
+    "jsonViewer": {
+      "nav": "JSON 檢視器",
+      "card": "JSON 檢視器",
+      "description": "驗證、格式化 JSON，並以文字或樹狀結構檢視。"
+    },
+    "textReplacer": {
+      "nav": "文字取代",
+      "card": "文字取代",
+      "description": "尋找並取代文字，包括將字面量 \\n 轉成真正的換行。"
+    }
+  },
+  "meta": {
+    "home": {
+      "title": "PDF 轉 MD - 免費線上 PDF 轉 Markdown 轉換器 | mdpdf.net",
+      "description": "免費 PDF 轉 MD 轉換器。在瀏覽器中將 PDF 轉成乾淨的 Markdown。"
+    },
+    "mdToPdf": {
+      "title": "MD 轉 PDF - Markdown 轉 PDF 轉換器 - MdPdf",
+      "description": "免費 MD 轉 PDF 轉換器。在瀏覽器中將 Markdown 匯出為 PDF，快速、私密、好用。"
+    },
+    "pdfToJpg": {
+      "title": "PDF 轉 JPG - 免費線上 PDF 轉 PNG 轉換器 - MdPdf",
+      "description": "免費將 PDF 轉成 JPG 或 PNG。在瀏覽器中完成轉換，匯出更快，也更注重隱私。"
+    },
+    "mdViewer": {
+      "title": "MD 檢視器 - 線上即時 Markdown 編輯器 - MdPdf",
+      "description": "免費 MD 檢視器，在瀏覽器中即時預覽 Markdown。可分割檢視原始碼與預覽，也可複製或下載 .md 檔。"
+    },
+    "jsonViewer": {
+      "title": "JSON 檢視器 - 線上 JSON 格式化與樹狀檢視 - MdPdf",
+      "description": "免費 JSON 檢視器與格式化工具。驗證 JSON、美化或壓縮，並以可摺疊樹狀結構檢視。全部在瀏覽器中完成。"
+    },
+    "textReplacer": {
+      "title": "文字取代 - 線上將 \\n 取代為換行 - MdPdf",
+      "description": "免費文字取代工具。在瀏覽器中尋找並取代字元或字串，包括將字面量 \\n 轉成真正的換行。"
+    },
+    "privacy": {
+      "title": "隱私權政策 - MdPdf",
+      "description": "了解 MdPdf 如何處理上傳檔案、分析資料、Cookie，以及 PDF 轉 Markdown 與 Markdown 轉 PDF 工具中的其他資訊。"
+    },
+    "terms": {
+      "title": "服務條款 - MdPdf",
+      "description": "閱讀使用 MdPdf 的條款，包括可接受使用、智慧財產權、免責聲明與責任限制。"
+    }
+  },
+  "upload": {
+    "click": "點擊上傳",
+    "orDrop": "或拖放檔案",
+    "hint": "僅限 PDF · 最大 50MB · 在瀏覽器中轉換",
+    "invalidType": "請上傳 PDF 檔案。",
+    "tooLarge": "請上傳小於 50MB 的 PDF。"
+  },
+  "viewMode": {
+    "label": "檢視模式",
+    "split": "分割",
+    "preview": "預覽"
+  },
+  "home": {
+    "h1": "MdPdf - PDF 轉 MD 轉換器",
+    "subtitle": "在瀏覽器中將 PDF 轉成乾淨、可編輯且可重複使用的 Markdown。",
+    "boxTitle": "PDF 轉 MD 轉換器",
+    "boxHint": "上傳 PDF，即可得到更易編輯、重複使用與發布的 Markdown。",
+    "intro": "當 PDF 難以複製時，使用此 PDF 轉 MD 轉換器。它在瀏覽器中執行，標題、清單、表格與程式碼會保留為可編輯、可發布的 Markdown 結構。",
+    "whyTitle": "為什麼選擇 PDF 轉 MD？",
+    "whyBody": "許多 PDF 複製貼上後很難重複使用。PDF 轉 MD 會將其轉成結構化 Markdown，更易整理、編輯與發布。流程快速免費，適合筆記、文件、表格與程式碼。",
+    "fastTitle": "極速轉換",
+    "fastBody": "幾秒內完成 PDF 轉 MD，精簡流程幫你更快從 PDF 得到可編輯的 Markdown。",
+    "accurateTitle": "高準確度",
+    "accurateBody": "轉換時會盡量保留標題、清單、表格與程式碼區塊的結構，讓 PDF 變成更易整理的 Markdown。",
+    "privacyTitle": "隱私優先",
+    "privacyBody": "在瀏覽器中安全完成 PDF 轉 MD，處理完成後檔案會被刪除。",
+    "faqTitle": "PDF 轉 MD 常見問題",
+    "faqIntro": "關於將 PDF 轉成 Markdown 的常見問題。",
+    "progress": {
+      "loading": "正在瀏覽器中讀取檔案...",
+      "parsing": "正在背景解析 PDF 頁面...",
+      "rendering": "正在產生 Markdown..."
+    },
+    "errors": {
+      "encrypted": "此 PDF 已加密或受密碼保護，無法在瀏覽器中轉換。",
+      "invalid": "該檔案看起來不是有效的 PDF，或可能已損毀。",
+      "scanned": "此 PDF 似乎是掃描件或圖片型文件，可能沒有可選取的文字可供轉換。",
+      "worker": "瀏覽器無法完成解析。請嘗試較小的檔案、換一個瀏覽器，或使用含可選文字的 PDF。",
+      "failed": "轉換失敗"
+    },
+    "faqs": [
+      {
+        "question": "PDF 轉 MD 如何運作？",
+        "answer": "上傳 PDF 後，工具會擷取文字，並盡量保留標題、清單、表格與類似程式碼的區塊，方便以 Markdown 編輯。"
+      },
+      {
+        "question": "是否免費？",
+        "answer": "是。此 PDF 轉 MD 轉換器免費使用，沒有隱藏費用、浮水印或檔案數量限制。"
+      },
+      {
+        "question": "需要安裝軟體嗎？",
+        "answer": "不需要。PDF 轉 MD 在瀏覽器中執行。上傳檔案即可開始編輯 Markdown，無需安裝應用程式。"
+      },
+      {
+        "question": "可以把 Markdown 再轉回 PDF 嗎？",
+        "answer": "可以。完成 PDF 轉 MD 後，如需再次得到精美 PDF，請使用 MD 轉 PDF 轉換器。"
+      },
+      {
+        "question": "轉換後我的檔案會怎樣？",
+        "answer": "PDF 轉 MD 在瀏覽器中處理檔案，轉換後即刪除。我們不會儲存或分享你的文件。"
+      },
+      {
+        "question": "格式會被保留嗎？",
+        "answer": "會盡量保留標題、清單、表格與基本格式，程式碼區塊處理也更好，讓 Markdown 更乾淨、更易編輯。"
+      }
+    ]
+  },
+  "mdToPdf": {
+    "h1": "MD 轉 PDF 轉換器",
+    "subtitle": "在瀏覽器中免費將 Markdown 轉成 PDF——撰寫、預覽並匯出。",
+    "intro": "使用此 MD 轉 PDF 轉換器：左側撰寫 Markdown，右側查看版面。預覽滿意後，透過瀏覽器列印對話框儲存為 PDF，檔案不會上傳。",
+    "whyTitle": "為什麼使用我們的 MD 轉 PDF 轉換器？",
+    "nativeTitle": "原生瀏覽器流程",
+    "nativeBody": "先在頁面中呈現 Markdown，再透過瀏覽器內建列印對話框匯出 PDF。",
+    "previewTitle": "儲存前預覽",
+    "previewBody": "即時預覽會隨輸入更新，列印前即可檢查標題、清單與表格。",
+    "frontendTitle": "純前端",
+    "frontendBody": "列印流程完全在瀏覽器中完成，不依賴單獨的 PDF API。",
+    "howTitle": "如何將 MD 轉成 PDF",
+    "step1Title": "撰寫或貼上 Markdown",
+    "step1Body": "使用左側編輯器準備要匯出的內容。",
+    "step2Title": "檢查預覽",
+    "step2Body": "查看右側呈現後的文件；編輯時會同步更新。",
+    "step3Title": "儲存為 PDF",
+    "step3Body": "開啟瀏覽器列印對話框，選擇「儲存為 PDF」，完成 MD 轉 PDF。",
+    "faqTitle": "MD 轉 PDF 常見問題",
+    "emptyError": "請先輸入一些 Markdown 內容。",
+    "printError": "無法開啟列印對話框，請再試一次。",
+    "faqs": [
+      {
+        "question": "MD 轉 PDF 會上傳我的 Markdown 嗎？",
+        "answer": "不會。轉換在瀏覽器中完成。列印對話框會把 PDF 儲存在你的裝置上。"
+      },
+      {
+        "question": "如何用 MD 轉 PDF 儲存檔案？",
+        "answer": "點擊「儲存為 PDF」。工具會開啟瀏覽器列印對話框——將目標選為「儲存為 PDF」。"
+      },
+      {
+        "question": "匯出前可以預覽嗎？",
+        "answer": "可以。即時預覽會隨輸入更新，你可以先檢查標題、清單與表格。"
+      },
+      {
+        "question": "是否免費？",
+        "answer": "是。可在瀏覽器中免費使用，無需註冊帳號。"
+      }
+    ]
+  },
+  "pdfToJpg": {
+    "h1": "免費線上 PDF 轉 JPG 轉換器",
+    "subtitle": "在瀏覽器中將 PDF 轉成 JPG 或 PNG，無需上傳檔案。",
+    "file": "檔案",
+    "pages": "頁面",
+    "pagesPlaceholder": "全部頁面（或例如 1-3,5,8）",
+    "pagesHint": "留空則轉換每一頁，或輸入指定頁面，如 1-3,5。",
+    "format": "格式",
+    "formatHint": "需要較小檔案選 JPG；需要更清晰的截圖、圖表或文字較多的頁面選 PNG。",
+    "quality": "品質",
+    "qualityStandard": "標準",
+    "qualityHigh": "高",
+    "qualityUltra": "超高",
+    "qualityHint": "品質越高，圖片越大。選擇 JPG 時，下方會出現 JPG 品質控制。",
+    "jpgQuality": "JPG 品質",
+    "progress": "正在瀏覽器中轉換第 {current} / {total} 頁...",
+    "needPdf": "請先上傳 PDF。",
+    "readError": "讀取 PDF 失敗。",
+    "convertError": "轉換失敗。",
+    "pagesLabel": "{count} 頁",
+    "doneOne": "已轉換 1 頁並下載 {name}。",
+    "doneMany": "已轉換 {count} 頁並下載 {name}。",
+    "whyTitle": "為什麼使用此 PDF 轉 JPG 轉換器？",
+    "fastTitle": "瀏覽器內快速轉換",
+    "fastBody": "在瀏覽器中將 PDF 轉成 JPG，無需等待大檔上傳、排隊或從遠端伺服器額外下載。",
+    "privateTitle": "私密處理 PDF",
+    "privateBody": "轉換期間 PDF 留在你的裝置上，更適合處理對隱私敏感的檔案。",
+    "flexTitle": "彈性匯出頁面",
+    "flexBody": "可轉換一頁或多頁，匯出 JPG 或 PNG；多頁結果會打包為 ZIP，方便逐頁重複使用。",
+    "howTitle": "如何線上將 PDF 轉成 JPG",
+    "step1Title": "上傳 PDF",
+    "step1Body": "選擇要轉換的 PDF。工具在瀏覽器中讀取檔案，並顯示總頁數。",
+    "step2Title": "選擇全部或指定頁面",
+    "step2Body": "「頁面」留空則轉換整份 PDF；若只需特定頁，可輸入如 1-3,5 的範圍。",
+    "step3Title": "選擇 JPG 或 PNG 並設定品質",
+    "step3Body": "JPG 適合較小檔案與分享；PNG 適合更清晰的匯出。然後選擇品質預設，必要時再調整 JPG 品質。",
+    "step4Title": "轉換並下載",
+    "step4Body": "點擊「轉換並下載」。單頁會直接下載，多頁會打成一個 ZIP。",
+    "useTitle": "PDF 轉 JPG 的常見用途",
+    "useShareTitle": "更快分享文件頁面",
+    "useShareBody": "想在聊天、郵件、工單或社群貼文中傳送頁面預覽、又不想附上整份 PDF 時，很適合使用。",
+    "useSlidesTitle": "將投影片或報告匯出為圖片",
+    "useSlidesBody": "把投影片、報告、發票或講義拆成獨立圖片，更方便在文件或簡報中重複使用。",
+    "useRangeTitle": "只儲存需要的頁面",
+    "useRangeBody": "若只需封面、簽名頁、圖表或附錄，輸入範圍後僅轉換這些頁。",
+    "usePngTitle": "需要更清晰畫面時用 PNG",
+    "usePngBody": "頁面含圖表、介面截圖或需要更銳利邊緣的文字時，轉成 PNG 通常比 JPG 更清晰。",
+    "vsTitle": "PDF 轉 JPG 與 PDF 轉 PNG",
+    "jpgTitle": "需要較小檔案時選 JPG",
+    "jpgBody": "若希望圖片較小、下載與分享更快，JPG 通常是更好選擇。適合照片、混排頁面與日常文件預覽。",
+    "pngTitle": "需要更清晰細節時選 PNG",
+    "pngBody": "需要清晰文字、截圖、圖表或其他精細元素時，PNG 更好。檔案往往較大，但畫質更乾淨。",
+    "faqTitle": "PDF 轉 JPG 常見問題",
+    "faqIntro": "關於將 PDF 轉成 JPG 或 PNG、選擇頁面、下載方式與隱私的簡要解答。",
+    "faqs": [
+      {
+        "question": "如何線上將 PDF 轉成 JPG？",
+        "answer": "上傳 PDF，選擇頁面，保持 JPG 選中，然後點擊「轉換並下載」。單頁會儲存為 JPG，多頁會打包進 ZIP。"
+      },
+      {
+        "question": "可以只轉換選定頁面嗎？",
+        "answer": "可以。在「頁面」中輸入如 1-3,5,8 的範圍。留空則會轉換 PDF 中的每一頁。"
+      },
+      {
+        "question": "該選 JPG 還是 PNG？",
+        "answer": "需要較小檔案、更快分享時選 JPG。需要更清晰的文字、圖表、截圖，或畫質比體積更重要時選 PNG。"
+      },
+      {
+        "question": "會上傳我的檔案嗎？",
+        "answer": "不會。轉換在瀏覽器中完成，檔案全程留在你的裝置上。比先上傳再處理的工具更快，也更注重隱私。"
+      },
+      {
+        "question": "為什麼多頁結果會下載為 ZIP？",
+        "answer": "每一頁都會變成獨立圖片。轉換多頁時會打包成 ZIP，一次即可全部下載。"
+      }
+    ]
+  },
+  "mdViewer": {
+    "h1": "MD 檢視器",
+    "subtitle": "免費 MD 檢視器，在瀏覽器中即時預覽 Markdown。",
+    "numberedCitations": "編號引用",
+    "generatedReferences": "產生的參考文獻",
+    "placeholder": "# 開始撰寫 Markdown…",
+    "intro": "使用此 MD 檢視器，無需離開瀏覽器即可撰寫並檢查 Markdown。左側貼上原始碼，預覽會隨輸入呈現標題、清單、表格與程式碼。完成後可複製或下載檔案；不會上傳任何內容。",
+    "whyTitle": "為什麼使用 MD 檢視器？",
+    "liveTitle": "即時呈現",
+    "liveBody": "輸入時即更新標題、清單、表格與程式碼，方便儘早發現格式問題。",
+    "splitTitle": "分割或純預覽",
+    "splitBody": "可將原始碼與呈現結果並排，也可隱藏編輯器，只閱讀預覽。",
+    "privateTitle": "留在你的裝置上",
+    "privateBody": "預覽在瀏覽器中執行。開啟本機檔案、複製原始碼或下載 .md，均無需上傳。",
+    "faqTitle": "MD 檢視器常見問題",
+    "faqs": [
+      {
+        "question": "MD 檢視器會上傳我的文字嗎？",
+        "answer": "不會。編輯器與呈現都在瀏覽器中執行，Markdown 留在你的裝置上。"
+      },
+      {
+        "question": "MD 檢視器與 MD 轉 PDF 有何不同？",
+        "answer": "MD 檢視器用於撰寫和檢查呈現後的 Markdown。準備透過瀏覽器列印對話框儲存文件時，請使用 MD 轉 PDF。"
+      },
+      {
+        "question": "可以在 MD 檢視器中開啟既有的 .md 檔嗎？",
+        "answer": "可以。使用「開啟檔案」從電腦載入 Markdown，然後在分割檢視中繼續編輯。"
+      },
+      {
+        "question": "MD 檢視器支援哪些 Markdown 功能？",
+        "answer": "支援 GitHub 風格 Markdown，包括標題、清單、表格、程式碼區塊與引用。開啟「編號引用」後，[title](url) 連結會呈現為 [1]、[2]。產生的參考文獻會出現在預覽下方的單獨清單中，原始碼裡既有的參考文獻仍保留在文件中。"
+      },
+      {
+        "question": "MD 檢視器免費嗎？",
+        "answer": "是。可在瀏覽器中免費使用，無需註冊帳號。"
+      }
+    ],
+    "contents": "目錄",
+    "noHeadings": "暫無標題"
+  },
+  "jsonViewer": {
+    "h1": "JSON 檢視器",
+    "subtitle": "免費 JSON 檢視器，在瀏覽器中驗證、格式化並檢視 JSON。",
+    "valid": "有效 JSON",
+    "invalid": "無效 JSON",
+    "empty": "空",
+    "formatted": "格式化",
+    "tree": "樹狀",
+    "kindLabel": "JSON 預覽類型",
+    "format": "格式化",
+    "minify": "壓縮",
+    "hoverHint": "將游標移到某一列可刪除鍵或陣列項目",
+    "expandAll": "全部展開",
+    "collapseAll": "全部摺疊",
+    "pasteHint": "在左側貼上 JSON 以預覽。",
+    "tooLarge": "此 JSON 過大，無法使用樹狀檢視，已改為顯示格式化文件。",
+    "intro": "使用此 JSON 檢視器，邊輸入邊檢查 JSON。左側貼上內容即可美化顯示，或展示可摺疊樹。可複製或下載結果；不會上傳任何內容。",
+    "whyTitle": "為什麼使用 JSON 檢視器？",
+    "validateTitle": "輸入時即時驗證",
+    "validateBody": "立即顯示內容是否有效；若剖析錯誤包含位置，還會給出行號與欄號。",
+    "inspectTitle": "格式化或檢查",
+    "inspectBody": "美化便於閱讀，壓縮得到精簡輸出；需要逐層展開巢狀鍵時，可切換到樹狀檢視。",
+    "privateTitle": "預設私密",
+    "privateBody": "開啟本機 .json 檔，複製結果並再次下載，內容不會傳送到伺服器。",
+    "faqTitle": "JSON 檢視器常見問題",
+    "faqs": [
+      {
+        "question": "JSON 檢視器會上傳我的 JSON 嗎？",
+        "answer": "不會。剖析、格式化與樹狀檢視都在瀏覽器中執行。"
+      },
+      {
+        "question": "JSON 檢視器中的「格式化」做什麼？",
+        "answer": "「格式化」會以 2 空格縮排美化有效 JSON。「壓縮」會去掉多餘空白，使內容更精簡。"
+      },
+      {
+        "question": "什麼時候該用樹狀檢視？",
+        "answer": "想逐層展開巢狀物件與陣列時用樹狀檢視；想看完整美化文件時用「格式化」。兩種檢視都可以刪除屬性或陣列項目，左側原始碼會同步更新。"
+      },
+      {
+        "question": "發現無效 JSON 會怎樣？",
+        "answer": "會顯示剖析錯誤；若瀏覽器提供位置，還會包含行號與欄號。在 JSON 有效之前，「格式化」與「壓縮」保持停用。"
+      },
+      {
+        "question": "JSON 檢視器免費嗎？",
+        "answer": "是。可在瀏覽器中免費使用，無需註冊帳號。"
+      }
+    ],
+    "unescape": "去除跳脫"
+  },
+  "textReplacer": {
+    "h1": "文字取代",
+    "subtitle": "免費文字取代：尋找並取代，包括將 \\n 轉成換行。",
+    "patternError": "模式錯誤",
+    "replacements": "{count, plural, one {# 處取代} other {# 處取代}}",
+    "useResult": "將結果用作輸入",
+    "find": "尋找",
+    "findRegex": "尋找（正規表示式）",
+    "replaceWith": "取代為",
+    "presetsLabel": "取代預設",
+    "presetNewline": "\\n → 換行",
+    "presetTab": "\\t → 定位字元",
+    "presetEncode": "換行 → \\n",
+    "presetCrlf": "\\r\\n → 換行",
+    "interpretReplace": "在取代中解讀跳脫字元",
+    "interpretFind": "在尋找中解讀跳脫字元",
+    "ignoreCase": "忽略大小寫",
+    "useRegex": "在尋找中使用正規表示式",
+    "greedy": "貪婪比對",
+    "hintLiteral": "尋找預設為字面量，因此 \\n 比對的是反斜線加 n。開啟「在取代中解讀跳脫字元」後，取代中的 \\n 會變成真正的換行。",
+    "hintRegexGreedy": "尋找是 JavaScript 正規表示式。像 .* 這樣的量詞會盡可能多地比對。取消「貪婪比對」可取最短比對。取代支援 $1、$2 與 $&。",
+    "hintRegexLazy": "已關閉貪婪比對，因此 * + ? 與 {n,m} 會盡可能少地比對（等同於寫 .*? 或 +?）。取代支援 $1、$2 與 $&。",
+    "placeholder": "貼上包含 \\n 或其他要取代字元的文字…",
+    "intro": "使用此文字取代工具，無需離開瀏覽器即可尋找並取代。左側貼上原文，設定尋找與取代，結果會隨輸入更新。可複製或下載輸出；不會上傳任何內容。",
+    "whyTitle": "為什麼使用文字取代？",
+    "newlineTitle": "將字面量 \\n 轉成換行",
+    "newlineBody": "從 JSON、紀錄或聊天複製的文字，常把 \\n 顯示成兩個字元。預設取代會把它們變成真正的換行。",
+    "liveTitle": "即時結果",
+    "liveBody": "右側會隨你編輯尋找與取代而更新，並顯示完成了多少處取代。",
+    "privateTitle": "留在瀏覽器中",
+    "privateBody": "在文字取代中開啟本機檔案、複製結果或下載 .txt，均無需上傳。",
+    "faqTitle": "文字取代常見問題",
+    "faqs": [
+      {
+        "question": "如何在文字取代中把 \\n 變成真正的換行？",
+        "answer": "將尋找保持為 \\n，取代保持為 \\n，並開啟「在取代中解讀跳脫字元」。尋找仍是字面量，因此比對的是反斜線與 n 這兩個字元。取代隨後會插入真正的換行。"
+      },
+      {
+        "question": "文字取代支援哪些跳脫序列？",
+        "answer": "開啟「在取代中解讀跳脫字元」後，\\n 變為換行，\\t 變為定位字元，\\r 變為歸位字元，\\\\ 變為反斜線。"
+      },
+      {
+        "question": "文字取代會上傳我的文字嗎？",
+        "answer": "不會。尋找、取代與預覽都在瀏覽器中執行。"
+      },
+      {
+        "question": "什麼時候該在文字取代中使用正規表示式？",
+        "answer": "開啟「在尋找中使用正規表示式」，即可把尋找當作 JavaScript 正規表示式。例如尋找 (\\d+)，取代 [$1]，會給每個數字加上方括號。貪婪比對（預設）讓 .* 盡可能多地比對；取消勾選則比對最短範圍。正規表示式模式下，\\n 比對真正的換行；要比對反斜線與 n 這兩個字元，請使用 \\\\n。"
+      },
+      {
+        "question": "文字取代免費嗎？",
+        "answer": "是。可在瀏覽器中免費使用，無需註冊帳號。"
+      }
+    ]
+  },
+  "privacy": {
+    "h1": "隱私權政策",
+    "intro1": "本隱私權政策說明 MdPdf（「MdPdf」、「我們」或「我們的」）在您使用本網站與工具（包括 PDF 轉 Markdown 與 Markdown 轉 PDF）時如何蒐集、使用與保護資訊。",
+    "intro2": "使用 MdPdf 即表示您同意本政策所述做法。如不同意，請勿使用本網站。",
+    "s1Title": "1. 我們蒐集的資訊",
+    "s1P1": "我們僅蒐集營運 MdPdf、改進網站、了解使用情況並保護服務所需的有限資訊。",
+    "s1P2": "您為轉換而上傳的檔案。使用 PDF 轉 Markdown 工具時，您可能上傳 PDF，以便我們處理並回傳轉換後的 Markdown。",
+    "s1P3": "您在瀏覽器中輸入的內容。使用 Markdown 轉 PDF 工具時，您輸入或貼上的 Markdown 會留在瀏覽器中，用於列印流程。",
+    "s1P4": "使用與裝置資訊。我們可能蒐集 IP 位址、瀏覽器類型、作業系統、來源頁面、瀏覽頁面、時間戳記、由 IP 推斷的大致位置，以及網站上的一般使用事件等技術資料。",
+    "s1P5": "分析資訊。我們使用包括 Google Analytics 在內的分析工具，了解訪客如何使用 MdPdf、哪些頁面最有用，以及可以在何處改進體驗。",
+    "s1P6": "Cookie 及類似技術。我們可能使用 Cookie 或類似技術來記住偏好、衡量流量並改進網站功能。",
+    "s2Title": "2. 我們如何使用資訊",
+    "s2P1": "我們使用所蒐集的資訊以：",
+    "s2Items": [
+      "提供並營運 MdPdf 網站與工具；",
+      "處理上傳的 PDF 並回傳轉換結果；",
+      "監控效能、診斷錯誤並提高可靠性；",
+      "分析流量與功能使用情況；",
+      "防止濫用、詐欺、資安事件以及對服務的不當使用；",
+      "在需要時遵守法律義務。"
+    ],
+    "s3Title": "3. 檔案處理",
+    "s3P1": "MdPdf 旨在盡量減少對上傳內容的保留。對於 PDF 轉 Markdown 工具，上傳的檔案僅用於完成轉換，不會在完成請求所需時間之外繼續儲存。",
+    "s3P2": "Markdown 轉 PDF 功能在瀏覽器列印流程中執行，這表示您為該功能撰寫或貼上的 Markdown 會在用戶端作為瀏覽器體驗的一部分處理。",
+    "s3P3": "儘管我們力求將檔案處理降至最低，但任何系統都無法保證 100% 安全。請避免上傳高度敏感的檔案，除非您能接受網際網路服務所伴隨的風險。",
+    "s4Title": "4. Cookie 與分析",
+    "s4P1": "我們可能使用 Cookie、分析標籤及類似技術來了解網站使用情況、維持效能，並改進內容與產品決策。",
+    "s4P2": "這些技術可能蒐集瀏覽器類型、裝置類型、工作階段活動以及與頁面和功能的互動等資訊。第三方分析供應商也可能按其自身隱私權政策接收此類資訊。",
+    "s4P3": "您通常可透過瀏覽器設定管理 Cookie。封鎖部分 Cookie 可能影響網站功能。",
+    "s5Title": "5. 我們如何共享資訊",
+    "s5P1": "我們不會出售您的個人資訊。我們可能在以下情況下共享資訊：",
+    "s5Items": [
+      "與協助我們託管、營運、分析或保護網站的服務供應商；",
+      "與協助我們了解流量與效能的分析供應商；",
+      "在法律、法規、法律程序或有效政府要求下必須揭露時；",
+      "為保護 MdPdf、使用者或其他人的權利、安全與資安；",
+      "作為合併、收購、融資或資產移轉的一部分。"
+    ],
+    "s6Title": "6. 資料保留",
+    "s6P1": "我們僅在本政策所述目的合理必要的期限內保留資訊，包括營運服務、排除故障、遵守法律義務與解決爭議。",
+    "s6P2": "出於安全、防詐欺與服務改進需要，技術紀錄與分析資料可能保留更長時間。",
+    "s7Title": "7. 國際資料傳輸",
+    "s7P1": "MdPdf 可能使用位於不同國家的基礎建設與服務供應商。因此，您的資訊可能在居住國以外處理或儲存。",
+    "s7P2": "在適用情況下，我們會採取合理措施，確保此類傳輸具備適當保障。",
+    "s8Title": "8. 您的選擇",
+    "s8P1": "您可以選擇資訊的使用方式，包括：",
+    "s8Items": [
+      "調整瀏覽器設定以封鎖或移除 Cookie；",
+      "使用限制分析或追蹤的瀏覽器工具或擴充功能；",
+      "選擇不上傳您不希望線上處理的檔案。"
+    ],
+    "s8P2": "根據您所在地區，您可能還享有存取、更正、刪除或限制某些個人資訊的法律權利。",
+    "s9Title": "9. 安全",
+    "s9P1": "我們採取合理的管理、技術與組織措施，協助防止資訊被未經授權存取、揭露、竄改或銷毀。",
+    "s9P2": "但任何網站、網路或線上服務都無法保證絕對安全。您使用 MdPdf 需自行承擔風險。",
+    "s10Title": "10. 兒童隱私",
+    "s10P1": "MdPdf 不面向兒童，我們不會故意蒐集適用法律所規定年齡以下兒童的個人資訊。如果您認為兒童透過本網站提供了個人資訊，請聯絡我們，以便我們審查並處理。",
+    "s11Title": "11. 本政策的變更",
+    "s11P1": "我們可能不時更新本隱私權政策。如有變更，我們將在本頁發布修訂版本，並在需要時更新生效日期。",
+    "s11P2": "更新後繼續使用 MdPdf，即表示您接受修訂後的政策。",
+    "s12Title": "12. 聯絡我們",
+    "s12P1": "如對本隱私權政策或 MdPdf 如何處理資料有疑問，請透過網站提供的聯絡方式與我們聯絡。"
+  },
+  "terms": {
+    "h1": "服務條款",
+    "intro1": "使用 MdPdf 前請仔細閱讀本服務條款。存取或使用我們的網站、工具、功能或相關服務（統稱「服務」），即表示您同意受本條款及隱私權政策約束。",
+    "intro2": "如不同意本條款，您不得使用 MdPdf。",
+    "s1Title": "1. 接受條款",
+    "s1P1": "使用 MdPdf 即表示您確認自己具備訂立本協議的法律能力，並將遵守所有適用法律法規。",
+    "s2Title": "2. 服務說明",
+    "s2P1": "MdPdf 提供線上工具，用於將 PDF 轉成 Markdown，並透過瀏覽器將 Markdown 匯出為 PDF。",
+    "s2P2": "我們可隨時更新、修改、暫停或終止服務的任何部分，無論是否另行通知。",
+    "s3Title": "3. 允許的使用",
+    "s3P1": "您僅可為合法目的並依照本條款使用 MdPdf。您同意不會：",
+    "s3Items": [
+      "以違反任何法律法規的方式使用服務；",
+      "上傳或提交您無權處理的內容；",
+      "上傳惡意程式碼、有害檔案，或旨在干擾服務的內容；",
+      "試圖干擾、探測或未經授權存取我們的系統；",
+      "使用自動化手段使服務過載、擷取或濫用服務；",
+      "使用服務侵害他人權利，包括智慧財產權。"
+    ],
+    "s4Title": "4. 您的內容",
+    "s4P1": "您透過 MdPdf 上傳、貼上或產生的檔案與內容，所有權仍歸您所有。您須自行確保有權使用、處理與轉換該等內容。",
+    "s4P2": "使用服務即表示您授予我們為營運並提供所請求功能所必需的有限權利，以處理您的內容。",
+    "s5Title": "5. 智慧財產權",
+    "s5P1": "MdPdf（包括我們提供的網站設計、品牌、軟體、文字、圖形及其他材料）由我們所有或獲得授權，並受適用智慧財產權法律保護。",
+    "s5P2": "除法律明確允許外，未經我們事先書面同意，您不得重製、修改、散布、出售、逆向工程服務的任何部分，或基於其創作衍生作品。",
+    "s6Title": "6. 隱私",
+    "s6P1": "您對 MdPdf 的使用同時受我們的隱私權政策約束，該政策說明我們如何蒐集、使用與保護與服務相關的資訊。",
+    "s7Title": "7. 無擔保",
+    "s7P1": "服務按「現況」與「現有」基礎提供。在法律允許的最大範圍內，MdPdf 不作任何明示或默示擔保，包括適售性、特定用途適用性、不侵權與可用性方面的擔保。",
+    "s7P2": "我們不保證服務不中斷、無錯誤、安全，也不保證轉換結果始終完整、準確或適合您的特定用途。",
+    "s8Title": "8. 責任限制",
+    "s8P1": "在法律允許的最大範圍內，MdPdf 及其營運方、關係企業、服務供應商與授權方不對因您使用或無法使用服務而產生的任何間接、附帶、特殊、衍生性、懲戒性或懲罰性損害，或任何資料、利潤、收入、業務或商譽損失承擔責任。",
+    "s8P2": "在無法完全排除責任的情況下，我們的總責任將限於適用法律允許的最低金額。",
+    "s9Title": "9. 第三方服務與連結",
+    "s9P1": "MdPdf 可能依賴或連結至第三方服務、工具或網站。我們不對第三方的內容、政策、可用性或做法負責。",
+    "s10Title": "10. 終止",
+    "s10P1": "若我們認為您違反本條款、濫用服務、造成資安風險，或為保護平台、使用者或第三方有必要暫停，我們可隨時暫停或終止您對 MdPdf 的存取。",
+    "s11Title": "11. 條款變更",
+    "s11P1": "我們可能不時修訂本條款。更新版本將在本頁發布時生效，除非另有說明。",
+    "s11P2": "更新後繼續使用 MdPdf，即表示您接受修訂後的條款。",
+    "s12Title": "12. 準據法",
+    "s12P1": "本條款受 MdPdf 營運方適用法律管轄，不考慮法律衝突原則。具體管轄地可能取決於營運服務的法律實體或司法管轄區。",
+    "s13Title": "13. 聯絡我們",
+    "s13P1": "如對本服務條款有疑問，請透過網站提供的聯絡方式與我們聯絡。"
+  }
+}

@@ -1,39 +1,28 @@
-import { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
+import { languageAlternates, localizedUrl, PAGE_PATHS } from "@/lib/seo";
 
-const routes = [
-  {
-    url: "https://mdpdf.net",
-    priority: 1,
-  },
-  {
-    url: "https://mdpdf.net/md-to-pdf",
-    priority: 0.9,
-  },
-  {
-    url: "https://mdpdf.net/pdf-to-jpg",
-    priority: 0.9,
-  },
-  {
-    url: "https://mdpdf.net/md-viewer",
-    priority: 0.8,
-  },
-  {
-    url: "https://mdpdf.net/json-viewer",
-    priority: 0.8,
-  },
-  {
-    url: "https://mdpdf.net/text-replacer",
-    priority: 0.8,
-  },
-] as const;
+const priorities: Record<(typeof PAGE_PATHS)[number], number> = {
+  "/": 1,
+  "/md-to-pdf": 0.9,
+  "/pdf-to-jpg": 0.9,
+  "/md-viewer": 0.8,
+  "/json-viewer": 0.8,
+  "/text-replacer": 0.8,
+  "/privacy-policy": 0.3,
+  "/terms-of-service": 0.3,
+};
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
+  const publicRoutes = PAGE_PATHS.filter((href) => href !== "/privacy-policy" && href !== "/terms-of-service");
 
-  return routes.map((route) => ({
-    url: route.url,
+  return publicRoutes.map((href) => ({
+    url: localizedUrl("en", href),
     lastModified,
     changeFrequency: "weekly",
-    priority: route.priority,
+    priority: priorities[href],
+    alternates: {
+      languages: languageAlternates(href),
+    },
   }));
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { startTransition, useCallback, useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import MarkdownHtmlPreview from "@/components/MarkdownHtmlPreview";
 import SourceTextarea from "@/components/SourceTextarea";
 import ViewModeToggle, { type ResultViewMode } from "@/components/ViewModeToggle";
@@ -14,6 +15,7 @@ interface Props {
 type CopyState = "idle" | "copied";
 
 export default function MarkdownPreview({ markdown, filename, onDownload }: Props) {
+  const t = useTranslations("common");
   const [copyState, setCopyState] = useState<CopyState>("idle");
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [viewMode, setViewMode] = useState<ResultViewMode>("split");
@@ -85,7 +87,7 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-lg font-semibold text-gray-700">Result</h2>
+        <h2 className="text-lg font-semibold text-gray-700">{t("result")}</h2>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
           {viewToggle}
           {!isFullscreen && (
@@ -94,7 +96,7 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
               onClick={handleFullscreenToggle}
               className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50 sm:w-auto"
             >
-              Fullscreen
+              {t("fullscreen")}
             </button>
           )}
           <button
@@ -102,7 +104,7 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
             onClick={handleDownload}
             className="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-700 sm:w-auto"
           >
-            Download .md
+            {t("downloadMd")}
           </button>
         </div>
       </div>
@@ -113,7 +115,7 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
       >
         {isFullscreen && (
           <div className="mb-3 flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-gray-200 pb-3">
-            <span className="text-sm font-medium text-gray-700">Source & Preview</span>
+            <span className="text-sm font-medium text-gray-700">{t("sourceAndPreview")}</span>
             <div className="flex flex-wrap items-center gap-2">
               {viewToggle}
               <button
@@ -121,14 +123,14 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
                 onClick={handleDownload}
                 className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-blue-700"
               >
-                Download .md
+                {t("downloadMd")}
               </button>
               <button
                 type="button"
                 onClick={handleFullscreenToggle}
                 className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50"
               >
-                Exit fullscreen
+                {t("exitFullscreen")}
               </button>
             </div>
           </div>
@@ -143,13 +145,13 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
           {isSplit && (
             <div className={paneShellClass}>
               <div className="mb-2 flex items-center justify-between gap-2">
-                <span className="text-xs font-medium uppercase tracking-wide text-gray-500">Source</span>
+                <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{t("source")}</span>
                 <button
                   type="button"
                   onClick={handleCopy}
                   className="rounded bg-gray-700 px-3 py-1 text-xs text-gray-300 transition-colors hover:bg-gray-600"
                 >
-                  {copyState === "copied" ? "Copied!" : "Copy"}
+                  {copyState === "copied" ? t("copied") : t("copy")}
                 </button>
               </div>
               <SourceTextarea markdown={markdown} />
@@ -157,14 +159,14 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
           )}
           <div className={paneShellClass}>
             <div className="mb-2 flex items-center justify-between gap-2">
-              <span className="text-xs font-medium uppercase tracking-wide text-gray-500">Preview</span>
+              <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{t("preview")}</span>
               {!isSplit && (
                 <button
                   type="button"
                   onClick={handleCopy}
                   className="rounded bg-gray-700 px-3 py-1 text-xs text-gray-300 transition-colors hover:bg-gray-600"
                 >
-                  {copyState === "copied" ? "Copied!" : "Copy"}
+                  {copyState === "copied" ? t("copied") : t("copy")}
                 </button>
               )}
             </div>

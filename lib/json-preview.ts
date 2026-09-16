@@ -45,6 +45,56 @@ export function minifyJson(value: unknown): string {
   return JSON.stringify(value);
 }
 
+/** Unwrap a JSON-encoded / backslash-escaped JSON string. Returns null if nothing to unescape. */
+export function unescapeJsonText(text: string): string | null {
+  const original = text.trim();
+  if (!original) return null;
+
+  let current = original;
+  let changed = false;
+
+  for (let step = 0; step < 8; step += 1) {
+    try {
+      const parsed = JSON.parse(current) as unknown;
+      if (typeof parsed === "string") {
+        current = parsed;
+        changed = true;
+        continue;
+      }
+      return changed ? prettyUnescapedJson(parsed) : null;
+    } catch {
+      const decoded = decodeEscapedJsonText(current);
+      if (decoded === null || decoded === current) break;
+      current = decoded;
+      changed = true;
+    }
+  }
+
+  if (!changed) return null;
+  try {
+    return prettyUnescapedJson(JSON.parse(current) as unknown);
+  } catch {
+    return current;
+  }
+}
+
+function decodeEscapedJsonText(text: string): string | null {
+  try {
+    const decoded = JSON.parse(`"${text}"`) as unknown;
+    return typeof decoded === "string" ? decoded : null;
+  } catch {
+    return null;
+  }
+}
+
+function prettyUnescapedJson(value: unknown): string {
+  if (typeof value === "string") return value;
+  if (value === null || typeof value === "number" || typeof value === "boolean") {
+    return JSON.stringify(value);
+  }
+  return JSON.stringify(value, null, 2);
+}
+
 export function stringifyJsonLikeSource(value: unknown, source: string): string {
   return source.includes("\n") ? formatJson(value) : minifyJson(value);
 }

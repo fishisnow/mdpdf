@@ -1,0 +1,537 @@
+{
+  "common": {
+    "language": "语言",
+    "moreTools": "更多工具",
+    "copy": "复制",
+    "copied": "已复制",
+    "download": "下载",
+    "downloadMd": "下载 .md",
+    "openFile": "打开文件",
+    "filename": "文件名",
+    "fullscreen": "全屏",
+    "exit": "退出",
+    "exitFullscreen": "退出全屏",
+    "preview": "预览",
+    "source": "源码",
+    "markdown": "Markdown",
+    "json": "JSON",
+    "writeMarkdown": "编写 Markdown",
+    "writeAndPreview": "编写与预览",
+    "sourceAndPreview": "源码与预览",
+    "result": "结果",
+    "original": "原文",
+    "saveAsPdf": "保存为 PDF",
+    "opening": "正在打开…",
+    "loadingPreview": "正在加载预览…",
+    "convertAndDownload": "转换并下载",
+    "converting": "正在转换...",
+    "backToHome": "← 返回 MdPdf",
+    "privacyPolicy": "隐私政策",
+    "termsOfService": "服务条款",
+    "copyright": "© {year} MdPdf。保留所有权利。",
+    "collapse": "折叠",
+    "expand": "展开"
+  },
+  "tools": {
+    "home": {
+      "nav": "首页",
+      "card": "PDF 转 MD",
+      "description": "在浏览器中将 PDF 转为干净、可编辑的 Markdown。"
+    },
+    "mdToPdf": {
+      "nav": "MD 转 PDF",
+      "card": "MD 转 PDF",
+      "description": "编写 Markdown，并通过打印对话框导出为 PDF。"
+    },
+    "pdfToJpg": {
+      "nav": "PDF 转 JPG",
+      "card": "PDF 转 JPG",
+      "description": "无需上传，即可将 PDF 页面转为 JPG 或 PNG 图片。"
+    },
+    "mdViewer": {
+      "nav": "MD 查看器",
+      "card": "MD 查看器",
+      "description": "实时 MD 查看器，支持分栏或全宽渲染 Markdown 预览。"
+    },
+    "jsonViewer": {
+      "nav": "JSON 查看器",
+      "card": "JSON 查看器",
+      "description": "校验、格式化 JSON，并以文本或树形结构查看。"
+    },
+    "textReplacer": {
+      "nav": "文本替换",
+      "card": "文本替换",
+      "description": "查找并替换文本，包括将字面量 \\n 转为真正的换行。"
+    }
+  },
+  "meta": {
+    "home": {
+      "title": "PDF 转 MD - 免费在线 PDF 转 Markdown 转换器 | mdpdf.net",
+      "description": "免费 PDF 转 MD 转换器。在浏览器中将 PDF 转为干净的 Markdown。"
+    },
+    "mdToPdf": {
+      "title": "MD 转 PDF - Markdown 转 PDF 转换器 - MdPdf",
+      "description": "免费 MD 转 PDF 转换器。在浏览器中将 Markdown 导出为 PDF，快速、私密、易用。"
+    },
+    "pdfToJpg": {
+      "title": "PDF 转 JPG - 免费在线 PDF 转 PNG 转换器 - MdPdf",
+      "description": "免费将 PDF 转为 JPG 或 PNG。在浏览器中完成转换，导出更快，也更注重隐私。"
+    },
+    "mdViewer": {
+      "title": "MD 查看器 - 在线实时 Markdown 编辑器 - MdPdf",
+      "description": "免费 MD 查看器，在浏览器中实时预览 Markdown。可分栏查看源码与预览，也可复制或下载 .md 文件。"
+    },
+    "jsonViewer": {
+      "title": "JSON 查看器 - 在线 JSON 格式化与树形查看 - MdPdf",
+      "description": "免费 JSON 查看器与格式化工具。校验 JSON、美化或压缩，并以可折叠树形结构查看。全部在浏览器中完成。"
+    },
+    "textReplacer": {
+      "title": "文本替换 - 在线将 \\n 替换为换行 - MdPdf",
+      "description": "免费文本替换工具。在浏览器中查找并替换字符或字符串，包括将字面量 \\n 转为真正的换行。"
+    },
+    "privacy": {
+      "title": "隐私政策 - MdPdf",
+      "description": "了解 MdPdf 如何处理上传文件、分析数据、Cookie，以及 PDF 转 Markdown 与 Markdown 转 PDF 工具中的其他信息。"
+    },
+    "terms": {
+      "title": "服务条款 - MdPdf",
+      "description": "阅读使用 MdPdf 的条款，包括可接受使用、知识产权、免责声明和责任限制。"
+    }
+  },
+  "upload": {
+    "click": "点击上传",
+    "orDrop": "或拖放文件",
+    "hint": "仅限 PDF · 最大 50MB · 在浏览器中转换",
+    "invalidType": "请上传 PDF 文件。",
+    "tooLarge": "请上传小于 50MB 的 PDF。"
+  },
+  "viewMode": {
+    "label": "查看模式",
+    "split": "分栏",
+    "preview": "预览"
+  },
+  "home": {
+    "h1": "MdPdf - PDF 转 MD 转换器",
+    "subtitle": "在浏览器中将 PDF 转为干净、可编辑且可复用的 Markdown。",
+    "boxTitle": "PDF 转 MD 转换器",
+    "boxHint": "上传 PDF，即可得到更易编辑、复用和发布的 Markdown。",
+    "intro": "当 PDF 难以复制时，使用此 PDF 转 MD 转换器。它在浏览器中运行，标题、列表、表格和代码会保留为可编辑、可发布的 Markdown 结构。",
+    "whyTitle": "为什么选择 PDF 转 MD？",
+    "whyBody": "许多 PDF 复制粘贴后很难复用。PDF 转 MD 会将其转为结构化 Markdown，更易整理、编辑和发布。流程快速免费，适合笔记、文档、表格和代码。",
+    "fastTitle": "极速转换",
+    "fastBody": "几秒内完成 PDF 转 MD，精简流程帮你更快从 PDF 得到可编辑的 Markdown。",
+    "accurateTitle": "高准确度",
+    "accurateBody": "转换时会尽量保留标题、列表、表格和代码块的结构，让 PDF 变成更易整理的 Markdown。",
+    "privacyTitle": "隐私优先",
+    "privacyBody": "在浏览器中安全完成 PDF 转 MD，处理完成后文件会被删除。",
+    "faqTitle": "PDF 转 MD 常见问题",
+    "faqIntro": "关于将 PDF 转为 Markdown 的常见问题。",
+    "progress": {
+      "loading": "正在浏览器中读取文件...",
+      "parsing": "正在后台解析 PDF 页面...",
+      "rendering": "正在生成 Markdown..."
+    },
+    "errors": {
+      "encrypted": "此 PDF 已加密或受密码保护，无法在浏览器中转换。",
+      "invalid": "该文件看起来不是有效的 PDF，或可能已损坏。",
+      "scanned": "此 PDF 似乎是扫描件或图片型文档，可能没有可选取的文字可供转换。",
+      "worker": "浏览器无法完成解析。请尝试更小的文件、换一个浏览器，或使用含可选文字的 PDF。",
+      "failed": "转换失败"
+    },
+    "faqs": [
+      {
+        "question": "PDF 转 MD 如何工作？",
+        "answer": "上传 PDF 后，工具会提取文字，并尽量保留标题、列表、表格和类似代码的区块，方便以 Markdown 编辑。"
+      },
+      {
+        "question": "是否免费？",
+        "answer": "是。此 PDF 转 MD 转换器免费使用，没有隐藏费用、水印或文件数量限制。"
+      },
+      {
+        "question": "需要安装软件吗？",
+        "answer": "不需要。PDF 转 MD 在浏览器中运行。上传文件即可开始编辑 Markdown，无需安装应用。"
+      },
+      {
+        "question": "可以把 Markdown 再转回 PDF 吗？",
+        "answer": "可以。完成 PDF 转 MD 后，如需再次得到精美 PDF，请使用 MD 转 PDF 转换器。"
+      },
+      {
+        "question": "转换后我的文件会怎样？",
+        "answer": "PDF 转 MD 在浏览器中处理文件，转换后即删除。我们不会存储或分享你的文档。"
+      },
+      {
+        "question": "格式会被保留吗？",
+        "answer": "会尽量保留标题、列表、表格和基本格式，代码块处理也更好，让 Markdown 更干净、更易编辑。"
+      }
+    ]
+  },
+  "mdToPdf": {
+    "h1": "MD 转 PDF 转换器",
+    "subtitle": "在浏览器中免费将 Markdown 转为 PDF——编写、预览并导出。",
+    "intro": "使用此 MD 转 PDF 转换器：左侧编写 Markdown，右侧查看版式。预览满意后，通过浏览器打印对话框保存为 PDF，文件不会上传。",
+    "whyTitle": "为什么使用我们的 MD 转 PDF 转换器？",
+    "nativeTitle": "原生浏览器流程",
+    "nativeBody": "先在页面中渲染 Markdown，再通过浏览器内置打印对话框导出 PDF。",
+    "previewTitle": "保存前预览",
+    "previewBody": "实时预览会随输入更新，打印前即可检查标题、列表和表格。",
+    "frontendTitle": "纯前端",
+    "frontendBody": "打印流程完全在浏览器中完成，不依赖单独的 PDF API。",
+    "howTitle": "如何将 MD 转为 PDF",
+    "step1Title": "编写或粘贴 Markdown",
+    "step1Body": "使用左侧编辑器准备要导出的内容。",
+    "step2Title": "检查预览",
+    "step2Body": "查看右侧渲染后的文档；编辑时会同步更新。",
+    "step3Title": "保存为 PDF",
+    "step3Body": "打开浏览器打印对话框，选择“保存为 PDF”，完成 MD 转 PDF。",
+    "faqTitle": "MD 转 PDF 常见问题",
+    "emptyError": "请先输入一些 Markdown 内容。",
+    "printError": "无法打开打印对话框，请重试。",
+    "faqs": [
+      {
+        "question": "MD 转 PDF 会上传我的 Markdown 吗？",
+        "answer": "不会。转换在浏览器中完成。打印对话框会把 PDF 保存在你的设备上。"
+      },
+      {
+        "question": "如何用 MD 转 PDF 保存文件？",
+        "answer": "点击“保存为 PDF”。工具会打开浏览器打印对话框——将目标选为“保存为 PDF”。"
+      },
+      {
+        "question": "导出前可以预览吗？",
+        "answer": "可以。实时预览会随输入更新，你可以先检查标题、列表和表格。"
+      },
+      {
+        "question": "是否免费？",
+        "answer": "是。可在浏览器中免费使用，无需注册账号。"
+      }
+    ]
+  },
+  "pdfToJpg": {
+    "h1": "免费在线 PDF 转 JPG 转换器",
+    "subtitle": "在浏览器中将 PDF 转为 JPG 或 PNG，无需上传文件。",
+    "file": "文件",
+    "pages": "页面",
+    "pagesPlaceholder": "全部页面（或例如 1-3,5,8）",
+    "pagesHint": "留空则转换每一页，或输入指定页面，如 1-3,5。",
+    "format": "格式",
+    "formatHint": "需要更小文件选 JPG；需要更清晰的截图、图表或文字较多的页面选 PNG。",
+    "quality": "质量",
+    "qualityStandard": "标准",
+    "qualityHigh": "高",
+    "qualityUltra": "超高",
+    "qualityHint": "质量越高，图片越大。选择 JPG 时，下方会出现 JPG 质量控制。",
+    "jpgQuality": "JPG 质量",
+    "progress": "正在浏览器中转换第 {current} / {total} 页...",
+    "needPdf": "请先上传 PDF。",
+    "readError": "读取 PDF 失败。",
+    "convertError": "转换失败。",
+    "pagesLabel": "{count} 页",
+    "doneOne": "已转换 1 页并下载 {name}。",
+    "doneMany": "已转换 {count} 页并下载 {name}。",
+    "whyTitle": "为什么使用此 PDF 转 JPG 转换器？",
+    "fastTitle": "浏览器内快速转换",
+    "fastBody": "在浏览器中将 PDF 转为 JPG，无需等待大文件上传、排队或从远程服务器额外下载。",
+    "privateTitle": "私密处理 PDF",
+    "privateBody": "转换期间 PDF 留在你的设备上，更适合处理对隐私敏感的文件。",
+    "flexTitle": "灵活导出页面",
+    "flexBody": "可转换一页或多页，导出 JPG 或 PNG；多页结果会打包为 ZIP，方便逐页复用。",
+    "howTitle": "如何在线将 PDF 转为 JPG",
+    "step1Title": "上传 PDF",
+    "step1Body": "选择要转换的 PDF。工具在浏览器中读取文件，并显示总页数。",
+    "step2Title": "选择全部或指定页面",
+    "step2Body": "“页面”留空则转换整份 PDF；若只需特定页，可输入如 1-3,5 的范围。",
+    "step3Title": "选择 JPG 或 PNG 并设置质量",
+    "step3Body": "JPG 适合更小文件和分享；PNG 适合更清晰的导出。然后选择质量预设，必要时再调整 JPG 质量。",
+    "step4Title": "转换并下载",
+    "step4Body": "点击“转换并下载”。单页会直接下载，多页会打成一个 ZIP。",
+    "useTitle": "PDF 转 JPG 的常见用途",
+    "useShareTitle": "更快分享文档页面",
+    "useShareBody": "想在聊天、邮件、工单或社交帖子中发送页面预览、又不想附上整份 PDF 时，很适合使用。",
+    "useSlidesTitle": "将幻灯片或报告导出为图片",
+    "useSlidesBody": "把幻灯片、报告、发票或讲义拆成独立图片，更方便在文档或演示中复用。",
+    "useRangeTitle": "只保存需要的页面",
+    "useRangeBody": "若只需封面、签名页、图表或附录，输入范围后仅转换这些页。",
+    "usePngTitle": "需要更清晰画面时用 PNG",
+    "usePngBody": "页面含图表、界面截图或需要更锐利边缘的文字时，转为 PNG 通常比 JPG 更清晰。",
+    "vsTitle": "PDF 转 JPG 与 PDF 转 PNG",
+    "jpgTitle": "需要更小文件时选 JPG",
+    "jpgBody": "若希望图片更小、下载和分享更快，JPG 通常是更好选择。适合照片、混排页面和日常文档预览。",
+    "pngTitle": "需要更清晰细节时选 PNG",
+    "pngBody": "需要清晰文字、截图、图表或其他精细元素时，PNG 更好。文件往往更大，但画质更干净。",
+    "faqTitle": "PDF 转 JPG 常见问题",
+    "faqIntro": "关于将 PDF 转为 JPG 或 PNG、选择页面、下载方式和隐私的简要解答。",
+    "faqs": [
+      {
+        "question": "如何在线将 PDF 转为 JPG？",
+        "answer": "上传 PDF，选择页面，保持 JPG 选中，然后点击“转换并下载”。单页会保存为 JPG，多页会打包进 ZIP。"
+      },
+      {
+        "question": "可以只转换选定页面吗？",
+        "answer": "可以。在“页面”中输入如 1-3,5,8 的范围。留空则会转换 PDF 中的每一页。"
+      },
+      {
+        "question": "该选 JPG 还是 PNG？",
+        "answer": "需要更小文件、更快分享时选 JPG。需要更清晰的文字、图表、截图，或画质比体积更重要时选 PNG。"
+      },
+      {
+        "question": "会上传我的文件吗？",
+        "answer": "不会。转换在浏览器中完成，文件全程留在你的设备上。比先上传再处理的工具更快，也更注重隐私。"
+      },
+      {
+        "question": "为什么多页结果会下载为 ZIP？",
+        "answer": "每一页都会变成独立图片。转换多页时会打包成 ZIP，一次即可全部下载。"
+      }
+    ]
+  },
+  "mdViewer": {
+    "h1": "MD 查看器",
+    "subtitle": "免费 MD 查看器，在浏览器中实时预览 Markdown。",
+    "numberedCitations": "编号引用",
+    "generatedReferences": "生成的参考文献",
+    "placeholder": "# 开始编写 Markdown…",
+    "intro": "使用此 MD 查看器，无需离开浏览器即可编写并检查 Markdown。左侧粘贴源码，预览会随输入渲染标题、列表、表格和代码。完成后可复制或下载文件；不会上传任何内容。",
+    "whyTitle": "为什么使用 MD 查看器？",
+    "liveTitle": "实时渲染",
+    "liveBody": "输入时即更新标题、列表、表格和代码，方便尽早发现格式问题。",
+    "splitTitle": "分栏或纯预览",
+    "splitBody": "可将源码与渲染结果并排，也可隐藏编辑器，只阅读预览。",
+    "privateTitle": "留在你的设备上",
+    "privateBody": "预览在浏览器中运行。打开本地文件、复制源码或下载 .md，均无需上传。",
+    "faqTitle": "MD 查看器常见问题",
+    "faqs": [
+      {
+        "question": "MD 查看器会上传我的文本吗？",
+        "answer": "不会。编辑器和渲染都在浏览器中运行，Markdown 留在你的设备上。"
+      },
+      {
+        "question": "MD 查看器与 MD 转 PDF 有何不同？",
+        "answer": "MD 查看器用于编写和检查渲染后的 Markdown。准备通过浏览器打印对话框保存文档时，请使用 MD 转 PDF。"
+      },
+      {
+        "question": "可以在 MD 查看器中打开已有的 .md 文件吗？",
+        "answer": "可以。使用“打开文件”从电脑加载 Markdown，然后在分栏视图中继续编辑。"
+      },
+      {
+        "question": "MD 查看器支持哪些 Markdown 功能？",
+        "answer": "支持 GitHub 风格 Markdown，包括标题、列表、表格、代码块和引用。开启“编号引用”后，[title](url) 链接会渲染为 [1]、[2]。生成的参考文献会出现在预览下方的单独列表中，源码里已有的参考文献仍保留在文档中。"
+      },
+      {
+        "question": "MD 查看器免费吗？",
+        "answer": "是。可在浏览器中免费使用，无需注册账号。"
+      }
+    ],
+    "contents": "目录",
+    "noHeadings": "暂无标题"
+  },
+  "jsonViewer": {
+    "h1": "JSON 查看器",
+    "subtitle": "免费 JSON 查看器，在浏览器中校验、格式化并查看 JSON。",
+    "valid": "有效 JSON",
+    "invalid": "无效 JSON",
+    "empty": "空",
+    "formatted": "格式化",
+    "tree": "树形",
+    "kindLabel": "JSON 预览类型",
+    "format": "格式化",
+    "minify": "压缩",
+    "hoverHint": "悬停某一行可删除键或数组项",
+    "expandAll": "全部展开",
+    "collapseAll": "全部折叠",
+    "pasteHint": "在左侧粘贴 JSON 以预览。",
+    "tooLarge": "此 JSON 过大，无法使用树形视图，已改为显示格式化文档。",
+    "intro": "使用此 JSON 查看器，边输入边检查 JSON。左侧粘贴内容即可美化显示，或展示可折叠树。可复制或下载结果；不会上传任何内容。",
+    "whyTitle": "为什么使用 JSON 查看器？",
+    "validateTitle": "输入时即时校验",
+    "validateBody": "立即显示内容是否有效；若解析错误包含位置，还会给出行号和列号。",
+    "inspectTitle": "格式化或检查",
+    "inspectBody": "美化便于阅读，压缩得到紧凑输出；需要逐层展开嵌套键时，可切换到树形视图。",
+    "privateTitle": "默认私密",
+    "privateBody": "打开本地 .json 文件，复制结果并再次下载，内容不会发送到服务器。",
+    "faqTitle": "JSON 查看器常见问题",
+    "faqs": [
+      {
+        "question": "JSON 查看器会上传我的 JSON 吗？",
+        "answer": "不会。解析、格式化和树形视图都在浏览器中运行。"
+      },
+      {
+        "question": "JSON 查看器中的“格式化”做什么？",
+        "answer": "“格式化”会以 2 空格缩进美化有效 JSON。“压缩”会去掉多余空白，使内容更紧凑。"
+      },
+      {
+        "question": "什么时候该用树形视图？",
+        "answer": "想逐层展开嵌套对象和数组时用树形视图；想看完整美化文档时用“格式化”。两种视图都可以删除属性或数组项，左侧源码会同步更新。"
+      },
+      {
+        "question": "发现无效 JSON 会怎样？",
+        "answer": "会显示解析错误；若浏览器提供位置，还会包含行号和列号。在 JSON 有效之前，“格式化”和“压缩”保持禁用。"
+      },
+      {
+        "question": "JSON 查看器免费吗？",
+        "answer": "是。可在浏览器中免费使用，无需注册账号。"
+      }
+    ],
+    "unescape": "去除转义"
+  },
+  "textReplacer": {
+    "h1": "文本替换",
+    "subtitle": "免费文本替换：查找并替换，包括将 \\n 转为换行。",
+    "patternError": "模式错误",
+    "replacements": "{count, plural, one {# 处替换} other {# 处替换}}",
+    "useResult": "将结果用作输入",
+    "find": "查找",
+    "findRegex": "查找（正则表达式）",
+    "replaceWith": "替换为",
+    "presetsLabel": "替换预设",
+    "presetNewline": "\\n → 换行",
+    "presetTab": "\\t → 制表符",
+    "presetEncode": "换行 → \\n",
+    "presetCrlf": "\\r\\n → 换行",
+    "interpretReplace": "在替换中解释转义",
+    "interpretFind": "在查找中解释转义",
+    "ignoreCase": "忽略大小写",
+    "useRegex": "在查找中使用正则",
+    "greedy": "贪婪匹配",
+    "hintLiteral": "查找默认为字面量，因此 \\n 匹配的是反斜杠加 n。开启“在替换中解释转义”后，替换中的 \\n 会变成真正的换行。",
+    "hintRegexGreedy": "查找是 JavaScript 正则表达式。像 .* 这样的量词会尽可能多地匹配。取消“贪婪匹配”可取最短匹配。替换支持 $1、$2 和 $&。",
+    "hintRegexLazy": "已关闭贪婪匹配，因此 * + ? 和 {n,m} 会尽可能少地匹配（等同于写 .*? 或 +?）。替换支持 $1、$2 和 $&。",
+    "placeholder": "粘贴包含 \\n 或其他要替换字符的文本…",
+    "intro": "使用此文本替换工具，无需离开浏览器即可查找并替换。左侧粘贴原文，设置查找与替换，结果会随输入更新。可复制或下载输出；不会上传任何内容。",
+    "whyTitle": "为什么使用文本替换？",
+    "newlineTitle": "将字面量 \\n 转为换行",
+    "newlineBody": "从 JSON、日志或聊天复制的文本，常把 \\n 显示成两个字符。默认替换会把它们变成真正的换行。",
+    "liveTitle": "实时结果",
+    "liveBody": "右侧会随你编辑查找和替换而更新，并显示完成了多少处替换。",
+    "privateTitle": "留在浏览器中",
+    "privateBody": "在文本替换中打开本地文件、复制结果或下载 .txt，均无需上传。",
+    "faqTitle": "文本替换常见问题",
+    "faqs": [
+      {
+        "question": "如何在文本替换中把 \\n 变成真正的换行？",
+        "answer": "将查找保持为 \\n，替换保持为 \\n，并开启“在替换中解释转义”。查找仍是字面量，因此匹配的是反斜杠和 n 这两个字符。替换随后会插入真正的换行。"
+      },
+      {
+        "question": "文本替换支持哪些转义序列？",
+        "answer": "开启“在替换中解释转义”后，\\n 变为换行，\\t 变为制表符，\\r 变为回车，\\\\ 变为反斜杠。"
+      },
+      {
+        "question": "文本替换会上传我的文本吗？",
+        "answer": "不会。查找、替换和预览都在浏览器中运行。"
+      },
+      {
+        "question": "什么时候该在文本替换中使用正则？",
+        "answer": "开启“在查找中使用正则”，即可把查找当作 JavaScript 正则。例如查找 (\\d+)，替换 [$1]，会给每个数字加上方括号。贪婪匹配（默认）让 .* 尽可能多地匹配；取消勾选则匹配最短范围。正则模式下，\\n 匹配真正的换行；要匹配反斜杠和 n 这两个字符，请使用 \\\\n。"
+      },
+      {
+        "question": "文本替换免费吗？",
+        "answer": "是。可在浏览器中免费使用，无需注册账号。"
+      }
+    ]
+  },
+  "privacy": {
+    "h1": "隐私政策",
+    "intro1": "本隐私政策说明 MdPdf（“MdPdf”、“我们”或“我们的”）在您使用本网站和工具（包括 PDF 转 Markdown 与 Markdown 转 PDF）时如何收集、使用和保护信息。",
+    "intro2": "使用 MdPdf 即表示您同意本政策所述做法。如不同意，请勿使用本网站。",
+    "s1Title": "1. 我们收集的信息",
+    "s1P1": "我们仅收集运营 MdPdf、改进网站、了解使用情况并保护服务所需的有限信息。",
+    "s1P2": "您为转换而上传的文件。使用 PDF 转 Markdown 工具时，您可能上传 PDF，以便我们处理并返回转换后的 Markdown。",
+    "s1P3": "您在浏览器中输入的内容。使用 Markdown 转 PDF 工具时，您输入或粘贴的 Markdown 会留在浏览器中，用于打印流程。",
+    "s1P4": "使用与设备信息。我们可能收集 IP 地址、浏览器类型、操作系统、来源页面、浏览页面、时间戳、由 IP 推断的大致位置，以及网站上的一般使用事件等技术数据。",
+    "s1P5": "分析信息。我们使用包括 Google Analytics 在内的分析工具，了解访客如何使用 MdPdf、哪些页面最有用，以及可以在何处改进体验。",
+    "s1P6": "Cookie 及类似技术。我们可能使用 Cookie 或类似技术来记住偏好、衡量流量并改进网站功能。",
+    "s2Title": "2. 我们如何使用信息",
+    "s2P1": "我们使用所收集的信息以：",
+    "s2Items": [
+      "提供并运营 MdPdf 网站和工具；",
+      "处理上传的 PDF 并返回转换结果；",
+      "监控性能、诊断错误并提高可靠性；",
+      "分析流量与功能使用情况；",
+      "防止滥用、欺诈、安全事件以及对服务的不当使用；",
+      "在需要时遵守法律义务。"
+    ],
+    "s3Title": "3. 文件处理",
+    "s3P1": "MdPdf 旨在尽量减少对上传内容的保留。对于 PDF 转 Markdown 工具，上传的文件仅用于完成转换，不会在完成请求所需时间之外继续存储。",
+    "s3P2": "Markdown 转 PDF 功能在浏览器打印流程中运行，这意味着您为该功能编写或粘贴的 Markdown 会在客户端作为浏览器体验的一部分处理。",
+    "s3P3": "尽管我们力求将文件处理降至最低，但任何系统都无法保证 100% 安全。请避免上传高度敏感的文件，除非您能接受互联网服务所伴随的风险。",
+    "s4Title": "4. Cookie 与分析",
+    "s4P1": "我们可能使用 Cookie、分析标签及类似技术来了解网站使用情况、维持性能，并改进内容和产品决策。",
+    "s4P2": "这些技术可能收集浏览器类型、设备类型、会话活动以及与页面和功能的互动等信息。第三方分析提供商也可能按其自身隐私政策接收此类信息。",
+    "s4P3": "您通常可通过浏览器设置管理 Cookie。阻止部分 Cookie 可能影响网站功能。",
+    "s5Title": "5. 我们如何共享信息",
+    "s5P1": "我们不会出售您的个人信息。我们可能在以下情况下共享信息：",
+    "s5Items": [
+      "与帮助我们托管、运营、分析或保护网站的服务提供商；",
+      "与帮助我们了解流量和性能的分析供应商；",
+      "在法律、法规、法律程序或有效政府要求下必须披露时；",
+      "为保护 MdPdf、用户或其他人的权利、安全和安保；",
+      "作为合并、收购、融资或资产转让的一部分。"
+    ],
+    "s6Title": "6. 数据保留",
+    "s6P1": "我们仅在本政策所述目的合理必要的期限内保留信息，包括运营服务、排除故障、遵守法律义务和解决争议。",
+    "s6P2": "出于安全、防欺诈和服务改进需要，技术日志和分析数据可能保留更长时间。",
+    "s7Title": "7. 国际数据传输",
+    "s7P1": "MdPdf 可能使用位于不同国家的基础设施和服务提供商。因此，您的信息可能在居住国以外处理或存储。",
+    "s7P2": "在适用情况下，我们会采取合理措施，确保此类传输具备适当保障。",
+    "s8Title": "8. 您的选择",
+    "s8P1": "您可以选择信息的使用方式，包括：",
+    "s8Items": [
+      "调整浏览器设置以阻止或删除 Cookie；",
+      "使用限制分析或跟踪的浏览器工具或扩展；",
+      "选择不上传您不希望在线处理的文件。"
+    ],
+    "s8P2": "根据您所在地区，您可能还享有访问、更正、删除或限制某些个人信息的法律权利。",
+    "s9Title": "9. 安全",
+    "s9P1": "我们采取合理的管理、技术和组织措施，帮助防止信息被未经授权访问、披露、篡改或销毁。",
+    "s9P2": "但任何网站、网络或在线服务都无法保证绝对安全。您使用 MdPdf 需自行承担风险。",
+    "s10Title": "10. 儿童隐私",
+    "s10P1": "MdPdf 不面向儿童，我们不会故意收集适用法律所规定年龄以下儿童的个人信息。如果您认为儿童通过本网站提供了个人信息，请联系我们，以便我们审查并处理。",
+    "s11Title": "11. 本政策的变更",
+    "s11P1": "我们可能不时更新本隐私政策。如有变更，我们将在本页发布修订版本，并在需要时更新生效日期。",
+    "s11P2": "更新后继续使用 MdPdf，即表示您接受修订后的政策。",
+    "s12Title": "12. 联系我们",
+    "s12P1": "如对本隐私政策或 MdPdf 如何处理数据有疑问，请通过网站提供的联系方式与我们联系。"
+  },
+  "terms": {
+    "h1": "服务条款",
+    "intro1": "使用 MdPdf 前请仔细阅读本服务条款。访问或使用我们的网站、工具、功能或相关服务（统称“服务”），即表示您同意受本条款及隐私政策约束。",
+    "intro2": "如不同意本条款，您不得使用 MdPdf。",
+    "s1Title": "1. 接受条款",
+    "s1P1": "使用 MdPdf 即表示您确认自己具备订立本协议的法律能力，并将遵守所有适用法律法规。",
+    "s2Title": "2. 服务说明",
+    "s2P1": "MdPdf 提供在线工具，用于将 PDF 转为 Markdown，并通过浏览器将 Markdown 导出为 PDF。",
+    "s2P2": "我们可随时更新、修改、暂停或终止服务的任何部分，无论是否另行通知。",
+    "s3Title": "3. 允许的使用",
+    "s3P1": "您仅可为合法目的并依照本条款使用 MdPdf。您同意不会：",
+    "s3Items": [
+      "以违反任何法律法规的方式使用服务；",
+      "上传或提交您无权处理的内容；",
+      "上传恶意代码、有害文件，或旨在干扰服务的内容；",
+      "试图干扰、探测或未经授权访问我们的系统；",
+      "使用自动化手段使服务过载、抓取或滥用服务；",
+      "使用服务侵犯他人权利，包括知识产权。"
+    ],
+    "s4Title": "4. 您的内容",
+    "s4P1": "您通过 MdPdf 上传、粘贴或生成的文件和内容，所有权仍归您所有。您须自行确保有权使用、处理和转换该等内容。",
+    "s4P2": "使用服务即表示您授予我们为运营并提供所请求功能所必需的有限权利，以处理您的内容。",
+    "s5Title": "5. 知识产权",
+    "s5P1": "MdPdf（包括我们提供的网站设计、品牌、软件、文字、图形及其他材料）由我们所有或获得许可，并受适用知识产权法律保护。",
+    "s5P2": "除法律明确允许外，未经我们事先书面同意，您不得复制、修改、分发、出售、反向工程服务的任何部分，或基于其创作衍生作品。",
+    "s6Title": "6. 隐私",
+    "s6P1": "您对 MdPdf 的使用同时受我们的隐私政策约束，该政策说明我们如何收集、使用和保护与服务相关的信息。",
+    "s7Title": "7. 无担保",
+    "s7P1": "服务按“现状”和“现有”基础提供。在法律允许的最大范围内，MdPdf 不作任何明示或默示担保，包括适销性、特定用途适用性、不侵权和可用性方面的担保。",
+    "s7P2": "我们不保证服务不中断、无错误、安全，也不保证转换结果始终完整、准确或适合您的特定用途。",
+    "s8Title": "8. 责任限制",
+    "s8P1": "在法律允许的最大范围内，MdPdf 及其运营方、关联方、服务提供商和许可方不对因您使用或无法使用服务而产生的任何间接、附带、特殊、后果性、惩戒性或惩罚性损害，或任何数据、利润、收入、业务或商誉损失承担责任。",
+    "s8P2": "在无法完全排除责任的情况下，我们的总责任将限于适用法律允许的最低金额。",
+    "s9Title": "9. 第三方服务与链接",
+    "s9P1": "MdPdf 可能依赖或链接至第三方服务、工具或网站。我们不对第三方的内容、政策、可用性或做法负责。",
+    "s10Title": "10. 终止",
+    "s10P1": "若我们认为您违反本条款、滥用服务、造成安全风险，或为保护平台、用户或第三方有必要暂停，我们可随时暂停或终止您对 MdPdf 的访问。",
+    "s11Title": "11. 条款变更",
+    "s11P1": "我们可能不时修订本条款。更新版本将在本页发布时生效，除非另有说明。",
+    "s11P2": "更新后继续使用 MdPdf，即表示您接受修订后的条款。",
+    "s12Title": "12. 适用法律",
+    "s12P1": "本条款受 MdPdf 运营方适用法律管辖，不考虑法律冲突原则。具体管辖地可能取决于运营服务的法律实体或司法管辖区。",
+    "s13Title": "13. 联系我们",
+    "s13P1": "如对本服务条款有疑问，请通过网站提供的联系方式与我们联系。"
+  }
+}

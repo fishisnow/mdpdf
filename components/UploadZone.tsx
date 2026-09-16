@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 
 interface Props {
   onUpload: (file: File) => void;
@@ -11,22 +12,23 @@ const MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024;
 
 export default function UploadZone({ onUpload, disabled }: Props) {
   const [dragging, setDragging] = useState(false);
+  const t = useTranslations("upload");
 
   const handleFile = useCallback(
     (file: File) => {
       if (file.type !== "application/pdf") {
-        alert("Please upload a PDF file.");
+        alert(t("invalidType"));
         return;
       }
 
       if (file.size > MAX_FILE_SIZE_BYTES) {
-        alert("Please upload a PDF smaller than 50MB.");
+        alert(t("tooLarge"));
         return;
       }
 
       onUpload(file);
     },
-    [onUpload]
+    [onUpload, t]
   );
 
   const onDrop = useCallback(
@@ -65,9 +67,9 @@ export default function UploadZone({ onUpload, disabled }: Props) {
         />
       </svg>
       <p className="text-sm text-gray-600">
-        <span className="font-medium text-blue-600">Click to upload</span> or drag and drop
+        <span className="font-medium text-blue-600">{t("click")}</span> {t("orDrop")}
       </p>
-      <p className="mt-1 text-xs text-gray-400">PDF only · up to 50MB · converted in your browser</p>
+      <p className="mt-1 text-xs text-gray-400">{t("hint")}</p>
       <input
         type="file"
         accept=".pdf,application/pdf"

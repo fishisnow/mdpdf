@@ -1,6 +1,11 @@
-import Link from "next/link";
+"use client";
+
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 export default function Footer() {
+  const t = useTranslations("common");
+
   return (
     <footer className="bg-white border-t border-gray-100 mt-auto">
       <div className="mx-auto max-w-[90rem] px-4 py-8 sm:px-6">
@@ -8,11 +13,11 @@ export default function Footer() {
           <div className="flex flex-wrap items-center justify-center gap-4 text-center">
             <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-gray-500 sm:gap-6">
               <Link href="/privacy-policy" className="hover:text-gray-700 transition-colors">
-                Privacy Policy
+                {t("privacyPolicy")}
               </Link>
               <span className="text-gray-300">•</span>
               <Link href="/terms-of-service" className="hover:text-gray-700 transition-colors">
-                Terms of Service
+                {t("termsOfService")}
               </Link>
               <span className="text-gray-300">•</span>
               <a
@@ -33,9 +38,7 @@ export default function Footer() {
                 AI Video Generator
               </a>
             </div>
-            <p className="text-sm text-gray-400">
-              © 2026 MdPdf. All rights reserved.
-            </p>
+            <p className="text-sm text-gray-400">{t("copyright", { year: 2026 })}</p>
           </div>
         </div>
       </div>

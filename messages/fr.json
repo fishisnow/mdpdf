@@ -1,0 +1,537 @@
+{
+  "common": {
+    "language": "Langue",
+    "moreTools": "Plus d’outils",
+    "copy": "Copier",
+    "copied": "Copié",
+    "download": "Télécharger",
+    "downloadMd": "Télécharger .md",
+    "openFile": "Ouvrir un fichier",
+    "filename": "Nom de fichier",
+    "fullscreen": "Plein écran",
+    "exit": "Quitter",
+    "exitFullscreen": "Quitter le plein écran",
+    "preview": "Aperçu",
+    "source": "Source",
+    "markdown": "Markdown",
+    "json": "JSON",
+    "writeMarkdown": "Écrire du Markdown",
+    "writeAndPreview": "Écrire et prévisualiser",
+    "sourceAndPreview": "Source et aperçu",
+    "result": "Résultat",
+    "original": "Original",
+    "saveAsPdf": "Enregistrer en PDF",
+    "opening": "Ouverture…",
+    "loadingPreview": "Chargement de l’aperçu…",
+    "convertAndDownload": "Convertir et télécharger",
+    "converting": "Conversion...",
+    "backToHome": "← Retour à MdPdf",
+    "privacyPolicy": "Politique de confidentialité",
+    "termsOfService": "Conditions d’utilisation",
+    "copyright": "© {year} MdPdf. Tous droits réservés.",
+    "collapse": "Réduire",
+    "expand": "Développer"
+  },
+  "tools": {
+    "home": {
+      "nav": "Accueil",
+      "card": "PDF vers MD",
+      "description": "Transformez des PDF en Markdown propre et modifiable dans votre navigateur."
+    },
+    "mdToPdf": {
+      "nav": "MD vers PDF",
+      "card": "MD vers PDF",
+      "description": "Rédigez du Markdown et exportez-le en PDF via la boîte de dialogue d’impression."
+    },
+    "pdfToJpg": {
+      "nav": "PDF vers JPG",
+      "card": "PDF vers JPG",
+      "description": "Convertissez des pages PDF en images JPG ou PNG sans les envoyer en ligne."
+    },
+    "mdViewer": {
+      "nav": "Visionneuse MD",
+      "card": "Visionneuse MD",
+      "description": "Visionneuse MD en direct avec aperçu Markdown, en vue scindée ou pleine largeur."
+    },
+    "jsonViewer": {
+      "nav": "Visionneuse JSON",
+      "card": "Visionneuse JSON",
+      "description": "Validez, formatez et inspectez du JSON en texte ou en arbre."
+    },
+    "textReplacer": {
+      "nav": "Remplacement de texte",
+      "card": "Remplacement de texte",
+      "description": "Rechercher et remplacer, y compris transformer le littéral \\n en vrais sauts de ligne."
+    }
+  },
+  "meta": {
+    "home": {
+      "title": "PDF vers MD - convertisseur PDF vers Markdown gratuit en ligne | mdpdf.net",
+      "description": "Convertisseur PDF vers MD gratuit. Transformez des PDF en Markdown propre dans votre navigateur."
+    },
+    "mdToPdf": {
+      "title": "MD vers PDF - convertisseur Markdown vers PDF - MdPdf",
+      "description": "Convertisseur MD vers PDF gratuit. Exportez du Markdown en PDF dans votre navigateur : rapide, privé et simple."
+    },
+    "pdfToJpg": {
+      "title": "PDF vers JPG - convertisseur PDF vers PNG gratuit en ligne - MdPdf",
+      "description": "Convertissez gratuitement un PDF en JPG ou PNG. Le traitement se fait dans votre navigateur : export plus rapide et meilleure confidentialité."
+    },
+    "mdViewer": {
+      "title": "Visionneuse MD - éditeur Markdown en direct en ligne - MdPdf",
+      "description": "Visionneuse MD gratuite pour un aperçu Markdown en direct. Scindez source et aperçu, copiez ou téléchargez un fichier .md."
+    },
+    "jsonViewer": {
+      "title": "Visionneuse JSON - formateur et arbre JSON en ligne - MdPdf",
+      "description": "Visionneuse et formateur JSON gratuits. Validez le JSON, mettez-le en forme, minifiez-le et inspectez un arbre repliable. Tout s’exécute dans votre navigateur."
+    },
+    "textReplacer": {
+      "title": "Remplacement de texte - remplacer \\n par des sauts de ligne en ligne - MdPdf",
+      "description": "Remplacement de texte gratuit. Recherchez et remplacez des caractères ou des chaînes dans votre navigateur, y compris le littéral \\n en vrais sauts de ligne."
+    },
+    "privacy": {
+      "title": "Politique de confidentialité - MdPdf",
+      "description": "Découvrez comment MdPdf traite les fichiers envoyés, les données d’analyse, les cookies et d’autres informations dans nos outils PDF vers Markdown et Markdown vers PDF."
+    },
+    "terms": {
+      "title": "Conditions d’utilisation - MdPdf",
+      "description": "Lisez les conditions qui régissent l’utilisation de MdPdf, y compris l’usage acceptable, la propriété intellectuelle, les exclusions de garantie et les limitations de responsabilité."
+    }
+  },
+  "upload": {
+    "click": "Cliquez pour envoyer",
+    "orDrop": "ou glissez-déposez",
+    "hint": "PDF uniquement · jusqu’à 50 Mo · converti dans votre navigateur",
+    "invalidType": "Veuillez envoyer un fichier PDF.",
+    "tooLarge": "Veuillez envoyer un PDF de moins de 50 Mo."
+  },
+  "viewMode": {
+    "label": "Mode d’affichage",
+    "split": "Scinder",
+    "preview": "Aperçu"
+  },
+  "home": {
+    "h1": "MdPdf - Convertisseur PDF vers MD",
+    "subtitle": "Convertissez un PDF en MD dans votre navigateur et obtenez du Markdown propre à éditer et réutiliser.",
+    "boxTitle": "Convertisseur PDF vers MD",
+    "boxHint": "Envoyez un PDF et obtenez du Markdown plus facile à éditer, réutiliser et publier.",
+    "intro": "Utilisez ce convertisseur PDF vers MD lorsqu’un PDF est difficile à copier. Il s’exécute dans votre navigateur, donc titres, listes, tableaux et code restent structurés en Markdown éditable et publiable.",
+    "whyTitle": "Pourquoi choisir PDF vers MD ?",
+    "whyBody": "Beaucoup de PDF sont difficiles à réutiliser après un copier-coller. PDF vers MD les transforme en Markdown structuré, plus simple à nettoyer, éditer et publier. Le flux est rapide, gratuit et utile pour notes, documents, tableaux et code.",
+    "fastTitle": "Très rapide",
+    "fastBody": "Convertissez un PDF en MD en quelques secondes grâce à un flux simplifié, pour passer plus vite du PDF au Markdown éditable.",
+    "accurateTitle": "Haute précision",
+    "accurateBody": "Notre convertisseur conserve titres, listes, tableaux et blocs de code plus organisés lors du passage du PDF au Markdown.",
+    "privacyTitle": "La confidentialité d’abord",
+    "privacyBody": "Convertissez un PDF en MD en toute sécurité dans votre navigateur ; les fichiers sont supprimés après traitement.",
+    "faqTitle": "FAQ PDF vers MD",
+    "faqIntro": "Questions fréquentes sur la conversion de PDF en Markdown.",
+    "progress": {
+      "loading": "Lecture du fichier dans votre navigateur...",
+      "parsing": "Analyse des pages PDF en arrière-plan...",
+      "rendering": "Génération du Markdown..."
+    },
+    "errors": {
+      "encrypted": "Ce PDF est chiffré ou protégé par mot de passe et ne peut pas être converti dans le navigateur.",
+      "invalid": "Ce fichier ne semble pas être un PDF valide, ou il peut être corrompu.",
+      "scanned": "Ce PDF semble être scanné ou basé sur des images : il n’y a peut-être pas de texte sélectionnable à convertir.",
+      "worker": "Le navigateur n’a pas pu terminer l’analyse de ce PDF. Essayez un fichier plus petit, un autre navigateur ou un PDF textuel.",
+      "failed": "La conversion a échoué"
+    },
+    "faqs": [
+      {
+        "question": "Comment fonctionne PDF vers MD ?",
+        "answer": "Envoyez un PDF : l’outil extrait le texte tout en conservant titres, listes, tableaux et blocs de type code plus faciles à éditer en Markdown."
+      },
+      {
+        "question": "Est-ce gratuit ?",
+        "answer": "Oui. Ce convertisseur PDF vers MD est gratuit, sans frais cachés, filigrane ni limite de fichiers."
+      },
+      {
+        "question": "Faut-il installer un logiciel ?",
+        "answer": "Non. Tout s’exécute dans votre navigateur. Envoyez un fichier et commencez à éditer le Markdown sans installer d’application."
+      },
+      {
+        "question": "Puis-je reconvertir le Markdown en PDF ?",
+        "answer": "Oui. Après PDF vers MD, utilisez le convertisseur MD vers PDF lorsque vous avez de nouveau besoin d’un PDF soigné."
+      },
+      {
+        "question": "Que deviennent mes fichiers après la conversion ?",
+        "answer": "Les fichiers sont traités dans votre navigateur et supprimés après conversion. Nous ne stockons ni ne partageons vos documents."
+      },
+      {
+        "question": "La mise en forme est-elle conservée ?",
+        "answer": "Les titres, listes, tableaux et la mise en forme de base sont conservés, et les blocs de code sont mieux traités pour un Markdown plus propre à éditer."
+      }
+    ]
+  },
+  "mdToPdf": {
+    "h1": "Convertisseur MD vers PDF",
+    "subtitle": "MD vers PDF gratuit dans votre navigateur : rédigez, prévisualisez et exportez le Markdown en PDF.",
+    "intro": "Rédigez du Markdown à gauche et vérifiez la mise en page à droite. Lorsque l’aperçu convient, la boîte de dialogue d’impression du navigateur enregistre un PDF sans envoyer le fichier.",
+    "whyTitle": "Pourquoi utiliser notre convertisseur MD vers PDF ?",
+    "nativeTitle": "Flux natif du navigateur",
+    "nativeBody": "Le Markdown est rendu dans la page, puis exporté via la boîte de dialogue d’impression intégrée du navigateur.",
+    "previewTitle": "Aperçu avant enregistrement",
+    "previewBody": "L’aperçu en direct se met à jour pendant la saisie pour vérifier titres, listes et tableaux avant l’impression.",
+    "frontendTitle": "Frontend uniquement",
+    "frontendBody": "Le flux d’impression reste dans le navigateur, sans API PDF distincte.",
+    "howTitle": "Comment convertir MD vers PDF",
+    "step1Title": "Rédigez ou collez votre Markdown",
+    "step1Body": "Utilisez l’éditeur de gauche pour préparer le contenu à exporter.",
+    "step2Title": "Vérifiez l’aperçu",
+    "step2Body": "Consultez le document rendu à droite ; il se met à jour pendant l’édition.",
+    "step3Title": "Enregistrer en PDF",
+    "step3Body": "Ouvrez la boîte de dialogue d’impression et choisissez Enregistrer en PDF pour terminer.",
+    "faqTitle": "FAQ MD vers PDF",
+    "emptyError": "Veuillez d’abord saisir du contenu Markdown.",
+    "printError": "Impossible d’ouvrir la boîte de dialogue d’impression. Réessayez.",
+    "faqs": [
+      {
+        "question": "Mon Markdown est-il envoyé en ligne ?",
+        "answer": "Non. Tout s’exécute dans votre navigateur. La boîte de dialogue d’impression enregistre le PDF sur votre appareil."
+      },
+      {
+        "question": "Comment enregistrer le fichier ?",
+        "answer": "Cliquez sur Enregistrer en PDF. La boîte de dialogue d’impression s’ouvre : choisissez Enregistrer en PDF comme destination."
+      },
+      {
+        "question": "Puis-je prévisualiser avant d’exporter ?",
+        "answer": "Oui. L’aperçu en direct se met à jour pendant la saisie pour vérifier d’abord titres, listes et tableaux."
+      },
+      {
+        "question": "Est-ce gratuit ?",
+        "answer": "Oui. C’est gratuit dans le navigateur, sans compte."
+      }
+    ]
+  },
+  "pdfToJpg": {
+    "h1": "Convertisseur PDF vers JPG gratuit en ligne",
+    "subtitle": "Convertissez un PDF en JPG ou PNG dans votre navigateur, sans envoyer de fichiers.",
+    "file": "Fichier",
+    "pages": "Pages",
+    "pagesPlaceholder": "Toutes les pages (ou p. ex. 1-3,5,8)",
+    "pagesHint": "Laissez vide pour convertir toutes les pages, ou indiquez des pages précises comme 1-3,5.",
+    "format": "Format",
+    "formatHint": "Choisissez JPG pour des fichiers plus légers ou PNG pour des captures, schémas et pages textuelles plus nets.",
+    "quality": "Qualité",
+    "qualityStandard": "Standard",
+    "qualityHigh": "Élevée",
+    "qualityUltra": "Ultra",
+    "qualityHint": "Une qualité plus élevée crée des images plus lourdes. Le contrôle de qualité JPG apparaît ci-dessous lorsque JPG est sélectionné.",
+    "jpgQuality": "Qualité JPG",
+    "progress": "Conversion de la page {current} sur {total} dans votre navigateur...",
+    "needPdf": "Veuillez d’abord envoyer un PDF.",
+    "readError": "Échec de la lecture du PDF.",
+    "convertError": "La conversion a échoué.",
+    "pagesLabel": "{count} pages",
+    "doneOne": "1 page convertie et {name} téléchargé.",
+    "doneMany": "{count} pages converties et {name} téléchargé.",
+    "whyTitle": "Pourquoi utiliser ce convertisseur PDF vers JPG ?",
+    "fastTitle": "Conversion rapide dans le navigateur",
+    "fastBody": "Convertissez un PDF en JPG dans votre navigateur sans attendre de gros envois, de files d’attente ni de téléchargements supplémentaires depuis un serveur distant.",
+    "privateTitle": "Traitement privé du PDF",
+    "privateBody": "Votre PDF reste sur votre appareil pendant la conversion, ce qui convient mieux aux fichiers sensibles.",
+    "flexTitle": "Export de pages flexible",
+    "flexBody": "Convertissez une page ou plusieurs en JPG ou PNG, et téléchargez un résultat multipage en ZIP pour réutiliser chaque page facilement.",
+    "howTitle": "Comment convertir un PDF en JPG en ligne",
+    "step1Title": "Envoyez votre PDF",
+    "step1Body": "Choisissez le PDF à convertir. L’outil lit le fichier dans votre navigateur et affiche le nombre total de pages.",
+    "step2Title": "Toutes les pages ou certaines pages",
+    "step2Body": "Laissez le champ Pages vide pour convertir tout le PDF, ou saisissez des plages comme 1-3,5 si vous n’avez besoin que de certaines pages.",
+    "step3Title": "Choisissez JPG ou PNG et la qualité",
+    "step3Body": "JPG pour des fichiers plus légers et un partage plus simple. PNG pour des exports plus nets. Puis choisissez le préréglage de qualité et ajustez la qualité JPG si besoin.",
+    "step4Title": "Convertir et télécharger",
+    "step4Body": "Cliquez sur Convertir et télécharger. Une seule page se télécharge directement ; plusieurs pages arrivent dans un ZIP.",
+    "useTitle": "Cas d’usage courants de PDF vers JPG",
+    "useShareTitle": "Partager plus vite des pages de document",
+    "useShareBody": "Utile pour envoyer des aperçus de pages dans un chat, un e-mail, un ticket ou un réseau social sans joindre tout le PDF.",
+    "useSlidesTitle": "Exporter des diapositives ou rapports en images",
+    "useSlidesBody": "Transformez diapositives, rapports, factures ou documents en images séparées, plus faciles à réutiliser dans des docs ou présentations.",
+    "useRangeTitle": "Enregistrer uniquement les pages nécessaires",
+    "useRangeBody": "S’il ne vous faut qu’une couverture, une page de signature, un graphique ou une annexe, saisissez une plage et convertissez seulement ces pages.",
+    "usePngTitle": "Utiliser PNG pour des visuels plus nets",
+    "usePngBody": "Lorsqu’une page contient des schémas, des captures d’interface ou du texte qui a besoin de contours plus nets, convertissez en PNG plutôt qu’en JPG.",
+    "vsTitle": "PDF vers JPG vs PDF vers PNG",
+    "jpgTitle": "Choisissez JPG pour des fichiers plus légers",
+    "jpgBody": "JPG est généralement le meilleur choix pour des images plus petites, rapides à télécharger, joindre et partager. Il convient aux photos, mises en page mixtes et aperçus de documents du quotidien.",
+    "pngTitle": "Choisissez PNG pour plus de détail",
+    "pngBody": "PNG est préférable pour un texte net, des captures, des schémas ou d’autres éléments détaillés. Les fichiers sont souvent plus lourds, mais la qualité reste plus propre.",
+    "faqTitle": "FAQ PDF vers JPG",
+    "faqIntro": "Réponses rapides sur la conversion PDF vers JPG ou PNG, la sélection de pages, le téléchargement et la confidentialité.",
+    "faqs": [
+      {
+        "question": "Comment convertir un PDF en JPG en ligne ?",
+        "answer": "Envoyez votre PDF, choisissez les pages, laissez JPG sélectionné, puis cliquez sur Convertir et télécharger. Une page est enregistrée en JPG ; plusieurs pages sont regroupées dans un ZIP."
+      },
+      {
+        "question": "Puis-je convertir uniquement certaines pages ?",
+        "answer": "Oui. Saisissez des plages comme 1-3,5,8 dans le champ Pages. Si vous le laissez vide, toutes les pages du PDF sont converties."
+      },
+      {
+        "question": "Dois-je choisir JPG ou PNG ?",
+        "answer": "Choisissez JPG pour des fichiers plus légers et un partage plus rapide. Choisissez PNG pour un texte, des schémas ou des captures plus nets, lorsque la clarté compte plus que la taille."
+      },
+      {
+        "question": "Mes fichiers sont-ils envoyés en ligne ?",
+        "answer": "Non. Le convertisseur s’exécute dans votre navigateur, donc le fichier reste sur votre appareil. C’est plus rapide et plus privé que les outils qui commencent par un envoi."
+      },
+      {
+        "question": "Pourquoi plusieurs pages se téléchargent-elles en ZIP ?",
+        "answer": "Chaque page sélectionnée devient son propre fichier image. Lors de la conversion de plusieurs pages, elles sont regroupées dans un ZIP pour tout télécharger en une fois."
+      }
+    ]
+  },
+  "mdViewer": {
+    "h1": "Visionneuse MD",
+    "subtitle": "Visionneuse MD gratuite pour un aperçu Markdown en direct dans votre navigateur.",
+    "numberedCitations": "Citations numérotées",
+    "generatedReferences": "Références générées",
+    "placeholder": "# Commencez à écrire du Markdown…",
+    "intro": "Rédigez et vérifiez du Markdown sans quitter le navigateur. Collez la source à gauche : l’aperçu rend titres, listes, tableaux et code pendant la saisie. Copiez ou téléchargez le fichier une fois terminé ; rien n’est envoyé en ligne.",
+    "whyTitle": "Pourquoi utiliser la visionneuse MD ?",
+    "liveTitle": "Rendu en direct",
+    "liveBody": "Titres, listes, tableaux et code se mettent à jour pendant la saisie pour détecter plus tôt les problèmes de formatage.",
+    "splitTitle": "Vue scindée ou aperçu seul",
+    "splitBody": "Gardez la source à côté du rendu, ou masquez l’éditeur lorsque vous voulez seulement lire l’aperçu.",
+    "privateTitle": "Reste sur votre appareil",
+    "privateBody": "L’aperçu s’exécute dans le navigateur. Ouvrez un fichier local, copiez la source ou téléchargez un .md sans rien envoyer.",
+    "faqTitle": "FAQ de la visionneuse MD",
+    "faqs": [
+      {
+        "question": "Mon texte est-il envoyé en ligne ?",
+        "answer": "Non. L’éditeur et le rendu s’exécutent dans votre navigateur, donc le Markdown reste sur votre appareil."
+      },
+      {
+        "question": "Quelle différence avec MD vers PDF ?",
+        "answer": "La visionneuse MD sert à rédiger et vérifier le Markdown rendu. Utilisez MD vers PDF lorsque vous êtes prêt à enregistrer le document via la boîte de dialogue d’impression."
+      },
+      {
+        "question": "Puis-je ouvrir un fichier .md existant ?",
+        "answer": "Oui. Utilisez Ouvrir un fichier pour charger un Markdown depuis votre ordinateur, puis continuez à l’éditer en vue scindée."
+      },
+      {
+        "question": "Quelles fonctionnalités Markdown sont prises en charge ?",
+        "answer": "GitHub Flavored Markdown est pris en charge, y compris titres, listes, tableaux, blocs de code et citations. Avec Citations numérotées, les liens [title](url) s’affichent en [1], [2]. Les références générées apparaissent dans une liste séparée sous l’aperçu, donc les Références déjà présentes dans la source restent dans le document."
+      },
+      {
+        "question": "La visionneuse MD est-elle gratuite ?",
+        "answer": "Oui. C’est gratuit dans le navigateur, sans compte."
+      }
+    ],
+    "contents": "Sommaire",
+    "noHeadings": "Aucun titre"
+  },
+  "jsonViewer": {
+    "h1": "Visionneuse JSON",
+    "subtitle": "Visionneuse JSON gratuite pour valider, formater et inspecter du JSON dans votre navigateur.",
+    "valid": "JSON valide",
+    "invalid": "JSON invalide",
+    "empty": "Vide",
+    "formatted": "Formaté",
+    "tree": "Arbre",
+    "kindLabel": "Type d’aperçu JSON",
+    "format": "Formater",
+    "minify": "Minifier",
+    "hoverHint": "Survolez une ligne pour supprimer une clé ou un élément de tableau",
+    "expandAll": "Tout développer",
+    "collapseAll": "Tout replier",
+    "pasteHint": "Collez du JSON à gauche pour l’aperçu.",
+    "tooLarge": "Ce JSON est trop volumineux pour la vue arbre : le document formaté est affiché à la place.",
+    "intro": "Vérifiez le JSON pendant la saisie. Collez une charge utile à gauche pour l’afficher avec indentation ou un arbre repliable. Copiez ou téléchargez le résultat ; rien n’est envoyé en ligne.",
+    "whyTitle": "Pourquoi utiliser la visionneuse JSON ?",
+    "validateTitle": "Valider pendant la saisie",
+    "validateBody": "Indique immédiatement si la charge utile est valide, avec ligne et colonne lorsque l’erreur d’analyse inclut une position.",
+    "inspectTitle": "Formater ou inspecter",
+    "inspectBody": "Mise en forme pour la lecture, minification pour une sortie compacte, ou arbre pour développer des clés imbriquées.",
+    "privateTitle": "Privé par défaut",
+    "privateBody": "Ouvrez un fichier .json local, copiez le résultat et retéléchargez-le sans envoyer de contenu à un serveur.",
+    "faqTitle": "FAQ de la visionneuse JSON",
+    "faqs": [
+      {
+        "question": "Mon JSON est-il envoyé en ligne ?",
+        "answer": "Non. L’analyse, le formatage et l’arbre s’exécutent dans votre navigateur."
+      },
+      {
+        "question": "Que fait Formater ?",
+        "answer": "Formate le JSON valide avec une indentation de 2 espaces. Minifier retire les espaces superflus pour une charge utile compacte."
+      },
+      {
+        "question": "Quand utiliser la vue arbre ?",
+        "answer": "Utilisez l’arbre pour développer objets et tableaux imbriqués un niveau à la fois. Utilisez Formaté pour le document entier indenté. Dans les deux vues, vous pouvez supprimer une propriété ou un élément de tableau ; la source à gauche se met à jour."
+      },
+      {
+        "question": "Que se passe-t-il si le JSON est invalide ?",
+        "answer": "L’erreur d’analyse s’affiche, y compris ligne et colonne si le navigateur indique une position. Formater et Minifier restent désactivés tant que le JSON n’est pas valide."
+      },
+      {
+        "question": "La visionneuse JSON est-elle gratuite ?",
+        "answer": "Oui. C’est gratuit dans le navigateur, sans compte."
+      }
+    ],
+    "unescape": "Retirer les échappements"
+  },
+  "textReplacer": {
+    "h1": "Remplacement de texte",
+    "subtitle": "Remplacement de texte gratuit pour rechercher et remplacer, y compris transformer \\n en sauts de ligne.",
+    "patternError": "Erreur de motif",
+    "replacements": "{count, plural, one {# remplacement} other {# remplacements}}",
+    "useResult": "Utiliser le résultat comme entrée",
+    "find": "Rechercher",
+    "findRegex": "Rechercher (expression régulière)",
+    "replaceWith": "Remplacer par",
+    "presetsLabel": "Préréglages de remplacement",
+    "presetNewline": "\\n → saut de ligne",
+    "presetTab": "\\t → tabulation",
+    "presetEncode": "saut de ligne → \\n",
+    "presetCrlf": "\\r\\n → saut de ligne",
+    "interpretReplace": "Interpréter les échappements dans Remplacer",
+    "interpretFind": "Interpréter les échappements dans Rechercher",
+    "ignoreCase": "Ignorer la casse",
+    "useRegex": "Utiliser une regex dans Rechercher",
+    "greedy": "Correspondance greedy",
+    "hintLiteral": "Rechercher est littéral par défaut, donc \\n correspond à une barre oblique inverse plus n. Avec l’interprétation dans Remplacer, \\n dans Remplacer devient un vrai saut de ligne.",
+    "hintRegexGreedy": "Rechercher est une expression régulière JavaScript. Des quantificateurs comme .* correspondent autant que possible. Décochez Correspondance greedy pour la correspondance la plus courte. Le remplacement prend en charge $1, $2 et $&.",
+    "hintRegexLazy": "La correspondance greedy est désactivée, donc * + ? et {n,m} correspondent le moins possible (comme .*? ou +?). Le remplacement prend en charge $1, $2 et $&.",
+    "placeholder": "Collez du texte contenant \\n ou d’autres caractères à remplacer…",
+    "intro": "Recherchez et remplacez du texte sans quitter le navigateur. Collez la source à gauche, définissez Rechercher et Remplacer : le résultat se met à jour pendant la saisie. Copiez ou téléchargez la sortie ; rien n’est envoyé en ligne.",
+    "whyTitle": "Pourquoi utiliser le remplacement de texte ?",
+    "newlineTitle": "Littéral \\n vers sauts de ligne",
+    "newlineBody": "Le texte copié depuis JSON, journaux ou chats affiche souvent \\n comme deux caractères. Le remplacement par défaut les transforme en vrais sauts de ligne.",
+    "liveTitle": "Résultat en direct",
+    "liveBody": "Le panneau de droite se met à jour lorsque vous éditez Rechercher et Remplacer, et indique le nombre de remplacements.",
+    "privateTitle": "Reste dans le navigateur",
+    "privateBody": "Ouvrez un fichier local, copiez le résultat ou téléchargez un .txt sans rien envoyer.",
+    "faqTitle": "FAQ du remplacement de texte",
+    "faqs": [
+      {
+        "question": "Comment transformer \\n en vrais sauts de ligne ?",
+        "answer": "Laissez Rechercher à \\n et Remplacer à \\n, avec « Interpréter les échappements dans Remplacer » activé. Rechercher reste littéral et correspond aux deux caractères barre oblique inverse et n. Remplacer insère alors un vrai saut de ligne."
+      },
+      {
+        "question": "Quelles séquences d’échappement fonctionnent ?",
+        "answer": "Avec l’interprétation dans Remplacer, \\n devient un saut de ligne, \\t une tabulation, \\r un retour chariot et \\\\ une barre oblique inverse."
+      },
+      {
+        "question": "Mon texte est-il envoyé en ligne ?",
+        "answer": "Non. La recherche, le remplacement et l’aperçu s’exécutent dans votre navigateur."
+      },
+      {
+        "question": "Quand dois-je utiliser une regex ?",
+        "answer": "Activez Utiliser une regex dans Rechercher pour traiter Rechercher comme une expression régulière JavaScript. Par exemple, Rechercher (\\d+) et Remplacer [$1] entoure chaque nombre de crochets. La correspondance greedy (par défaut) laisse .* consommer autant que possible ; décochez-la pour la plus courte plage. En mode regex, \\n correspond à un vrai saut de ligne ; pour les deux caractères barre oblique inverse et n, utilisez \\\\n."
+      },
+      {
+        "question": "Le remplacement de texte est-il gratuit ?",
+        "answer": "Oui. C’est gratuit dans le navigateur, sans compte."
+      }
+    ]
+  },
+  "privacy": {
+    "h1": "Politique de confidentialité",
+    "intro1": "Cette Politique de confidentialité explique comment MdPdf (« MdPdf », « nous » ou « notre ») collecte, utilise et protège les informations lorsque vous utilisez notre site et nos outils, y compris les fonctions PDF vers Markdown et Markdown vers PDF.",
+    "intro2": "En utilisant MdPdf, vous acceptez les pratiques décrites dans cette politique. Si vous n’êtes pas d’accord, veuillez ne pas utiliser le site.",
+    "s1Title": "1. Informations que nous collectons",
+    "s1P1": "Nous collectons des informations limitées nécessaires pour exploiter MdPdf, améliorer le site, comprendre l’usage et protéger le service.",
+    "s1P2": "Fichiers que vous envoyez pour conversion. Lorsque vous utilisez l’outil PDF vers Markdown, vous pouvez envoyer des fichiers PDF afin que nous les traitions et renvoyions du Markdown converti.",
+    "s1P3": "Contenu saisi dans le navigateur. Lorsque vous utilisez l’outil Markdown vers PDF, le Markdown que vous tapez ou collez reste dans votre navigateur pour le flux d’impression.",
+    "s1P4": "Informations d’usage et d’appareil. Nous pouvons collecter des données techniques telles que l’adresse IP, le type de navigateur, le système d’exploitation, les pages de provenance, les pages consultées, les horodatages, une localisation approximative dérivée de l’IP et des événements d’usage généraux sur le site.",
+    "s1P5": "Informations d’analyse. Nous utilisons des outils d’analyse, y compris Google Analytics, pour comprendre comment les visiteurs utilisent MdPdf, quelles pages sont les plus utiles et où améliorer l’expérience.",
+    "s1P6": "Cookies et technologies similaires. Nous pouvons utiliser des cookies ou des technologies similaires pour mémoriser des préférences, mesurer le trafic et améliorer les fonctionnalités du site.",
+    "s2Title": "2. Comment nous utilisons les informations",
+    "s2P1": "Nous utilisons les informations collectées pour :",
+    "s2Items": [
+      "fournir et exploiter le site et les outils MdPdf ;",
+      "traiter les fichiers PDF envoyés et renvoyer les résultats de conversion ;",
+      "surveiller les performances, diagnostiquer les erreurs et améliorer la fiabilité ;",
+      "analyser le trafic et l’usage des fonctionnalités ;",
+      "prévenir les abus, la fraude, les incidents de sécurité et le mauvais usage du service ;",
+      "respecter les obligations légales lorsque cela est requis."
+    ],
+    "s3Title": "3. Traitement des fichiers",
+    "s3P1": "MdPdf est conçu pour minimiser la conservation du contenu envoyé. Pour l’outil PDF vers Markdown, les fichiers envoyés sont traités pour la conversion et ne sont pas stockés plus longtemps que nécessaire pour terminer la demande.",
+    "s3P2": "La fonction Markdown vers PDF s’exécute dans le flux d’impression du navigateur : le Markdown que vous rédigez ou collez pour cette fonction est traité côté client dans le cadre de l’expérience du navigateur.",
+    "s3P3": "Même si nous visons un traitement minimal des fichiers, aucun système ne peut être garanti sûr à 100 %. Évitez d’envoyer des fichiers très sensibles, sauf si vous acceptez les risques liés aux services en ligne.",
+    "s4Title": "4. Cookies et analyse",
+    "s4P1": "Nous pouvons utiliser des cookies, des balises d’analyse et des technologies similaires pour comprendre l’usage du site, maintenir les performances et améliorer les décisions de contenu et de produit.",
+    "s4P2": "Ces technologies peuvent collecter des informations telles que le type de navigateur, le type d’appareil, l’activité de session et les interactions avec les pages et fonctionnalités. Des fournisseurs d’analyse tiers peuvent également recevoir ces informations conformément à leurs propres politiques de confidentialité.",
+    "s4P3": "Vous pouvez généralement gérer les cookies dans les paramètres de votre navigateur. Bloquer certains cookies peut affecter le fonctionnement du site.",
+    "s5Title": "5. Comment nous partageons les informations",
+    "s5P1": "Nous ne vendons pas vos informations personnelles. Nous pouvons partager des informations :",
+    "s5Items": [
+      "avec des prestataires qui nous aident à héberger, exploiter, analyser ou sécuriser le site ;",
+      "avec des fournisseurs d’analyse qui nous aident à comprendre le trafic et les performances ;",
+      "si la loi, un règlement, une procédure juridique ou une demande gouvernementale valide l’exige ;",
+      "pour protéger les droits, la sécurité et la sûreté de MdPdf, de nos utilisateurs ou d’autrui ;",
+      "dans le cadre d’une fusion, d’une acquisition, d’un financement ou d’un transfert d’actifs."
+    ],
+    "s6Title": "6. Conservation des données",
+    "s6P1": "Nous conservons les informations uniquement aussi longtemps que raisonnablement nécessaire aux finalités décrites dans cette politique, y compris l’exploitation du service, le dépannage, le respect des obligations légales et la résolution des litiges.",
+    "s6P2": "Les journaux techniques et les données d’analyse peuvent être conservés plus longtemps lorsque c’est nécessaire pour la sécurité, la prévention de la fraude et l’amélioration du service.",
+    "s7Title": "7. Transferts internationaux de données",
+    "s7P1": "MdPdf peut utiliser une infrastructure et des prestataires situés dans différents pays. En conséquence, vos informations peuvent être traitées ou stockées hors de votre pays de résidence.",
+    "s7P2": "Le cas échéant, nous prenons des mesures raisonnables pour assurer des garanties appropriées pour ces transferts.",
+    "s8Title": "8. Vos choix",
+    "s8P1": "Vous pouvez avoir des choix quant à l’utilisation de vos informations, notamment :",
+    "s8Items": [
+      "ajuster les paramètres du navigateur pour bloquer ou supprimer les cookies ;",
+      "utiliser des outils ou extensions de navigateur qui limitent l’analyse ou le suivi ;",
+      "choisir de ne pas envoyer de fichiers que vous ne souhaitez pas traiter en ligne."
+    ],
+    "s8P2": "Selon votre lieu de résidence, vous pouvez également avoir des droits légaux d’accès, de correction, de suppression ou de limitation de certaines informations personnelles.",
+    "s9Title": "9. Sécurité",
+    "s9P1": "Nous utilisons des mesures administratives, techniques et organisationnelles raisonnables pour aider à protéger les informations contre l’accès, la divulgation, l’altération ou la destruction non autorisés.",
+    "s9P2": "Toutefois, aucun site, réseau ou service en ligne ne peut être garanti totalement sûr. Vous utilisez MdPdf à vos propres risques.",
+    "s10Title": "10. Vie privée des enfants",
+    "s10P1": "MdPdf n’est pas destiné aux enfants et nous ne collectons pas sciemment d’informations personnelles d’enfants en dessous de l’âge requis par la loi applicable. Si vous pensez qu’un enfant a fourni des informations personnelles via le site, contactez-nous afin que nous puissions examiner et traiter la question.",
+    "s11Title": "11. Modifications de cette politique",
+    "s11P1": "Nous pouvons mettre à jour cette Politique de confidentialité de temps à autre. En cas de modifications, nous publierons la version révisée sur cette page et mettrons à jour la date d’entrée en vigueur si nécessaire.",
+    "s11P2": "La poursuite de l’utilisation de MdPdf après une mise à jour signifie que vous acceptez la politique révisée.",
+    "s12Title": "12. Contact",
+    "s12P1": "Si vous avez des questions sur cette Politique de confidentialité ou sur la manière dont MdPdf traite les données, contactez-nous via le moyen de contact indiqué sur le site."
+  },
+  "terms": {
+    "h1": "Conditions d’utilisation",
+    "intro1": "Veuillez lire attentivement ces Conditions d’utilisation avant d’utiliser MdPdf. En accédant à notre site, outils, fonctionnalités ou services associés (collectivement, le « Service ») ou en les utilisant, vous acceptez d’être lié par ces Conditions et par notre Politique de confidentialité.",
+    "intro2": "Si vous n’acceptez pas ces Conditions, vous ne devez pas utiliser MdPdf.",
+    "s1Title": "1. Acceptation des conditions",
+    "s1P1": "En utilisant MdPdf, vous confirmez que vous êtes légalement en mesure de conclure cet accord et que vous respecterez toutes les lois et réglementations applicables.",
+    "s2Title": "2. Description du service",
+    "s2P1": "MdPdf fournit des outils en ligne pour convertir des fichiers PDF en Markdown et pour préparer du contenu Markdown en vue d’un export PDF via le navigateur.",
+    "s2P2": "Nous pouvons mettre à jour, modifier, suspendre ou interrompre toute partie du Service à tout moment, avec ou sans préavis.",
+    "s3Title": "3. Usage autorisé",
+    "s3P1": "Vous ne pouvez utiliser MdPdf qu’à des fins licites et conformément à ces Conditions. Vous acceptez de ne pas :",
+    "s3Items": [
+      "utiliser le Service en violation de toute loi ou réglementation ;",
+      "envoyer ou soumettre du contenu que vous n’avez pas le droit de traiter ;",
+      "envoyer du code malveillant, des fichiers nuisibles ou du contenu destiné à perturber le Service ;",
+      "tenter d’interférer, de sonder ou d’obtenir un accès non autorisé à nos systèmes ;",
+      "utiliser des moyens automatisés pour surcharger, extraire ou abuser du Service ;",
+      "utiliser le Service pour porter atteinte aux droits d’autrui, y compris les droits de propriété intellectuelle."
+    ],
+    "s4Title": "4. Votre contenu",
+    "s4P1": "Vous conservez la propriété des fichiers et du contenu que vous envoyez, collez ou générez via MdPdf. Vous êtes seul responsable de vous assurer que vous avez le droit d’utiliser, de traiter et de convertir ce contenu.",
+    "s4P2": "En utilisant le Service, vous nous accordez les droits limités nécessaires pour traiter votre contenu uniquement afin d’exploiter et de fournir la fonctionnalité demandée.",
+    "s5Title": "5. Propriété intellectuelle",
+    "s5P1": "MdPdf, y compris la conception du site, la marque, le logiciel, le texte, les graphismes et autres éléments que nous fournissons, nous appartient ou nous est concédé sous licence et est protégé par les lois applicables sur la propriété intellectuelle.",
+    "s5P2": "Sauf autorisation expresse de la loi, vous ne pouvez pas copier, modifier, distribuer, vendre, désosser ni créer d’œuvres dérivées à partir de toute partie du Service sans notre consentement écrit préalable.",
+    "s6Title": "6. Confidentialité",
+    "s6P1": "Votre utilisation de MdPdf est également régie par notre Politique de confidentialité, qui explique comment nous collectons, utilisons et protégeons les informations liées au Service.",
+    "s7Title": "7. Absence de garantie",
+    "s7P1": "Le Service est fourni « en l’état » et « selon disponibilité ». Dans toute la mesure permise par la loi, MdPdf décline toutes garanties, expresses ou implicites, y compris les garanties de qualité marchande, d’adéquation à un usage particulier, de non-contrefaçon et de disponibilité.",
+    "s7P2": "Nous ne garantissons pas que le Service sera ininterrompu, sans erreur, sûr, ni que les résultats de conversion seront toujours complets, exacts ou adaptés à votre cas d’usage spécifique.",
+    "s8Title": "8. Limitation de responsabilité",
+    "s8P1": "Dans toute la mesure permise par la loi, MdPdf et ses opérateurs, affiliés, prestataires et concédants ne seront pas responsables de tout dommage indirect, accessoire, spécial, consécutif, exemplaire ou punitif, ni de toute perte de données, profits, revenus, activité ou clientèle découlant de ou liée à votre utilisation ou votre incapacité à utiliser le Service.",
+    "s8P2": "Lorsque la responsabilité ne peut pas être entièrement exclue, notre responsabilité totale sera limitée au montant minimal autorisé par le droit applicable.",
+    "s9Title": "9. Services et liens tiers",
+    "s9P1": "MdPdf peut s’appuyer sur des services, outils ou sites tiers ou y renvoyer. Nous ne sommes pas responsables du contenu, des politiques, de la disponibilité ou des pratiques de ces tiers.",
+    "s10Title": "10. Résiliation",
+    "s10P1": "Nous pouvons suspendre ou résilier votre accès à MdPdf à tout moment si nous estimons que vous avez violé ces Conditions, abusé du Service, créé un risque de sécurité, ou lorsque la suspension est nécessaire pour protéger la plateforme, les utilisateurs ou des tiers.",
+    "s11Title": "11. Modifications de ces Conditions",
+    "s11P1": "Nous pouvons réviser ces Conditions de temps à autre. Les versions mises à jour prendront effet lors de leur publication sur cette page, sauf indication contraire.",
+    "s11P2": "La poursuite de l’utilisation de MdPdf après une mise à jour signifie que vous acceptez les Conditions révisées.",
+    "s12Title": "12. Droit applicable",
+    "s12P1": "Ces Conditions sont régies par les lois applicables à l’opérateur de MdPdf, sans égard aux principes de conflit de lois. Le for exact peut dépendre de l’entité juridique ou de la juridiction qui exploite le Service.",
+    "s13Title": "13. Contact",
+    "s13P1": "Si vous avez des questions sur ces Conditions d’utilisation, contactez-nous via le moyen de contact indiqué sur le site."
+  }
+}

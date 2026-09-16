@@ -1,8 +1,10 @@
 "use client";
 
 import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import ViewModeToggle, { type ResultViewMode } from "@/components/ViewModeToggle";
 import MoreTools from "@/components/MoreTools";
+import FaqList from "@/components/FaqList";
 import JsonFormattedView from "@/components/JsonFormattedView";
 import JsonTreeView from "@/components/JsonTreeView";
 import { trackEvent } from "@/lib/analytics";
@@ -13,6 +15,7 @@ import {
   formatJson,
   minifyJson,
   parseJsonInput,
+  unescapeJsonText,
   stringifyJsonLikeSource,
   type JsonPath,
 } from "@/lib/json-preview";
@@ -34,31 +37,9 @@ const DEFAULT_JSON = `{
 
 type PreviewKind = "formatted" | "tree";
 
-const faqs = [
-  {
-    question: "Does JSON Viewer upload my JSON?",
-    answer: "No. Parsing, formatting, and the tree view all run in your browser.",
-  },
-  {
-    question: "What does Format do in JSON Viewer?",
-    answer: "Format pretty-prints valid JSON with 2-space indentation. Minify removes extra whitespace so the payload is compact.",
-  },
-  {
-    question: "When should I use the JSON Viewer tree view?",
-    answer:
-      "Use the JSON Viewer tree when you want to expand nested objects and arrays one level at a time. Use Formatted when you want the full pretty-printed document. In both views you can delete a property or array item; the source on the left updates to match.",
-  },
-  {
-    question: "What happens if JSON Viewer finds invalid JSON?",
-    answer: "JSON Viewer shows the parse error, including line and column when the browser reports a position. Format and Minify stay disabled until the JSON is valid.",
-  },
-  {
-    question: "Is JSON Viewer free?",
-    answer: "Yes. It is free to use in the browser, with no account required.",
-  },
-] as const;
-
 export default function JsonPreviewPage() {
+  const t = useTranslations("jsonViewer");
+  const tCommon = useTranslations("common");
   const [source, setSource] = useState(DEFAULT_JSON);
   const [filename, setFilename] = useState("data");
   const [copyState, setCopyState] = useState<"idle" | "copied">("idle");
@@ -67,7 +48,6 @@ export default function JsonPreviewPage() {
   const [previewKind, setPreviewKind] = useState<PreviewKind>("formatted");
   const [expandDepth, setExpandDepth] = useState(1);
   const [treeKey, setTreeKey] = useState(0);
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
   const viewerRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const isSplit = viewMode === "split";
@@ -125,6 +105,14 @@ export default function JsonPreviewPage() {
     trackEvent("json_preview_minify", { input_length: source.length });
   };
 
+  const unescapedSource = useMemo(() => unescapeJsonText(source), [source]);
+
+  const handleUnescape = () => {
+    if (unescapedSource === null) return;
+    setSource(unescapedSource);
+    trackEvent("json_preview_unescape", { input_length: source.length });
+  };
+
   const handleDeletePath = useCallback((path: JsonPath) => {
     setSource((current) => {
       const currentParsed = parseJsonInput(current);
@@ -153,9 +141,9 @@ export default function JsonPreviewPage() {
   return (
     <main className="mx-auto w-full max-w-[90rem] px-4 py-8 sm:px-6 sm:py-10 md:py-12">
       <div className="mb-8 text-center sm:mb-10">
-        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">JSON Viewer</h1>
+        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">{t("h1")}</h1>
         <p className="mx-auto text-base text-gray-500 sm:text-lg md:whitespace-nowrap">
-          Free JSON Viewer to validate, format, and inspect JSON in your browser.
+          {t("subtitle")}
         </p>
       </div>
 
@@ -179,7 +167,7 @@ export default function JsonPreviewPage() {
           <div className="mb-3 flex shrink-0 flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex min-w-0 flex-wrap items-center gap-2">
               <label className="shrink-0 text-sm text-gray-600" htmlFor="json-preview-filename">
-                Filename
+                {tCommon("filename")}
               </label>
               <input
                 id="json-preview-filename"
@@ -200,12 +188,12 @@ export default function JsonPreviewPage() {
                       : "bg-gray-100 text-gray-600")
                 }
               >
-                {parsed.ok ? "Valid JSON" : source.trim() ? "Invalid JSON" : "Empty"}
+                {parsed.ok ? t("valid") : source.trim() ? t("invalid") : t("empty")}
               </span>
             </div>
             <div className="flex flex-wrap items-center justify-end gap-2">
               <ViewModeToggle value={viewMode} onChange={setViewMode} />
-              <div className="inline-flex rounded-lg border border-gray-200 bg-gray-50 p-0.5" role="group" aria-label="JSON preview kind">
+              <div className="inline-flex rounded-lg border border-gray-200 bg-gray-50 p-0.5" role="group" aria-label={t("kindLabel")}>
                 {(["formatted", "tree"] as const).map((kind) => {
                   const active = previewKind === kind;
                   return (
@@ -215,11 +203,11 @@ export default function JsonPreviewPage() {
                       aria-pressed={active}
                       onClick={() => setPreviewKind(kind)}
                       className={
-                        "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-colors " +
+                        "rounded-md px-3 py-1.5 text-sm font-medium transition-colors " +
                         (active ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-900")
                       }
                     >
-                      {kind}
+                      {kind === "formatted" ? t("formatted") : t("tree")}
                     </button>
                   );
                 })}
@@ -230,7 +218,7 @@ export default function JsonPreviewPage() {
                 disabled={!parsed.ok}
                 className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Format
+                {t("format")}
               </button>
               <button
                 type="button"
@@ -238,14 +226,14 @@ export default function JsonPreviewPage() {
                 disabled={!parsed.ok}
                 className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Minify
+                {t("minify")}
               </button>
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50"
               >
-                Open file
+                {tCommon("openFile")}
               </button>
               <button
                 type="button"
@@ -253,7 +241,7 @@ export default function JsonPreviewPage() {
                 disabled={!source}
                 className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {copyState === "copied" ? "Copied" : "Copy"}
+                {copyState === "copied" ? tCommon("copied") : tCommon("copy")}
               </button>
               <button
                 type="button"
@@ -261,14 +249,14 @@ export default function JsonPreviewPage() {
                 disabled={!source.trim()}
                 className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Download
+                {tCommon("download")}
               </button>
               <button
                 type="button"
                 onClick={handleFullscreenToggle}
                 className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50"
               >
-                {isFullscreen ? "Exit" : "Fullscreen"}
+                {isFullscreen ? tCommon("exit") : tCommon("fullscreen")}
               </button>
             </div>
           </div>
@@ -281,7 +269,17 @@ export default function JsonPreviewPage() {
           >
             {isSplit && (
               <div className={editorColumnClass}>
-                <span className="mb-2 shrink-0 text-xs font-medium uppercase tracking-wide text-gray-500">JSON</span>
+                <div className="mb-2 flex h-7 shrink-0 items-center gap-2">
+                  <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{tCommon("json")}</span>
+                  <button
+                    type="button"
+                    onClick={handleUnescape}
+                    disabled={unescapedSource === null}
+                    className="h-6 rounded-md border border-gray-300 px-2 text-xs leading-none text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {t("unescape")}
+                  </button>
+                </div>
                 <textarea
                   value={source}
                   onChange={(event) => setSource(event.target.value)}
@@ -292,18 +290,18 @@ export default function JsonPreviewPage() {
               </div>
             )}
             <div className={previewColumnClass}>
-              <div className="mb-2 flex shrink-0 items-center justify-between gap-2">
+              <div className="mb-2 flex h-7 shrink-0 items-center justify-between gap-2">
                 <div className="flex min-w-0 items-baseline gap-2">
-                  <span className="text-xs font-medium uppercase tracking-wide text-gray-500">Preview</span>
-                  <span className="hidden truncate text-xs text-gray-400 sm:inline">Hover a row to delete a key or array item</span>
+                  <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{tCommon("preview")}</span>
+                  <span className="hidden truncate text-xs text-gray-400 sm:inline">{t("hoverHint")}</span>
                 </div>
                 {previewKind === "tree" && parsed.ok && (
                   <div className="flex gap-2">
                     <button type="button" className="text-xs text-blue-600 hover:underline" onClick={() => resetTree(99)}>
-                      Expand all
+                      {t("expandAll")}
                     </button>
                     <button type="button" className="text-xs text-blue-600 hover:underline" onClick={() => resetTree(0)}>
-                      Collapse all
+                      {t("collapseAll")}
                     </button>
                   </div>
                 )}
@@ -313,7 +311,7 @@ export default function JsonPreviewPage() {
                   {source.trim() ? (
                     <p className="text-red-700">{parsed.message}</p>
                   ) : (
-                    <p>Paste JSON on the left to preview.</p>
+                    <p>{t("pasteHint")}</p>
                   )}
                 </div>
               ) : previewKind === "tree" ? (
@@ -321,7 +319,7 @@ export default function JsonPreviewPage() {
                   <JsonTreeView key={treeKey} value={parsed.value} expandDepth={expandDepth} onDelete={handleDeletePath} />
                 ) : (
                   <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-                    <p className="mb-2 shrink-0 text-xs text-gray-500">This JSON is too large for a tree view, so the formatted document is shown instead.</p>
+                    <p className="mb-2 shrink-0 text-xs text-gray-500">{t("tooLarge")}</p>
                     <pre className="min-h-0 flex-1 overflow-auto whitespace-pre-wrap break-words rounded-lg border border-gray-200 bg-white p-3 font-mono text-[13px] leading-6 text-gray-800 sm:p-4">
                       {formatted}
                     </pre>
@@ -340,43 +338,30 @@ export default function JsonPreviewPage() {
       </div>
 
       <p className="mx-auto mb-12 max-w-4xl text-center text-sm leading-relaxed text-gray-600 sm:mb-16 sm:text-base">
-        Use this JSON Viewer to check JSON as you type. Paste a payload on the left to pretty-print it or show a collapsible tree. Copy or download the result; nothing is uploaded.
+        {t("intro")}
       </p>
 
       <section className="mb-12 sm:mb-16">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">Why use JSON Viewer?</h2>
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">{t("whyTitle")}</h2>
         <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">Validate as you type</h3>
-            <p className="text-sm leading-relaxed text-gray-600">JSON Viewer shows whether the payload is valid immediately, with line and column details when a parse error includes a position.</p>
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("validateTitle")}</h3>
+            <p className="text-sm leading-relaxed text-gray-600">{t("validateBody")}</p>
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">Format or inspect</h3>
-            <p className="text-sm leading-relaxed text-gray-600">Pretty-print for reading, minify for compact output, or switch to a tree when you need to expand nested keys.</p>
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("inspectTitle")}</h3>
+            <p className="text-sm leading-relaxed text-gray-600">{t("inspectBody")}</p>
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">Private by default</h3>
-            <p className="text-sm leading-relaxed text-gray-600">Open a local .json file, copy the result, and download it again without sending content to a server.</p>
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("privateTitle")}</h3>
+            <p className="text-sm leading-relaxed text-gray-600">{t("privateBody")}</p>
           </div>
         </div>
       </section>
 
       <section className="mb-12 sm:mb-16">
-        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">JSON Viewer FAQs</h2>
-        <div className="mx-auto max-w-3xl space-y-4">
-          {faqs.map((faq, index) => (
-            <div key={faq.question} className="overflow-hidden rounded-lg border border-gray-200 bg-white">
-              <button
-                className="flex w-full items-start justify-between gap-4 px-4 py-4 text-left transition-colors hover:bg-gray-50 sm:px-6"
-                onClick={() => setOpenFaq(openFaq === index ? null : index)}
-              >
-                <span className="font-medium text-gray-900">{faq.question}</span>
-                <span className="ml-auto shrink-0 text-xl text-gray-400">{openFaq === index ? "−" : "+"}</span>
-              </button>
-              <div className={openFaq === index ? "px-4 pb-4 text-sm leading-relaxed text-gray-600 sm:px-6" : "hidden"}>{faq.answer}</div>
-            </div>
-          ))}
-        </div>
+        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">{t("faqTitle")}</h2>
+        <FaqList items={t.raw("faqs")} />
       </section>
 
       <MoreTools currentHref="/json-viewer" />

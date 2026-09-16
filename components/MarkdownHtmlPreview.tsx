@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState, type Ref } from "react";
 import type { MarkdownCitation } from "@/lib/markdown-citations";
 import { parseMarkdownDocument } from "@/lib/markdown-to-html";
 import { sanitizeMarkdownHtml } from "@/lib/sanitize-markdown-html";
@@ -21,11 +21,13 @@ const MarkdownHtmlPreview = memo(
     className,
     numberedCitations = false,
     onCitationsChange,
+    containerRef,
   }: {
     markdown: string;
     className?: string;
     numberedCitations?: boolean;
     onCitationsChange?: (citations: MarkdownCitation[]) => void;
+    containerRef?: Ref<HTMLDivElement>;
   }) {
     const smallDoc = useMemo(() => {
       if (markdown.length > WORKER_THRESHOLD) return null;
@@ -114,22 +116,37 @@ const MarkdownHtmlPreview = memo(
     }, [markdown, numberedCitations, onCitationsChange]);
 
     if (markdown.length <= WORKER_THRESHOLD) {
-      return <div className={previewRootClass(className)} dangerouslySetInnerHTML={{ __html: smallDoc?.html ?? "" }} />;
+      return (
+        <div
+          ref={containerRef}
+          className={previewRootClass(className)}
+          dangerouslySetInnerHTML={{ __html: smallDoc?.html ?? "" }}
+        />
+      );
     }
 
     if (error) {
-      return <div className={`${previewRootClass(className)} text-red-600`}>{error}</div>;
+      return (
+        <div ref={containerRef} className={`${previewRootClass(className)} text-red-600`}>
+          {error}
+        </div>
+      );
     }
 
     if (largeHtml === null) {
       return (
-        <div className={`${previewRootClass(className)} flex items-center justify-center text-gray-500`}>
+        <div
+          ref={containerRef}
+          className={`${previewRootClass(className)} flex items-center justify-center text-gray-500`}
+        >
           Rendering preview…
         </div>
       );
     }
 
-    return <div className={previewRootClass(className)} dangerouslySetInnerHTML={{ __html: largeHtml }} />;
+    return (
+      <div ref={containerRef} className={previewRootClass(className)} dangerouslySetInnerHTML={{ __html: largeHtml }} />
+    );
   },
   (prev, next) =>
     prev.markdown === next.markdown &&

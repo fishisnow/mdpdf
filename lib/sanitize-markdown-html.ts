@@ -18,5 +18,5 @@ function ensureLinkHooks() {
 
 export function sanitizeMarkdownHtml(html: string): string {
   ensureLinkHooks();
-  return DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
+  return DOMPurify.sanitize(html, { USE_PROFILES: { html: true }, ADD_ATTR: ["id"] });
 }

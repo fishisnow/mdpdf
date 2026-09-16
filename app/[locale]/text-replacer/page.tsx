@@ -1,44 +1,21 @@
 "use client";
 
 import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import ViewModeToggle, { type ResultViewMode } from "@/components/ViewModeToggle";
 import MoreTools from "@/components/MoreTools";
+import FaqList from "@/components/FaqList";
 import { trackEvent } from "@/lib/analytics";
 import { applyTextReplace } from "@/lib/text-replacer";
 import { downloadTextFile, workspacePaneHeight } from "@/lib/tools";
 
 const DEFAULT_TEXT = `Hello\\nWorld\\nColumn A\\tColumn B`;
 
-const faqs = [
-  {
-    question: "How do I turn \\n into real line breaks in Text Replacer?",
-    answer:
-      "In Text Replacer, keep Find as \\n and Replace as \\n, with “Interpret escapes in replace” turned on. Find stays literal, so it matches the two characters backslash and n. Replace then inserts a real newline.",
-  },
-  {
-    question: "What escape sequences work in Text Replacer?",
-    answer: "With interpret-replace enabled, \\n becomes a newline, \\t a tab, \\r a carriage return, and \\\\ a backslash.",
-  },
-  {
-    question: "Does Text Replacer upload my text?",
-    answer: "No. Text Replacer runs find, replace, and preview in your browser.",
-  },
-  {
-    question: "When should I use regex in Text Replacer?",
-    answer:
-      "Turn on Use regex in Text Replacer to treat Find as a JavaScript regular expression. For example, Find (\\d+) and Replace [$1] wraps each number in brackets. Greedy matching (the default) lets .* consume as much as possible; uncheck it to match the shortest span instead. In regex mode, \\n matches a real newline; to match the two characters backslash and n, use \\\\n.",
-  },
-  {
-    question: "Is Text Replacer free?",
-    answer: "Yes. It is free to use in the browser, with no account required.",
-  },
-] as const;
-
 type PresetId = "literal-newline" | "literal-tab" | "encode-newline" | "crlf-to-newline";
 
 const PRESETS: {
   id: PresetId;
-  label: string;
+  labelKey: "presetNewline" | "presetTab" | "presetEncode" | "presetCrlf";
   find: string;
   replace: string;
   interpretFind: boolean;
@@ -46,7 +23,7 @@ const PRESETS: {
 }[] = [
   {
     id: "literal-newline",
-    label: "\\n → newline",
+    labelKey: "presetNewline",
     find: "\\n",
     replace: "\\n",
     interpretFind: false,
@@ -54,7 +31,7 @@ const PRESETS: {
   },
   {
     id: "literal-tab",
-    label: "\\t → tab",
+    labelKey: "presetTab",
     find: "\\t",
     replace: "\\t",
     interpretFind: false,
@@ -62,7 +39,7 @@ const PRESETS: {
   },
   {
     id: "encode-newline",
-    label: "newline → \\n",
+    labelKey: "presetEncode",
     find: "\\n",
     replace: "\\n",
     interpretFind: true,
@@ -70,7 +47,7 @@ const PRESETS: {
   },
   {
     id: "crlf-to-newline",
-    label: "\\r\\n → newline",
+    labelKey: "presetCrlf",
     find: "\\r\\n",
     replace: "\\n",
     interpretFind: true,
@@ -79,6 +56,8 @@ const PRESETS: {
 ];
 
 export default function TextReplacerPage() {
+  const t = useTranslations("textReplacer");
+  const tCommon = useTranslations("common");
   const [source, setSource] = useState(DEFAULT_TEXT);
   const [find, setFind] = useState("\\n");
   const [replace, setReplace] = useState("\\n");
@@ -91,7 +70,6 @@ export default function TextReplacerPage() {
   const [copyState, setCopyState] = useState<"idle" | "copied">("idle");
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [viewMode, setViewMode] = useState<ResultViewMode>("split");
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
   const viewerRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const isSplit = viewMode === "split";
@@ -176,9 +154,9 @@ export default function TextReplacerPage() {
   return (
     <main className="mx-auto w-full max-w-[90rem] px-4 py-8 sm:px-6 sm:py-10 md:py-12">
       <div className="mb-8 text-center sm:mb-10">
-        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">Text Replacer</h1>
+        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">{t("h1")}</h1>
         <p className="mx-auto text-base text-gray-500 sm:text-lg md:whitespace-nowrap">
-          Free Text Replacer for find and replace, including turning \n into line breaks.
+          {t("subtitle")}
         </p>
       </div>
 
@@ -202,7 +180,7 @@ export default function TextReplacerPage() {
           <div className="mb-4 flex shrink-0 flex-col gap-3">
             <div className="flex min-w-0 flex-wrap items-center gap-2">
               <label className="shrink-0 text-sm text-gray-600" htmlFor="text-replacer-filename">
-                Filename
+                {tCommon("filename")}
               </label>
               <input
                 id="text-replacer-filename"
@@ -214,7 +192,7 @@ export default function TextReplacerPage() {
               />
               <span className="shrink-0 text-sm text-gray-400">.txt</span>
               <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">
-                {result.error ? "Pattern error" : `${result.count} replacement${result.count === 1 ? "" : "s"}`}
+                {result.error ? t("patternError") : t("replacements", { count: result.count })}
               </span>
               <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
                 <ViewModeToggle value={viewMode} onChange={setViewMode} />
@@ -223,7 +201,7 @@ export default function TextReplacerPage() {
                   onClick={() => fileInputRef.current?.click()}
                   className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50"
                 >
-                  Open file
+                  {tCommon("openFile")}
                 </button>
                 <button
                   type="button"
@@ -231,28 +209,28 @@ export default function TextReplacerPage() {
                   disabled={Boolean(result.error) || result.output === source}
                   className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  Use result as input
+                  {t("useResult")}
                 </button>
                 <button
                   type="button"
                   onClick={() => void handleCopy()}
                   className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50"
                 >
-                  {copyState === "copied" ? "Copied" : "Copy"}
+                  {copyState === "copied" ? tCommon("copied") : tCommon("copy")}
                 </button>
                 <button
                   type="button"
                   onClick={handleDownload}
                   className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
                 >
-                  Download
+                  {tCommon("download")}
                 </button>
                 <button
                   type="button"
                   onClick={handleFullscreenToggle}
                   className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50"
                 >
-                  {isFullscreen ? "Exit" : "Fullscreen"}
+                  {isFullscreen ? tCommon("exit") : tCommon("fullscreen")}
                 </button>
               </div>
             </div>
@@ -260,7 +238,7 @@ export default function TextReplacerPage() {
             <div className="grid gap-3 md:grid-cols-2">
               <label className="flex min-w-0 flex-col gap-1">
                 <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
-                  {useRegex ? "Find (regular expression)" : "Find"}
+                  {useRegex ? t("findRegex") : t("find")}
                 </span>
                 <input
                   value={find}
@@ -271,7 +249,7 @@ export default function TextReplacerPage() {
                 />
               </label>
               <label className="flex min-w-0 flex-col gap-1">
-                <span className="text-xs font-medium uppercase tracking-wide text-gray-500">Replace with</span>
+                <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{t("replaceWith")}</span>
                 <input
                   value={replace}
                   onChange={(event) => setReplace(event.target.value)}
@@ -282,7 +260,7 @@ export default function TextReplacerPage() {
               </label>
             </div>
 
-            <div className="flex flex-wrap gap-2" role="group" aria-label="Replace presets">
+            <div className="flex flex-wrap gap-2" role="group" aria-label={t("presetsLabel")}>
               {PRESETS.map((preset) => {
                 const active = activePreset === preset.id;
                 return (
@@ -298,7 +276,7 @@ export default function TextReplacerPage() {
                         : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50")
                     }
                   >
-                    {preset.label}
+                    {t(preset.labelKey)}
                   </button>
                 );
               })}
@@ -312,7 +290,7 @@ export default function TextReplacerPage() {
                   onChange={(event) => setInterpretReplace(event.target.checked)}
                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
-                Interpret escapes in replace
+                {t("interpretReplace")}
               </label>
               <label className="inline-flex items-center gap-2">
                 <input
@@ -322,7 +300,7 @@ export default function TextReplacerPage() {
                   onChange={(event) => setInterpretFind(event.target.checked)}
                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50"
                 />
-                Interpret escapes in find
+                {t("interpretFind")}
               </label>
               <label className="inline-flex items-center gap-2">
                 <input
@@ -331,7 +309,7 @@ export default function TextReplacerPage() {
                   onChange={(event) => setCaseSensitive(!event.target.checked)}
                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
-                Ignore case
+                {t("ignoreCase")}
               </label>
               <label className="inline-flex items-center gap-2">
                 <input
@@ -340,7 +318,7 @@ export default function TextReplacerPage() {
                   onChange={(event) => setUseRegex(event.target.checked)}
                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
-                Use regex in Find
+                {t("useRegex")}
               </label>
               <label className="inline-flex items-center gap-2">
                 <input
@@ -350,15 +328,15 @@ export default function TextReplacerPage() {
                   onChange={(event) => setGreedy(event.target.checked)}
                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50"
                 />
-                Greedy matching
+                {t("greedy")}
               </label>
             </div>
             <p className="text-xs text-gray-500">
               {useRegex
                 ? greedy
-                  ? "Find is a JavaScript regular expression. Quantifiers like .* match as much as possible. Uncheck Greedy matching to take the shortest match. Replacement supports $1, $2, and $&."
-                  : "Greedy matching is off, so * + ? and {n,m} match as little as possible (same as writing .*? or +?). Replacement supports $1, $2, and $&."
-                : "Find is literal by default, so \\n matches a backslash plus n. With interpret-replace on, \\n in Replace becomes a real line break."}
+                  ? t("hintRegexGreedy")
+                  : t("hintRegexLazy")
+                : t("hintLiteral")}
             </p>
           </div>
 
@@ -374,18 +352,18 @@ export default function TextReplacerPage() {
           >
             {isSplit && (
               <div className={editorColumnClass}>
-                <span className="mb-2 shrink-0 text-xs font-medium uppercase tracking-wide text-gray-500">Original</span>
+                <span className="mb-2 shrink-0 text-xs font-medium uppercase tracking-wide text-gray-500">{tCommon("original")}</span>
                 <textarea
                   value={source}
                   onChange={(event) => setSource(event.target.value)}
                   spellCheck={false}
-                  placeholder="Paste text that contains \n or other characters to replace…"
+                  placeholder={t("placeholder")}
                   className="min-h-0 w-full flex-1 resize-none rounded-lg border border-gray-200 bg-gray-50 p-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:p-4"
                 />
               </div>
             )}
             <div className={previewColumnClass}>
-              <span className="mb-2 shrink-0 text-xs font-medium uppercase tracking-wide text-gray-500">Result</span>
+              <span className="mb-2 shrink-0 text-xs font-medium uppercase tracking-wide text-gray-500">{tCommon("result")}</span>
               <textarea
                 value={result.output}
                 readOnly
@@ -398,45 +376,32 @@ export default function TextReplacerPage() {
       </div>
 
       <p className="mx-auto mb-12 max-w-4xl text-center text-sm leading-relaxed text-gray-600 sm:mb-16 sm:text-base">
-        Use this Text Replacer to find and replace text without leaving the browser. Paste source on the left, set Find and Replace, and the result updates as you type. Copy or download the output; nothing is uploaded.
+        {t("intro")}
       </p>
 
       <section className="mb-12 sm:mb-16">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">Why use Text Replacer?</h2>
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">{t("whyTitle")}</h2>
         <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">Literal \n to newlines</h3>
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("newlineTitle")}</h3>
             <p className="text-sm leading-relaxed text-gray-600">
-              Text copied from JSON, logs, or chat often shows \n as two characters. The default replace turns those into real line breaks.
+              {t("newlineBody")}
             </p>
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">Live result</h3>
-            <p className="text-sm leading-relaxed text-gray-600">The right pane updates as you edit Find and Replace, and shows how many replacements were made.</p>
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("liveTitle")}</h3>
+            <p className="text-sm leading-relaxed text-gray-600">{t("liveBody")}</p>
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">Stays in the browser</h3>
-            <p className="text-sm leading-relaxed text-gray-600">Open a local file in Text Replacer, copy the result, or download a .txt file without uploading anything.</p>
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("privateTitle")}</h3>
+            <p className="text-sm leading-relaxed text-gray-600">{t("privateBody")}</p>
           </div>
         </div>
       </section>
 
       <section className="mb-12 sm:mb-16">
-        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">Text Replacer FAQs</h2>
-        <div className="mx-auto max-w-3xl space-y-4">
-          {faqs.map((faq, index) => (
-            <div key={faq.question} className="overflow-hidden rounded-lg border border-gray-200 bg-white">
-              <button
-                className="flex w-full items-start justify-between gap-4 px-4 py-4 text-left transition-colors hover:bg-gray-50 sm:px-6"
-                onClick={() => setOpenFaq(openFaq === index ? null : index)}
-              >
-                <span className="font-medium text-gray-900">{faq.question}</span>
-                <span className="ml-auto shrink-0 text-xl text-gray-400">{openFaq === index ? "−" : "+"}</span>
-              </button>
-              <div className={openFaq === index ? "px-4 pb-4 text-sm leading-relaxed text-gray-600 sm:px-6" : "hidden"}>{faq.answer}</div>
-            </div>
-          ))}
-        </div>
+        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">{t("faqTitle")}</h2>
+        <FaqList items={t.raw("faqs")} />
       </section>
 
       <MoreTools currentHref="/text-replacer" />

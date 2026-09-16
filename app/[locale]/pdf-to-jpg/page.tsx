@@ -1,9 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import UploadZone from "@/components/UploadZone";
 import MoreTools from "@/components/MoreTools";
 import ProgressBar from "@/components/ProgressBar";
+import FaqList from "@/components/FaqList";
 import {
   buildZipFromImages,
   convertPdfToImages,
@@ -14,34 +16,6 @@ import {
 } from "@/lib/pdf-to-image";
 
 type ConvertState = "idle" | "ready" | "converting" | "done" | "error";
-
-const faqs = [
-  {
-    question: "How do I convert PDF to JPG online?",
-    answer:
-      "Upload your PDF, choose the pages you want, keep JPG selected, then click Convert and Download. pdf to jpg saves one page as a JPG file, while multiple pages are bundled into a ZIP.",
-  },
-  {
-    question: "Can pdf to jpg convert selected pages?",
-    answer:
-      "Yes. Enter page ranges such as 1-3,5,8 in the Pages field. If you leave the field blank, pdf to jpg converts every page in the PDF.",
-  },
-  {
-    question: "Should I choose JPG or PNG?",
-    answer:
-      "Use pdf to jpg when you want smaller files for faster sharing. Choose PNG when you want sharper text, diagrams, screenshots, or other pages where image clarity matters more than file size.",
-  },
-  {
-    question: "Does pdf to jpg upload my files?",
-    answer:
-      "No. This pdf to jpg converter runs in your browser, so your file stays on your device during conversion. That keeps the workflow fast and gives you better privacy than upload-first tools.",
-  },
-  {
-    question: "Why do multiple converted pages download as a ZIP?",
-    answer:
-      "Each selected page becomes its own image file. When pdf to jpg converts more than one page, the tool packages them into a ZIP so you can download everything in one step.",
-  },
-] as const;
 
 function downloadBlob(bytes: Uint8Array, fileName: string, mimeType: string) {
   const normalized = new Uint8Array(bytes.byteLength);
@@ -64,6 +38,8 @@ function clampJpgQuality(value: number): number {
 }
 
 export default function PdfToImagePage() {
+  const t = useTranslations("pdfToJpg");
+  const tCommon = useTranslations("common");
   const [state, setState] = useState<ConvertState>("idle");
   const [file, setFile] = useState<File | null>(null);
   const [fileBytes, setFileBytes] = useState<Uint8Array | null>(null);
@@ -76,7 +52,6 @@ export default function PdfToImagePage() {
   const [progressCurrent, setProgressCurrent] = useState(0);
   const [progressTotal, setProgressTotal] = useState(0);
   const [resultMessage, setResultMessage] = useState("");
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   const progressPercent = useMemo(() => {
     if (!progressTotal) return 0;
@@ -102,13 +77,13 @@ export default function PdfToImagePage() {
       setFileBytes(null);
       setPageCount(0);
       setState("error");
-      setError(uploadError instanceof Error ? uploadError.message : "Failed to read PDF.");
+      setError(uploadError instanceof Error ? uploadError.message : t("readError"));
     }
   };
 
   const onConvert = async () => {
     if (!file || !fileBytes) {
-      setError("Please upload a PDF first.");
+      setError(t("needPdf"));
       setState("error");
       return;
     }
@@ -137,27 +112,27 @@ export default function PdfToImagePage() {
       if (images.length === 1) {
         const single = images[0];
         downloadBlob(single.bytes, single.fileName, single.mimeType);
-        setResultMessage(`Converted 1 page and downloaded ${single.fileName}.`);
+        setResultMessage(t("doneOne", { name: single.fileName }));
       } else {
         const zipBytes = buildZipFromImages(images);
         const ext = format === "png" ? "png" : "jpg";
         const zipName = `${stripExtension(file.name)}_${ext}.zip`;
         downloadBlob(zipBytes, zipName, "application/zip");
-        setResultMessage(`Converted ${images.length} pages and downloaded ${zipName}.`);
+        setResultMessage(t("doneMany", { count: images.length, name: zipName }));
       }
 
       setState("done");
     } catch (convertError) {
       setState("error");
-      setError(convertError instanceof Error ? convertError.message : "Conversion failed.");
+      setError(convertError instanceof Error ? convertError.message : t("convertError"));
     }
   };
 
   return (
     <main className="mx-auto w-full max-w-[90rem] px-4 py-8 sm:px-6 sm:py-10 md:py-12">
       <div className="mb-8 text-center sm:mb-10">
-        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">PDF to JPG Converter Free Online</h1>
-        <p className="mx-auto text-base text-gray-500 sm:text-lg md:whitespace-nowrap">Convert PDF to JPG or PNG in your browser, without uploading files.</p>
+        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">{t("h1")}</h1>
+        <p className="mx-auto text-base text-gray-500 sm:text-lg md:whitespace-nowrap">{t("subtitle")}</p>
       </div>
 
       <div className="flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:gap-6 sm:p-6 md:p-8">
@@ -166,25 +141,25 @@ export default function PdfToImagePage() {
         {file && (
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="rounded-lg border border-gray-200 p-4">
-              <p className="text-sm text-gray-500">File</p>
+              <p className="text-sm text-gray-500">{t("file")}</p>
               <p className="break-all text-sm font-medium text-gray-800">{file.name}</p>
-              <p className="mt-1 text-xs text-gray-500">{pageCount} pages</p>
+              <p className="mt-1 text-xs text-gray-500">{t("pagesLabel", { count: pageCount })}</p>
             </div>
             <label className="rounded-lg border border-gray-200 p-4">
-              <span className="mb-2 block text-sm font-medium text-gray-700">Pages</span>
+              <span className="mb-2 block text-sm font-medium text-gray-700">{t("pages")}</span>
               <input
                 type="text"
                 value={pageRangeInput}
                 onChange={(event) => setPageRangeInput(event.target.value)}
-                placeholder="All pages (or e.g. 1-3,5,8)"
+                placeholder={t("pagesPlaceholder")}
                 className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-500"
                 disabled={state === "converting"}
               />
-              <span className="mt-2 block text-xs text-gray-500">Leave this blank to convert every page, or enter specific pages like 1-3,5.</span>
+              <span className="mt-2 block text-xs text-gray-500">{t("pagesHint")}</span>
             </label>
 
             <label className="rounded-lg border border-gray-200 p-4">
-              <span className="mb-2 block text-sm font-medium text-gray-700">Format</span>
+              <span className="mb-2 block text-sm font-medium text-gray-700">{t("format")}</span>
               <select
                 className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
                 value={format}
@@ -194,28 +169,28 @@ export default function PdfToImagePage() {
                 <option value="jpg">JPG</option>
                 <option value="png">PNG</option>
               </select>
-              <span className="mt-2 block text-xs text-gray-500">Choose JPG for smaller files or PNG for sharper screenshots, diagrams, and text-heavy pages.</span>
+              <span className="mt-2 block text-xs text-gray-500">{t("formatHint")}</span>
             </label>
 
             <label className="rounded-lg border border-gray-200 p-4">
-              <span className="mb-2 block text-sm font-medium text-gray-700">Quality</span>
+              <span className="mb-2 block text-sm font-medium text-gray-700">{t("quality")}</span>
               <select
                 className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
                 value={qualityPreset}
                 onChange={(event) => setQualityPreset(event.target.value as QualityPreset)}
                 disabled={state === "converting"}
               >
-                <option value="standard">Standard</option>
-                <option value="high">High</option>
-                <option value="ultra">Ultra</option>
+                <option value="standard">{t("qualityStandard")}</option>
+                <option value="high">{t("qualityHigh")}</option>
+                <option value="ultra">{t("qualityUltra")}</option>
               </select>
-              <span className="mt-2 block text-xs text-gray-500">Higher quality creates larger images. JPG quality control appears below when JPG is selected.</span>
+              <span className="mt-2 block text-xs text-gray-500">{t("qualityHint")}</span>
             </label>
 
             {format === "jpg" && (
               <label className="rounded-lg border border-gray-200 p-4 sm:col-span-2">
                 <div className="mb-2 flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">JPG Quality</span>
+                  <span className="text-sm font-medium text-gray-700">{t("jpgQuality")}</span>
                   <span className="text-xs text-gray-500">{Math.round(jpgQuality * 100)}%</span>
                 </div>
                 <input
@@ -235,7 +210,7 @@ export default function PdfToImagePage() {
 
         {state === "converting" && (
           <div className="flex flex-col gap-2">
-            <p className="text-sm text-gray-500">Converting page {progressCurrent} of {progressTotal} in your browser...</p>
+            <p className="text-sm text-gray-500">{t("progress", { current: progressCurrent, total: progressTotal })}</p>
             <ProgressBar progress={progressPercent} />
           </div>
         )}
@@ -249,58 +224,58 @@ export default function PdfToImagePage() {
           disabled={!file || state === "converting"}
           className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
         >
-          {state === "converting" ? "Converting..." : "Convert and Download"}
+          {state === "converting" ? tCommon("converting") : tCommon("convertAndDownload")}
         </button>
       </div>
 
       <section className="mt-12 sm:mt-16">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">Why Use This PDF to JPG Converter?</h2>
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">{t("whyTitle")}</h2>
         <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">Fast in-browser conversion</h3>
-            <p className="text-sm leading-relaxed text-gray-600">Convert PDF to JPG in your browser without waiting for large uploads, queue times, or extra download steps from a remote server.</p>
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("fastTitle")}</h3>
+            <p className="text-sm leading-relaxed text-gray-600">{t("fastBody")}</p>
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">Private PDF processing</h3>
-            <p className="text-sm leading-relaxed text-gray-600">Your PDF stays on your device during conversion, which makes this PDF to JPG tool a better fit for privacy-sensitive files.</p>
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("privateTitle")}</h3>
+            <p className="text-sm leading-relaxed text-gray-600">{t("privateBody")}</p>
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">Flexible page exports</h3>
-            <p className="text-sm leading-relaxed text-gray-600">Convert one page or many with pdf to jpg, export JPG or PNG, and download multi-page results as a ZIP so each page is easy to reuse.</p>
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("flexTitle")}</h3>
+            <p className="text-sm leading-relaxed text-gray-600">{t("flexBody")}</p>
           </div>
         </div>
       </section>
 
       <section className="mt-12 sm:mt-16">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">How to Convert PDF to JPG Online</h2>
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">{t("howTitle")}</h2>
         <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6 md:p-8">
           <ol className="space-y-4">
             <li className="flex items-start gap-4">
               <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white">1</span>
               <div>
-                <p className="font-medium text-gray-900">Upload your PDF</p>
-                <p className="text-sm text-gray-600">Choose the PDF file you want to convert. The tool reads the file in your browser and shows the total page count.</p>
+                <p className="font-medium text-gray-900">{t("step1Title")}</p>
+                <p className="text-sm text-gray-600">{t("step1Body")}</p>
               </div>
             </li>
             <li className="flex items-start gap-4">
               <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white">2</span>
               <div>
-                <p className="font-medium text-gray-900">Pick all pages or selected pages</p>
-                <p className="text-sm text-gray-600">Leave the Pages field empty to convert the full PDF, or enter page ranges like 1-3,5 if you only need specific pages.</p>
+                <p className="font-medium text-gray-900">{t("step2Title")}</p>
+                <p className="text-sm text-gray-600">{t("step2Body")}</p>
               </div>
             </li>
             <li className="flex items-start gap-4">
               <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white">3</span>
               <div>
-                <p className="font-medium text-gray-900">Choose JPG or PNG and set quality</p>
-                <p className="text-sm text-gray-600">Use JPG for smaller files and easier sharing. Use PNG for sharper exports. Then choose your quality preset and adjust JPG quality if needed.</p>
+                <p className="font-medium text-gray-900">{t("step3Title")}</p>
+                <p className="text-sm text-gray-600">{t("step3Body")}</p>
               </div>
             </li>
             <li className="flex items-start gap-4">
               <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white">4</span>
               <div>
-                <p className="font-medium text-gray-900">Convert and download</p>
-                <p className="text-sm text-gray-600">Click Convert and Download to run pdf to jpg. A single page downloads directly, while multiple pages are delivered in one ZIP file.</p>
+                <p className="font-medium text-gray-900">{t("step4Title")}</p>
+                <p className="text-sm text-gray-600">{t("step4Body")}</p>
               </div>
             </li>
           </ol>
@@ -308,60 +283,47 @@ export default function PdfToImagePage() {
       </section>
 
       <section className="mt-12 sm:mt-16">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">Common Use Cases for PDF to JPG</h2>
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">{t("useTitle")}</h2>
         <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6 md:p-8">
           <div className="grid gap-5 md:grid-cols-2">
             <div>
-              <h3 className="mb-2 text-lg font-semibold text-gray-900">Share document pages faster</h3>
-              <p className="text-sm leading-relaxed text-gray-600">Use pdf to jpg when you want to send page previews in chat, email, support tickets, or social posts without attaching the full PDF.</p>
+              <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("useShareTitle")}</h3>
+              <p className="text-sm leading-relaxed text-gray-600">{t("useShareBody")}</p>
             </div>
             <div>
-              <h3 className="mb-2 text-lg font-semibold text-gray-900">Export slides or reports as images</h3>
-              <p className="text-sm leading-relaxed text-gray-600">Turn slides, reports, invoices, or handouts into separate images that are easier to reuse in docs or decks.</p>
+              <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("useSlidesTitle")}</h3>
+              <p className="text-sm leading-relaxed text-gray-600">{t("useSlidesBody")}</p>
             </div>
             <div>
-              <h3 className="mb-2 text-lg font-semibold text-gray-900">Save only the pages you need</h3>
-              <p className="text-sm leading-relaxed text-gray-600">If you only need a cover, signature page, chart, or appendix, enter a range and run pdf to jpg on just those pages.</p>
+              <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("useRangeTitle")}</h3>
+              <p className="text-sm leading-relaxed text-gray-600">{t("useRangeBody")}</p>
             </div>
             <div>
-              <h3 className="mb-2 text-lg font-semibold text-gray-900">Use PNG for sharper visuals</h3>
-              <p className="text-sm leading-relaxed text-gray-600">When a page contains diagrams, UI screenshots, or text that needs cleaner edges, convert PDF to PNG instead of JPG for a sharper result.</p>
+              <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("usePngTitle")}</h3>
+              <p className="text-sm leading-relaxed text-gray-600">{t("usePngBody")}</p>
             </div>
           </div>
         </div>
       </section>
 
       <section className="mt-12 sm:mt-16">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">PDF to JPG vs PDF to PNG</h2>
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">{t("vsTitle")}</h2>
         <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">Choose JPG for smaller files</h3>
-            <p className="text-sm leading-relaxed text-gray-600">JPG is usually the best choice when you want smaller images that are quick to download, attach, and share. It works well for photos, mixed-layout pages, and everyday document previews.</p>
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("jpgTitle")}</h3>
+            <p className="text-sm leading-relaxed text-gray-600">{t("jpgBody")}</p>
           </div>
           <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">Choose PNG for sharper detail</h3>
-            <p className="text-sm leading-relaxed text-gray-600">PNG is better when you want crisp text, screenshots, diagrams, or other detailed page elements. The files are often larger, but the image quality stays cleaner.</p>
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("pngTitle")}</h3>
+            <p className="text-sm leading-relaxed text-gray-600">{t("pngBody")}</p>
           </div>
         </div>
       </section>
 
       <section className="mt-12 sm:mt-16">
-        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">PDF to JPG FAQs</h2>
-        <p className="mx-auto mb-8 max-w-2xl text-center text-gray-500">Quick answers about converting PDF to JPG or PNG, selecting pages, download behavior, and privacy.</p>
-        <div className="mx-auto max-w-3xl space-y-4">
-          {faqs.map((faq, index) => (
-            <div key={faq.question} className="overflow-hidden rounded-lg border border-gray-200 bg-white">
-              <button
-                className="flex w-full items-start justify-between gap-4 px-4 py-4 text-left transition-colors hover:bg-gray-50 sm:px-6"
-                onClick={() => setOpenFaq(openFaq === index ? null : index)}
-              >
-                <span className="font-medium text-gray-900">{faq.question}</span>
-                <span className="ml-auto shrink-0 text-xl text-gray-400">{openFaq === index ? "−" : "+"}</span>
-              </button>
-              <div className={openFaq === index ? "px-4 pb-4 text-sm leading-relaxed text-gray-600 sm:px-6" : "hidden"}>{faq.answer}</div>
-            </div>
-          ))}
-        </div>
+        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">{t("faqTitle")}</h2>
+        <p className="mx-auto mb-8 max-w-2xl text-center text-gray-500">{t("faqIntro")}</p>
+        <FaqList items={t.raw("faqs")} />
       </section>
 
       <MoreTools currentHref="/pdf-to-jpg" />
