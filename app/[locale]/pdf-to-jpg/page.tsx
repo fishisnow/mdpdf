@@ -6,6 +6,7 @@ import UploadZone from "@/components/UploadZone";
 import MoreTools from "@/components/MoreTools";
 import ProgressBar from "@/components/ProgressBar";
 import FaqList from "@/components/FaqList";
+import SeoSections, { type SeoSection } from "@/components/SeoSections";
 import {
   buildZipFromImages,
   convertPdfToImages,
@@ -319,6 +320,8 @@ export default function PdfToImagePage() {
           </div>
         </div>
       </section>
+
+      <SeoSections className="mt-12 sm:mt-16" sections={t.raw("seoSections") as SeoSection[]} />
 
       <section className="mt-12 sm:mt-16">
         <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">{t("faqTitle")}</h2>

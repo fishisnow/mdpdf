@@ -7,6 +7,7 @@ import MarkdownOutline from "@/components/MarkdownOutline";
 import ViewModeToggle, { type ResultViewMode } from "@/components/ViewModeToggle";
 import MoreTools from "@/components/MoreTools";
 import FaqList from "@/components/FaqList";
+import SeoSections, { type SeoSection } from "@/components/SeoSections";
 import { trackEvent } from "@/lib/analytics";
 import type { MarkdownCitation } from "@/lib/markdown-citations";
 import { extractMarkdownHeadings } from "@/lib/markdown-headings";
@@ -343,6 +344,8 @@ export default function MarkdownPreviewPage() {
           </div>
         </div>
       </section>
+
+      <SeoSections className="mb-12 sm:mb-16" sections={t.raw("seoSections") as SeoSection[]} />
 
       <section className="mb-12 sm:mb-16">
         <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">{t("faqTitle")}</h2>

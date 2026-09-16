@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import ViewModeToggle, { type ResultViewMode } from "@/components/ViewModeToggle";
 import MoreTools from "@/components/MoreTools";
 import FaqList from "@/components/FaqList";
+import SeoSections, { type SeoSection } from "@/components/SeoSections";
 import JsonFormattedView from "@/components/JsonFormattedView";
 import JsonTreeView from "@/components/JsonTreeView";
 import { trackEvent } from "@/lib/analytics";
@@ -358,6 +359,8 @@ export default function JsonPreviewPage() {
           </div>
         </div>
       </section>
+
+      <SeoSections className="mb-12 sm:mb-16" sections={t.raw("seoSections") as SeoSection[]} />
 
       <section className="mb-12 sm:mb-16">
         <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">{t("faqTitle")}</h2>

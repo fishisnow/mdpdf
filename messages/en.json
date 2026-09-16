@@ -30,7 +30,8 @@
     "termsOfService": "Terms of Service",
     "copyright": "© {year} MdPdf. All rights reserved.",
     "collapse": "Collapse",
-    "expand": "Expand"
+    "expand": "Expand",
+    "guide": "On this page"
   },
   "tools": {
     "home": {
@@ -171,6 +172,90 @@
       {
         "question": "Will the formatting be preserved?",
         "answer": "pdf to md keeps headers, lists, tables, and basic formatting, and it does a better job with code blocks so the Markdown stays cleaner to edit."
+      },
+      {
+        "question": "Is pdf to md good for AI workflows?",
+        "answer": "Yes. Markdown is easier to paste into prompts, split into chunks, and store in note or RAG systems than a locked PDF layout."
+      },
+      {
+        "question": "Does pdf to md work on scanned PDFs?",
+        "answer": "Scanned or image-only PDFs may have little selectable text. For best results, start with a text-based PDF or run OCR before conversion."
+      }
+    ],
+    "seoSections": [
+      {
+        "title": "What actually goes wrong when you copy from a PDF",
+        "body": [
+          "PDF was designed to freeze a page, not to give you a document you can keep editing. That is why copying from a viewer feels broken even when the file looks perfect on screen. Lines wrap in the middle of sentences. Headings arrive as slightly larger body text. A two-column paper comes out as left column, then right column, in the wrong reading order. Tables collapse into a pile of spaces and tabs. Hyphenated words at the end of a line stay split. Headers, footers, and page numbers repeat between every section.",
+          "Those artifacts are not just ugly. They break search, they confuse language models, and they make a 20-page handbook take an afternoon to clean. PDF to Markdown is useful when you want the opposite of a frozen page: headings that are real headings, lists that are lists, and text you can diff, quote, or republish without fighting the layout engine."
+        ],
+        "items": [
+          {
+            "title": "Broken reading order",
+            "body": "Multi-column magazines, academic papers, and slide-like PDFs often store text in drawing order, not reading order. A converter that rebuilds blocks into Markdown will not be perfect, but it gives you a starting outline instead of a shuffled paste."
+          },
+          {
+            "title": "Invisible structure",
+            "body": "In the PDF, a title is just a font size. In Markdown, a title is # or ##, which tools can outline, link to, and chunk. Recovering that hierarchy is the difference between a wall of text and a document you can navigate."
+          },
+          {
+            "title": "Tables and code that stop being data",
+            "body": "A table copied from a PDF is usually not a table anymore. Code samples pick up line numbers, stray spaces, and wrapped statements. Getting closer to fenced code and pipe tables is what makes the export worth editing instead of retyping."
+          }
+        ]
+      },
+      {
+        "title": "Where PDF to Markdown shows up in real work",
+        "body": [
+          "The pattern is the same across jobs: someone else published a PDF, and you need the words inside it to travel. That destination might be a prompt window, a Git repo, a wiki, a translation memory, or a personal knowledge base. The PDF itself stays the archive; Markdown becomes the working copy."
+        ],
+        "items": [
+          {
+            "title": "Research notes that you can actually search",
+            "body": "Papers, whitepapers, and industry reports are still distributed as PDF. Researchers paste a chapter into Obsidian, Notion, or a local vault, highlight claims, and link them to other notes. Markdown keeps citations and headings intact enough to annotate. A locked PDF does not."
+          },
+          {
+            "title": "Feeding models without feeding layout junk",
+            "body": "RAG pipelines and long-context chats both degrade when the input is full of running headers and split words. Turning a text-based PDF into Markdown first gives you cleaner chunks: one heading plus the paragraphs under it, instead of page 14's footer glued to page 15's first sentence. That matters for retrieval quality as much as for the prompt you paste by hand."
+          },
+          {
+            "title": "Handbooks that have to live in Git",
+            "body": "Engineering specs, API manuals, and compliance PDFs often start life in Word or FrameMaker and ship as PDF. Teams that want pull requests, blame, and review comments need a text format. Markdown is the format those teams already know how to review."
+          },
+          {
+            "title": "Support, sales, and operations reuse",
+            "body": "A pricing sheet, an onboarding packet, or a policy PDF gets quoted in tickets every week. Converting it once means the next person can copy a section, update a number, and republish—rather than screenshotting page 7 again."
+          },
+          {
+            "title": "Translation and localization drafts",
+            "body": "Translators would rather work on paragraphs than on a visual page. Markdown gives a bilingual reviewer something they can put in a diff tool. The original PDF can stay the signed artifact; the Markdown is the draft that moves through CAT tools and reviewers."
+          },
+          {
+            "title": "Turning a PDF back into a web page",
+            "body": "Documentation sites, GitBook, Docusaurus, and Hugo all want Markdown sources. If the only copy of a guide is a PDF export from three years ago, conversion is how you stop maintaining a dead format."
+          }
+        ]
+      },
+      {
+        "title": "How to get a cleaner conversion",
+        "body": [
+          "No in-browser converter can invent text that is not in the file. A scanned book, a photographed whiteboard, or a PDF that is only images will come out empty or garbled until you run OCR. Start with a file where you can select a sentence in Preview or Chrome; that is the signal that real text exists.",
+          "After conversion, treat the Markdown as a draft. Skim the outline first. If every line became a heading, or no headings survived, fix the hierarchy before you polish wording. Then look at tables, code fences, and lists. Those are the spots where layout usually lies."
+        ],
+        "items": [
+          {
+            "title": "Prefer a text-based export from the original tool",
+            "body": "If you still have the Word, Google Doc, or design source, export a text PDF instead of a flattened print file. Selectable text converts; outlines of letters drawn as paths do not."
+          },
+          {
+            "title": "Watch repeating chrome",
+            "body": "Headers, watermarks, and page numbers often leak into the Markdown as extra paragraphs. Delete them once at the top of the file, then scan for the same line repeating between sections."
+          },
+          {
+            "title": "Keep private files in the browser",
+            "body": "Contracts, medical notes, and unreleased specs should not go to an upload-first converter just to become text. This tool reads the PDF locally, which is the safer default when you do not control the other party's server."
+          }
+        ]
       }
     ]
   },
@@ -211,6 +296,72 @@
       {
         "question": "Is it free?",
         "answer": "Yes. md to pdf is free to use in the browser, with no account required."
+      },
+      {
+        "question": "Can I use MD to PDF for AI-generated Markdown?",
+        "answer": "Yes. Paste the Markdown from an AI chat, review the preview, then save as PDF when the layout looks right."
+      },
+      {
+        "question": "Will page breaks look perfect every time?",
+        "answer": "Print layout depends on your browser. Use the preview to adjust headings and spacing, then tweak print settings such as margins if needed."
+      }
+    ],
+    "seoSections": [
+      {
+        "title": "Markdown is the draft. PDF is still the envelope.",
+        "body": [
+          "People write in Markdown because it is fast, versionable, and easy to paste out of an AI chat. They still send PDFs because the other side did not ask for a .md file. Hiring managers want a resume they can print. Finance wants a one-pager that will look the same in email. A professor wants a lab report that does not reflow when opened on a phone. Government portals and many vendors still only accept PDF uploads.",
+          "MD to PDF exists for that last mile. You keep writing in a format you can edit. When the wording is done, the browser's print dialog freezes the layout into a file you can attach. You do not need Word, and you do not need to upload the draft to a conversion API to get a portable document."
+        ],
+        "items": [
+          {
+            "title": "Weekly notes that have to look finished",
+            "body": "Meeting notes, incident reviews, and status reports start as Markdown in a vault or a chat. Exporting them as PDF is how they enter a thread with people who will never open VS Code. The live preview is there so you catch a broken table before that thread starts."
+          },
+          {
+            "title": "AI output you need to archive",
+            "body": "A long answer from ChatGPT or Claude is Markdown in the clipboard. If you need a snapshot for a ticket, a client, or a compliance folder, saving that snapshot as PDF is more stable than hoping the chat history stays available. Preview first: models love to emit headings and code fences that look different once they are actually rendered."
+          },
+          {
+            "title": "READMEs, RFCs, and handbooks leaving Git",
+            "body": "Internal design docs live in the repo. Occasionally they have to leave: a partner review, a printout for a workshop, an attachment for a change-advisory board. Markdown to PDF is the export path that does not require rebuilding the document in Google Docs."
+          },
+          {
+            "title": "Round-tripping with PDF to Markdown",
+            "body": "Some teams receive a PDF, convert it to Markdown, edit the source, and export a new PDF. That loop only works if both ends are in the browser and you can see the rendered page before you save."
+          }
+        ]
+      },
+      {
+        "title": "What makes a Markdown file print well",
+        "body": [
+          "The print dialog will faithfully reproduce whatever the preview shows, including mistakes. A document full of bold-as-headings, HTML copied from a CMS, and tables with twenty columns will look cramped on A4. A few writing habits produce more predictable pages."
+        ],
+        "items": [
+          {
+            "title": "Use real heading markers",
+            "body": "Write #, ##, and ### instead of enlarging a paragraph with bold. Headings create visual rhythm on the page and give you an outline. They also survive if you later convert the PDF back to Markdown."
+          },
+          {
+            "title": "Keep tables narrow enough to print",
+            "body": "GitHub-style pipe tables work. Tables that are really spreadsheets do not. If a row cannot fit, split the table or turn extra columns into a list under each item. Check the preview at a width close to a printed page, not only on a wide monitor."
+          },
+          {
+            "title": "Fence code, then glance at wrapping",
+            "body": "Long command lines wrap in print even when they looked fine in the editor. Break them, or accept that the PDF will show wrapped code. Either decision is better than discovering it after you emailed the file."
+          },
+          {
+            "title": "In the dialog, save as PDF—not as a printer",
+            "body": "Chrome, Edge, and Safari all expose a destination named Save as PDF or similar. That is the option that writes a file. Sending the job to a physical printer is a different outcome. Margins and headers in the print UI are worth a five-second check; they are how you drop the default “page 1 of 4” chrome if you do not want it."
+          }
+        ]
+      },
+      {
+        "title": "Why the conversion stays in your browser",
+        "body": [
+          "A cloud MD-to-PDF API is convenient until the document contains customer names, unreleased numbers, or a draft you do not want logged. Rendering the page locally and printing it locally means the bytes never have to sit on someone else's disk just to become a PDF. There is no account, no watermark, and no queue behind a shared server.",
+          "The tradeoff is that page breaks follow your browser's print engine. That is the same engine you already use for everything else on the web. If a heading is stranded at the bottom of a page, add a blank line or shorten the previous section in the Markdown—then print again. You are editing a document, not waiting on a remote layout job."
+        ]
       }
     ]
   },
@@ -288,6 +439,58 @@
       {
         "question": "Why do multiple converted pages download as a ZIP?",
         "answer": "Each selected page becomes its own image file. When pdf to jpg converts more than one page, the tool packages them into a ZIP so you can download everything in one step."
+      },
+      {
+        "question": "Is PDF to JPG useful for social media or tickets?",
+        "answer": "Yes. Exporting a page as an image is often easier to attach in chat, email, or social posts than sharing the full PDF."
+      }
+    ],
+    "seoSections": [
+      {
+        "title": "Most people do not need another PDF. They need a picture of a page.",
+        "body": [
+          "PDFs are awkward in the places where work actually happens. WeChat and many internal IM clients show a generic file chip instead of the page. Slack and email threads get noisy when every reply re-attaches a 40-page deck. A designer asked for “the cover and the chart on page 6.” A QA engineer needs the error dialog that only exists on page 12 of a test report. None of those people wanted the full document. They wanted pixels.",
+          "PDF to JPG (or PNG) is the straightforward answer: pick the pages, pick a format, download images. Doing it in the browser means the file never goes to a conversion farm, which is the difference between sharing a screenshot of a public flyer and sharing a screenshot of a contract."
+        ],
+        "items": [
+          {
+            "title": "Chat, tickets, and “can you send that page?”",
+            "body": "Support tickets, incident channels, and vendor chats all work better with an image. The other person can see the invoice total or the broken UI without downloading software. Exporting one page is faster than teaching someone how to open a PDF on their phone."
+          },
+          {
+            "title": "Slides and reports as reusable assets",
+            "body": "A page of a pitch deck becomes a LinkedIn image, a Notion embed, or a figure in another document. Course handouts become slides in a different tool. Product one-pagers become website graphics. Once each page is a file, you can drop it anywhere an image is accepted."
+          },
+          {
+            "title": "Only the pages that matter",
+            "body": "Signature pages, appendices, maps, and certificates are often a few leaves inside a long PDF. Page ranges such as 1-3,8 exist so you are not rasterizing a 200-page manual to grab the cover. Less work, smaller ZIP, fewer accidental leaks of pages you did not mean to send."
+          },
+          {
+            "title": "Bug reports and visual QA",
+            "body": "When a PDF itself is the product—statements, generated reports, print previews—you sometimes need to attach how a page looks, not the file. An image in a bug ticket is unambiguous. The developer does not have to install the same font to see what you saw."
+          },
+          {
+            "title": "Thumbnails, covers, and social crops",
+            "body": "Ebook covers, whitepaper heroes, and event posters still travel as PDF from the design team. Marketing needs a JPG for CMS fields that reject PDF. A high-quality raster of page 1 is usually enough."
+          }
+        ]
+      },
+      {
+        "title": "JPG or PNG is a choice about what you are afraid of losing",
+        "body": [
+          "JPG is a photograph format. It is small, and it is lossy. Fine for mixed pages, photos, and anything that will be compressed again by a chat app. Soft type and flat UI chrome can pick up smudges or ringing if you push the quality too low.",
+          "PNG is a screenshot format. Edges stay sharp, text stays readable, diagrams do not grow JPEG blocks. Files are larger. That is the right trade when the page is a table, a terminal capture, a flowchart, or anything a reader will pinch-zoom. If you are not sure, export one page both ways and keep the one you would actually send."
+        ],
+        "items": [
+          {
+            "title": "Quality presets are about pixels, not magic",
+            "body": "Standard, high, and ultra change how densely each page is rasterized. Higher looks better when someone zooms; it also makes a heavier ZIP. For a chat preview, high is usually enough. For a poster or a screenshot you might crop later, ultra wastes less of the original page."
+          },
+          {
+            "title": "Nothing is uploaded to make the image",
+            "body": "The PDF is read on your machine, pages are drawn on your machine, and the JPG or ZIP is saved to your downloads. That is slower on a huge scan and much safer on a file you would not put in a random converter's queue."
+          }
+        ]
       }
     ]
   },
@@ -326,11 +529,95 @@
       {
         "question": "Is MD Viewer free?",
         "answer": "Yes. It is free to use in the browser, with no account required."
+      },
+      {
+        "question": "Does MD Viewer support GitHub Flavored Markdown?",
+        "answer": "Yes. Common GFM features such as tables, fenced code blocks, and task-style lists are supported in the preview."
+      },
+      {
+        "question": "Can I use MD Viewer to check AI-generated Markdown?",
+        "answer": "Yes. Paste the answer into the editor and review the live preview before you publish or export it."
       }
     ],
     "contents": "Contents",
     "noHeadings": "No headings",
-    "lines": "{count, plural, one {# line} other {# lines}}"
+    "lines": "{count, plural, one {# line} other {# lines}}",
+    "seoSections": [
+      {
+        "title": "Markdown is still just text. Preview is how you see the document hiding in it.",
+        "body": [
+          "Markdown started as a way to write HTML without writing HTML. A heading is a #, emphasis is asterisks, a link is a pair of brackets. The file stays readable in a terminal, in a diff, and in email. GitHub, GitLab, Obsidian, Notion importers, static site generators, and almost every AI assistant standardized on it because humans can still parse the source when the renderer is missing.",
+          "The catch is that the source is not the document. A missing space after ##, an unclosed fence, or a table row with the wrong number of pipes will look fine as text and wrong as a page. An MD viewer is the cheap way to notice that before you open a pull request, publish a post, or paste the draft into a chat with your name on it."
+        ],
+        "items": [
+          {
+            "title": "Write and check in the same window",
+            "body": "Split view exists because Markdown errors are local. You see a list that refused to nest, you fix the indent, the preview updates. Hiding the editor is for reading: a README, a dumped AI answer, a note you were sent as a .md attachment."
+          },
+          {
+            "title": "Open the file you already have",
+            "body": "Most Markdown does not start in a browser. It starts in a repo, an export, or a vault. Opening a local .md, skimming the outline, and downloading the edited copy is the whole loop when you do not want to install another editor for a five-minute check."
+          },
+          {
+            "title": "Numbered citations for drafts that quote the web",
+            "body": "Research-style notes often accumulate [title](url) links until the paragraph is unreadable. Turning those links into [1], [2] in the preview—and listing the URLs underneath—is for that case. The source can keep the original links; the reading view becomes closer to a paper."
+          }
+        ]
+      },
+      {
+        "title": "The messy middle between AI output and something you can ship",
+        "body": [
+          "Language models answer in Markdown because it is a convenient default: headings, bullets, fenced code, the occasional table. That output is a first draft, not a document. Fences get labeled with the wrong language. Nested lists skip a level. Tables are missing a separator row. A “References” section duplicates links that already appeared inline.",
+          "Pasting the answer into a live preview is faster than mentally simulating GitHub Flavored Markdown. It is also how you decide the next tool: stay here and edit, send the source to MD Diff against an older version, or export with MD to PDF when someone needs an attachment. The viewer is the inspection step, not the whole publishing chain."
+        ],
+        "items": [
+          {
+            "title": "PR descriptions and READMEs",
+            "body": "Git hosts render Markdown, but they render it after you press comment. Previewing locally means you are not the person who submitted a broken table in a design doc. The same applies to issue templates and wiki pages."
+          },
+          {
+            "title": "Notes, wikis, and personal knowledge bases",
+            "body": "Obsidian, Logseq, and a pile of smaller apps speak Markdown dialects. A browser preview will not clone every plugin, but it will tell you whether the portable subset—headings, lists, tables, code, quotes—survives outside your vault. That is the subset you can email, commit, or convert."
+          },
+          {
+            "title": "Docs platforms and static sites",
+            "body": "Docusaurus, MkDocs, VitePress, Hugo, and GitBook all compile Markdown to pages. Authors who do not have the site running still need to see whether an admonition-free draft looks coherent. The viewer covers that common core so you are not editing blind in a CMS box."
+          }
+        ]
+      },
+      {
+        "title": "A working subset of Markdown worth remembering",
+        "body": [
+          "You do not need the whole CommonMark spec to write useful documents. The patterns below are the ones that fail most often in previews, and the ones every GFM renderer is expected to understand. Spaces matter more than people expect: #Heading is not a heading, and -item is not a list."
+        ],
+        "items": [
+          {
+            "title": "Headings and thematic breaks",
+            "body": [
+              "Start a line with one to six # characters, then a space, then the title. Use the levels to outline, not to style: one H1 per document is enough. A line of --- can separate sections when a heading would be too loud."
+            ]
+          },
+          {
+            "title": "Emphasis, inline code, and fences",
+            "body": [
+              "Wrap a word in *single asterisks* or _underscores_ for italics, and **two** for bold. Inline code uses single backticks. Anything you would paste into a terminal belongs in a fenced block: three backticks, an optional language tag, then the code, then three backticks to close. Unclosed fences eat the rest of the file. That is the usual reason a preview “goes blank” after a certain line."
+            ]
+          },
+          {
+            "title": "Lists, tasks, and quotes",
+            "body": [
+              "Unordered lists start with - or * and a space. Ordered lists start with 1. and a space; the number you type is less important than the marker. Nested items need a consistent indent. Task-style items (- [ ] and - [x]) render as lists here even when they are not interactive checkboxes. Quotes start with > and can wrap multiple paragraphs if each line is prefixed."
+            ]
+          },
+          {
+            "title": "Links, images, and tables",
+            "body": [
+              "A link is [visible text](https://example.com). An image is the same idea with a leading bang: ![short description](https://example.com/chart.png). Tables need a header row, a separator row of dashes, and body rows, all split by pipes. If one row has fewer cells than the header, the preview will look jagged—count the pipes before you blame the renderer."
+            ]
+          }
+        ]
+      }
+    ]
   },
   "jsonViewer": {
     "h1": "JSON Viewer",
@@ -377,9 +664,47 @@
       {
         "question": "Is JSON Viewer free?",
         "answer": "Yes. It is free to use in the browser, with no account required."
+      },
+      {
+        "question": "Can I inspect API or LLM JSON without uploading it?",
+        "answer": "Yes. Paste the payload into the JSON viewer; parsing and formatting stay in your browser."
       }
     ],
-    "unescape": "Unescape"
+    "unescape": "Unescape",
+    "seoSections": [
+      {
+        "title": "JSON is fine until it is one line, or wrong, or both",
+        "body": [
+          "APIs return minified objects. Config files accumulate nested keys until nobody can see which brace closes which feature flag. Language models emit “JSON” that is almost valid: a trailing comma, a comment, a single-quoted string, an unescaped newline inside a value. Log pipelines dump entire payloads as escaped strings. In all of those cases you do not need a new editor as much as you need a place that will parse, point at the error, and let you look around.",
+          "This JSON viewer stays in the browser on purpose. Production tokens, customer records, and staging secrets show up in JSON more often than people admit. Formatting that payload should not require pasting it into a random website that might log the body."
+        ],
+        "items": [
+          {
+            "title": "API responses you cannot read in the network panel",
+            "body": "DevTools will pretty-print, but it will not let you delete a noisy key, minify a subset, or save a fixture. Paste the body here when you are turning a live response into a test case, or when you need to send a colleague the shape without the auth header still sitting in the screenshot."
+          },
+          {
+            "title": "Config, manifests, and infrastructure files",
+            "body": "package.json, appsettings, Terraform JSON, and workflow payloads are all the same problem at different scales: nested maps that you need to expand one branch at a time. Tree view is for navigation. Formatted view is for reading a full file you are about to commit."
+          },
+          {
+            "title": "Tool calls and structured model output",
+            "body": "Agents pass arguments as JSON. When a call fails, the reason is often a type that should have been a string, a missing field, or a blob of Markdown stuffed into a value. Inspecting the payload as a tree is quicker than counting brackets in the trace UI. If the model wrapped JSON inside a string, unescape first so you are looking at the inner object."
+          },
+          {
+            "title": "When the file is “JSON” but will not parse",
+            "body": "The viewer tells you that the input is invalid, and if the engine knows the position, it tells you the line and column. Format and minify stay disabled until the document is actually JSON. That is deliberate: pretty-printing invalid input would invent a structure that is not there."
+          }
+        ]
+      },
+      {
+        "title": "Formatted, minified, and tree are three jobs",
+        "body": [
+          "Formatted JSON is for reading and for diffs against other pretty-printed files. Minified JSON is for pasting into an environment variable, a CLI flag, or a size-sensitive request. Tree view is for exploring: expand one object, collapse the rest, delete a key you do not want in a sample. Hovering a line to remove a property is how you shrink a production dump down to the fields a bug report actually needs.",
+          "Large documents may skip the tree and stay in formatted view. That is a limit of running in the browser, not a prompt to upload the file somewhere else. Copy or download when you are done; the source on the left stays in sync with edits you make in the tree."
+        ]
+      }
+    ]
   },
   "textReplacer": {
     "h1": "Text Replacer",
@@ -433,6 +758,80 @@
       {
         "question": "Is Text Replacer free?",
         "answer": "Yes. It is free to use in the browser, with no account required."
+      },
+      {
+        "question": "Why does \\n not become a newline until I change settings?",
+        "answer": "Find is literal by default, so it matches the two characters \\ and n. Enable interpret escapes in the replacement (or use the newline preset) to insert real line breaks."
+      }
+    ],
+    "seoSections": [
+      {
+        "title": "The \\n you see is often not a newline",
+        "body": [
+          "When a program wants a line break inside a string, it writes a backslash and an n. JSON does this. Many logs do this. Chat exports, CSV cells, error messages copied out of a browser, and code-generated prompts do this. What lands on your clipboard is four characters of meaning compressed into two glyphs: \\n. If you paste that into a notes app, you get a single crushed paragraph with the symbols still visible. Nothing is “wrong” with the text. It is just still escaped.",
+          "The same thing happens with tabs (\\t), Windows line endings (\\r\\n), and doubled backslashes from logs that escaped an already escaped string. A text replacer that can interpret those sequences is how you get a document back: real line breaks, real columns, a stack trace you can read. The reverse job exists too—turning a readable draft back into a JSON string—because the next system in the pipeline may only accept the escaped form."
+        ],
+        "items": [
+          {
+            "title": "JSON strings, API samples, and copied payloads",
+            "body": "You extract a field that looks like \"Hello\\nWorld\" and want it to display as two lines. Literal find of \\n, with interpret-escapes on the replacement, is the direct path. People hit this constantly when they copy a value out of a JSON viewer, a Swagger UI, or a log line that quoted the body."
+          },
+          {
+            "title": "Logs that arrived as one row",
+            "body": "Collectors and SIEM exports like to keep an event on a single line. Newlines inside the message get escaped so the file stays one record per row. To read the exception, you need those escapes turned back into breaks. Doing it in the browser is safer than sending the dump to an online “formatter” that will store it."
+          },
+          {
+            "title": "Chat, CSV, and spreadsheets",
+            "body": "Excel and Google Sheets will show a cell that contains line breaks as a single wrapped box, then copy it with \\n or with real breaks depending on the app. Chat backups from Slack, Teams, or WeChat often flatten messages. A pass of replacement is cheaper than cleaning 400 rows by hand."
+          },
+          {
+            "title": "The other direction: encode newlines for code",
+            "body": "Sometimes you wrote a readable prompt or an email, and now you need it inside a JSON file, a YAML literal, or a unit-test string. Converting real line breaks to \\n (and tabs to \\t) is the encode preset. Without it, the JSON you paste will not parse."
+          }
+        ]
+      },
+      {
+        "title": "Replacement is also how messy text becomes a draft",
+        "body": [
+          "Not every job is about escapes. Product names change. Staging URLs have to become production URLs. A model wrote “Acme Corp” thirty times and legal wants the real entity. You have a list of IDs in brackets and want them wrapped as markdown links. Find and replace with a live count is the small tool people still open a whole IDE to get."
+        ],
+        "items": [
+          {
+            "title": "Prompt and output cleanup",
+            "body": "Models emit odd spacing, doubled headings, or HTML entities in otherwise Markdown text. A few literal replacements—straightening quotes, stripping a repeated signature, turning three blank lines into one—make the draft editable before you move it into the MD viewer."
+          },
+          {
+            "title": "Bulk wording in a pasted document",
+            "body": "When the “document” is already on the clipboard, opening Word is overhead. Paste, replace the old brand name or the old API host, glance at the replacement count, copy back. Ignore-case is there because marketing copy is inconsistent about capitalization."
+          },
+          {
+            "title": "Regex when the pattern is the point",
+            "body": [
+              "Literal find cannot express “every run of digits” or “the text inside the last pair of quotes.” JavaScript regular expressions can. Capture groups and $1 / $2 in the replacement are how you wrap, reorder, or extract without writing a script. Greedy matching is the default because that is how JS works; turn it off when .* is eating too much and you wanted the shortest match.",
+              "Regex mode changes the meaning of \\n in the find box: it becomes a real newline, not the two characters backslash and n. If you still need to find the escaped form, search for \\\\n. That distinction is the usual source of “it didn't match anything.”"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Check the options before you trust the output",
+        "body": [
+          "Find is literal unless you say it is a regex. Replacement inserts what you typed unless you ask it to interpret escapes. Those two switches are independent, which is powerful and easy to mis-set. The live result on the right is the ground truth—watch the count as well as the text. If the count is 0, your find string does not occur. If the count is huge, you may have enabled regex with a pattern that matches empty positions."
+        ],
+        "items": [
+          {
+            "title": "Literal find is the safe default",
+            "body": "With literal find, \\n is a backslash followed by n. That is what you want for JSON-style dumps. Enable regex only when you intend . * + ? and character classes to have meaning. A forgotten regex toggle is how a dot in an IP address starts matching any character."
+          },
+          {
+            "title": "Interpret escapes only where you need them",
+            "body": "On the replacement side, interpret-escapes turns \\n into a real line break, \\t into a tab, \\r into a carriage return, and \\\\ into a single backslash. Leave it off when you want those characters to stay visible in the output."
+          },
+          {
+            "title": "Greedy vs lazy is a regex-only problem",
+            "body": ".* matches as far as it can. If you are wrapping HTML-ish fragments or quoted strings and the replacement swallowed half the file, disable greedy matching (or write .*? yourself). Literal mode ignores the switch, because there are no quantifiers."
+          }
+        ]
       }
     ]
   },
@@ -589,6 +988,44 @@
       {
         "question": "Is md diff free?",
         "answer": "Yes. md diff is free to use in the browser, with no account required."
+      },
+      {
+        "question": "Can md diff compare AI-rewritten Markdown?",
+        "answer": "Yes. Paste the original and the rewritten version to review preview-level and source-level changes in the browser."
+      }
+    ],
+    "seoSections": [
+      {
+        "title": "Two Markdown files can look the same and still not be the same document",
+        "body": [
+          "A generic text diff will tell you that a space moved. It will not tell you that a heading was demoted, that a list became a paragraph, or that a link label stayed put while the URL changed. Markdown is a presentation language sitting on top of plain text. Reviewing only the characters is how a “minor rewrite” ships with a missing disclaimer or a reordered procedure.",
+          "MD Diff is for the moment you have two drafts—an original and a rewrite—and you need to see both the reading experience and the source. Preview mode is for structure: did the argument still flow, did the table survive, did the citations remain. Source mode is for the line-level add and delete coloring you already know from Git, with line numbers you can point to in a review comment."
+        ],
+        "items": [
+          {
+            "title": "What an AI rewrite actually changed",
+            "body": "Models paraphrase confidently. They also invent sections, drop caveats, and “helpfully” rewrite quoted text. Putting the original Markdown on the left and the model output on the right is the fastest way to see those edits as edits, not as a new essay you have to re-read from scratch."
+          },
+          {
+            "title": "Documentation pull requests without checking out the branch",
+            "body": "README updates, runbooks, and style guides are Markdown. Pasting HEAD and the proposed file into a side-by-side view is useful when you are reviewing from a browser, when the change is in an email, or when the two versions never lived in the same repo."
+          },
+          {
+            "title": "Translation and localization review",
+            "body": "A translated Markdown page should keep heading depth, list length, and link targets aligned with the source. Diffing the two files will not grade the prose, but it will catch a missing step in a procedure, a dropped table column, or a link that still points at the English anchor."
+          },
+          {
+            "title": "Legal-ish drafts that cannot skip a clause",
+            "body": "Privacy policies, terms, and internal policies often start as Markdown even when they ship as PDF. Comparing versions side by side is how you confirm a paragraph moved rather than vanished. Citation counts on each pane are a second check when the document is built out of referenced URLs."
+          }
+        ]
+      },
+      {
+        "title": "How to read a Markdown diff without getting lost",
+        "body": [
+          "Start in preview. If the outline jumped, fix the headings before you argue about wording. Then switch to source for the hunks that matter: a list that changed length, a table row, a code sample, a URL. Ignore whitespace-only churn if you can; if one side was auto-formatted, normalize that first so the coloring is about meaning.",
+          "When a whole section shows as deleted and re-inserted, it probably moved. Confirm the content still exists, then look at the neighbors to see whether the move broke a numbered procedure. Line numbers are there so you can say “modified, line 84” instead of quoting a paragraph into chat."
+        ]
       }
     ]
   }

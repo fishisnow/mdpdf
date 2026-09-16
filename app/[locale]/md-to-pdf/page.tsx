@@ -7,6 +7,7 @@ import { trackEvent } from "@/lib/analytics";
 import ViewModeToggle, { type ResultViewMode } from "@/components/ViewModeToggle";
 import MoreTools from "@/components/MoreTools";
 import FaqList from "@/components/FaqList";
+import SeoSections, { type SeoSection } from "@/components/SeoSections";
 
 function PreviewLoading() {
   const tCommon = useTranslations("common");
@@ -372,6 +373,11 @@ export default function MdToPdfPage() {
           </ol>
         </div>
       </section>
+
+      <SeoSections
+        className="mb-12 print:hidden sm:mb-16"
+        sections={t.raw("seoSections") as SeoSection[]}
+      />
 
       <section className="mb-12 print:hidden sm:mb-16">
         <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">{t("faqTitle")}</h2>
