@@ -9,6 +9,7 @@ export const PAGE_PATHS = [
   "/md-to-pdf",
   "/pdf-to-jpg",
   "/md-viewer",
+  "/md-diff",
   "/json-viewer",
   "/text-replacer",
   "/privacy-policy",

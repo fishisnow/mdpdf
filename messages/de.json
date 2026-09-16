@@ -53,6 +53,11 @@
       "card": "MD-Viewer",
       "description": "Live-MD-Viewer mit gerenderter Markdown-Vorschau, geteilt oder in voller Breite."
     },
+    "mdDiff": {
+      "nav": "MD Diff",
+      "card": "MD Diff",
+      "description": "Zwei Markdown-Dateien mit md diff vergleichen und Zitate zählen."
+    },
     "jsonViewer": {
       "nav": "JSON-Viewer",
       "card": "JSON-Viewer",
@@ -80,6 +85,10 @@
     "mdViewer": {
       "title": "MD-Viewer - Online-Live-Markdown-Editor - MdPdf",
       "description": "Kostenloser MD-Viewer mit Live-Markdown-Vorschau im Browser. Quelle und Vorschau teilen, kopieren oder eine .md-Datei herunterladen."
+    },
+    "mdDiff": {
+      "title": "md diff - Markdown nebeneinander vergleichen - MdPdf",
+      "description": "Kostenloses md diff. Vergleichen Sie zwei Markdown-Dateien, sehen Sie Zeilennummern und zählen Sie Zitate im Browser."
     },
     "jsonViewer": {
       "title": "JSON-Viewer - JSON-Formatierer und Baumansicht online - MdPdf",
@@ -320,7 +329,8 @@
       }
     ],
     "contents": "Inhalt",
-    "noHeadings": "Keine Überschriften"
+    "noHeadings": "Keine Überschriften",
+    "lines": "{count, plural, one {# Zeile} other {# Zeilen}}"
   },
   "jsonViewer": {
     "h1": "JSON-Viewer",
@@ -533,5 +543,53 @@
     "s12P1": "Diese Bedingungen unterliegen den für den Betreiber von MdPdf geltenden Gesetzen, ohne Rücksicht auf Kollisionsnormen. Der genaue Gerichtsstand kann von der juristischen Person oder Rechtsordnung abhängen, die den Dienst betreibt.",
     "s13Title": "13. Kontakt",
     "s13P1": "Wenn Sie Fragen zu diesen Nutzungsbedingungen haben, kontaktieren Sie uns bitte über die auf der Website angegebene Kontaktmethode."
+  },
+  "mdDiff": {
+    "h1": "MD Diff",
+    "subtitle": "Kostenloses md diff zum Vergleich zweier Markdown-Dateien nebeneinander im Browser.",
+    "compare": "Vergleichen",
+    "compareMode": "Vergleichsmodus",
+    "viewPreview": "Vorschau",
+    "viewSource": "Quelle",
+    "edit": "Bearbeiten",
+    "original": "Original",
+    "modified": "Geändert",
+    "leftPlaceholder": "Original-Markdown einfügen…",
+    "rightPlaceholder": "Markdown zum Vergleich einfügen…",
+    "lines": "{count, plural, one {# Zeile} other {# Zeilen}}",
+    "citations": "{count, plural, one {# Zitat} other {# Zitate}}",
+    "numberedCitations": "Nummerierte Zitate",
+    "generatedReferences": "Generierte Quellen",
+    "intro": "Nutzen Sie dieses md diff, wenn zwei Markdown-Entwürfe auseinanderlaufen. Fügen Sie beide Seiten ein, prüfen Sie die Zitate und starten Sie md diff für die Vollbild-Gegenüberstellung. Änderungen bleiben im Browser; nichts wird hochgeladen.",
+    "whyTitle": "Warum md diff?",
+    "sideTitle": "md diff nebeneinander",
+    "sideBody": "md diff richtet beide Dateien aus, damit Sie Überschriften, Listen und Absätze ohne Tabwechsel prüfen können.",
+    "citeTitle": "Zitatanzahl",
+    "citeBody": "Jede Seite zeigt, wie viele Markdown-Links md diff als Zitate zählt, damit fehlende Quellen vor dem Merge auffallen.",
+    "privateTitle": "Bleibt auf dem Gerät",
+    "privateBody": "md diff läuft im Browser. Öffnen Sie lokale .md-Dateien und vergleichen Sie sie ohne Upload.",
+    "faqTitle": "md diff FAQ",
+    "faqs": [
+      {
+        "question": "Lädt md diff mein Markdown hoch?",
+        "answer": "Nein. md diff vergleicht beide Dateien im Browser, der Text verlässt das Gerät nicht."
+      },
+      {
+        "question": "Wie zählt md diff Zitate?",
+        "answer": "md diff zählt eindeutige [Titel](url)-Links wie die nummerierten Zitate im MD Viewer."
+      },
+      {
+        "question": "Was passiert bei Vergleichen in md diff?",
+        "answer": "md diff öffnet standardmäßig die Vollbild-Vorschau mit Inhaltsverzeichnis. In Quelle markieren Add-/Delete-Farben die Zeilenänderungen."
+      },
+      {
+        "question": "Zeigt md diff Zeilennummern?",
+        "answer": "Ja. Der md-diff-Vergleich zeigt auf beiden Seiten Zeilennummern."
+      },
+      {
+        "question": "Ist md diff kostenlos?",
+        "answer": "Ja. md diff ist im Browser ohne Konto nutzbar."
+      }
+    ]
   }
 }

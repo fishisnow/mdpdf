@@ -53,6 +53,11 @@
       "card": "MD Viewer",
       "description": "Live MD Viewer with a rendered Markdown preview, split or full-width."
     },
+    "mdDiff": {
+      "nav": "MD Diff",
+      "card": "MD Diff",
+      "description": "Compare two Markdown files with md diff and citation counts."
+    },
     "jsonViewer": {
       "nav": "JSON Viewer",
       "card": "JSON Viewer",
@@ -80,6 +85,10 @@
     "mdViewer": {
       "title": "md viewer - live markdown editor online - MdPdf",
       "description": "Free MD Viewer for live Markdown preview in your browser. Split source and preview, copy, or download a .md file with this MD Viewer."
+    },
+    "mdDiff": {
+      "title": "md diff - compare markdown side by side - MdPdf",
+      "description": "Free md diff tool. Compare two Markdown files with md diff, see line numbers, and count citations in your browser."
     },
     "jsonViewer": {
       "title": "json viewer - json formatter and tree viewer online - MdPdf",
@@ -320,7 +329,8 @@
       }
     ],
     "contents": "Contents",
-    "noHeadings": "No headings"
+    "noHeadings": "No headings",
+    "lines": "{count, plural, one {# line} other {# lines}}"
   },
   "jsonViewer": {
     "h1": "JSON Viewer",
@@ -533,5 +543,53 @@
     "s12P1": "These Terms are governed by the laws applicable to the operator of MdPdf, without regard to conflict of law principles. The exact governing venue may depend on the legal entity or jurisdiction operating the Service.",
     "s13Title": "13. Contact",
     "s13P1": "If you have questions about these Terms of Service, please contact us through the contact method provided on the site."
+  },
+  "mdDiff": {
+    "h1": "MD Diff",
+    "subtitle": "Free md diff to compare two Markdown files side by side in your browser.",
+    "compare": "Compare",
+    "compareMode": "Compare mode",
+    "viewPreview": "Preview",
+    "viewSource": "Source",
+    "edit": "Edit",
+    "original": "Original",
+    "modified": "Modified",
+    "leftPlaceholder": "Paste the original Markdown…",
+    "rightPlaceholder": "Paste the Markdown to compare…",
+    "lines": "{count, plural, one {# line} other {# lines}}",
+    "citations": "{count, plural, one {# citation} other {# citations}}",
+    "numberedCitations": "Numbered citations",
+    "generatedReferences": "Generated references",
+    "intro": "Use this md diff when two Markdown drafts drifted. Paste both sides, check citation counts, and run md diff to open a fullscreen side-by-side view. Added and removed lines stay in your browser; nothing is uploaded.",
+    "whyTitle": "Why use md diff?",
+    "sideTitle": "Side-by-side md diff",
+    "sideBody": "md diff lines up both files so you can scan heading, list, and paragraph changes without flipping tabs.",
+    "citeTitle": "Citation counts",
+    "citeBody": "Each pane shows how many Markdown links md diff counts as citations, so a missing reference is easy to spot before you merge.",
+    "privateTitle": "Stays on your device",
+    "privateBody": "md diff runs in the browser. Open local .md files and compare them without uploading.",
+    "faqTitle": "md diff FAQs",
+    "faqs": [
+      {
+        "question": "Does md diff upload my Markdown?",
+        "answer": "No. md diff compares both files in your browser, so the text never leaves your device."
+      },
+      {
+        "question": "How does md diff count citations?",
+        "answer": "md diff counts unique [title](url) Markdown links the same way MD Viewer numbered citations work. Autolinks and identical URLs are not double-counted."
+      },
+      {
+        "question": "What happens when I click Compare in md diff?",
+        "answer": "md diff opens a fullscreen side-by-side preview by default, with a table of contents. Switch to Source to see line-level add and delete colors."
+      },
+      {
+        "question": "Does md diff show line numbers?",
+        "answer": "Yes. The md diff comparison shows line numbers on both sides so you can point to the exact row that changed."
+      },
+      {
+        "question": "Is md diff free?",
+        "answer": "Yes. md diff is free to use in the browser, with no account required."
+      }
+    ]
   }
 }

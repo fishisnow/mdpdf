@@ -9,11 +9,15 @@ type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSelect: (id: string) => void;
+  compact?: boolean;
 };
 
-export default function MarkdownOutline({ headings, activeId, open, onOpenChange, onSelect }: Props) {
+export default function MarkdownOutline({ headings, activeId, open, onOpenChange, onSelect, compact = false }: Props) {
   const t = useTranslations("mdViewer");
   const tCommon = useTranslations("common");
+  const itemClass = compact
+    ? "block w-full truncate rounded-none py-1 pr-2 text-left text-[11px] leading-4 transition-colors "
+    : "block w-full truncate rounded-none py-1.5 pr-3 text-left text-sm transition-colors ";
 
   if (!open) {
     return (
@@ -22,31 +26,43 @@ export default function MarkdownOutline({ headings, activeId, open, onOpenChange
         onClick={() => onOpenChange(true)}
         aria-expanded={false}
         aria-label={tCommon("expand") + " " + t("contents")}
-        className="flex h-full w-9 shrink-0 flex-col items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 py-3 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
+        className={
+          compact
+            ? "flex h-full w-6 shrink-0 flex-col items-center gap-1.5 border-r border-gray-200 bg-gray-50 py-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-800"
+            : "flex h-full w-9 shrink-0 flex-col items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 py-3 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
+        }
       >
-        <ChevronIcon className="h-3.5 w-3.5" />
-        <span className="text-[11px] font-medium tracking-wide [writing-mode:vertical-rl]">{t("contents")}</span>
+        <ChevronIcon className={compact ? "h-3 w-3" : "h-3.5 w-3.5"} />
+        <span className={compact ? "text-[10px] font-medium tracking-wide [writing-mode:vertical-rl]" : "text-[11px] font-medium tracking-wide [writing-mode:vertical-rl]"}>
+          {t("contents")}
+        </span>
       </button>
     );
   }
 
   return (
-    <aside className="flex w-56 shrink-0 flex-col overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
-      <div className="flex shrink-0 items-center justify-between gap-2 border-b border-gray-200 px-3 py-2">
-        <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{t("contents")}</span>
+    <aside
+      className={
+        compact
+          ? "flex w-32 shrink-0 flex-col overflow-hidden border-r border-gray-200 bg-gray-50"
+          : "flex w-56 shrink-0 flex-col overflow-hidden rounded-lg border border-gray-200 bg-gray-50"
+      }
+    >
+      <div className={"flex shrink-0 items-center justify-between gap-1 border-b border-gray-200 " + (compact ? "px-2 py-1.5" : "px-3 py-2")}>
+        <span className={"font-medium uppercase tracking-wide text-gray-500 " + (compact ? "text-[10px]" : "text-xs")}>{t("contents")}</span>
         <button
           type="button"
           onClick={() => onOpenChange(false)}
           aria-expanded={true}
           aria-label={tCommon("collapse") + " " + t("contents")}
-          className="rounded p-1 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700"
+          className="rounded p-0.5 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700"
         >
-          <ChevronIcon className="h-3.5 w-3.5 rotate-180" />
+          <ChevronIcon className={compact ? "h-3 w-3 rotate-180" : "h-3.5 w-3.5 rotate-180"} />
         </button>
       </div>
-      <nav className="min-h-0 flex-1 overflow-auto py-1.5" aria-label={t("contents")}>
+      <nav className={"min-h-0 flex-1 overflow-auto " + (compact ? "py-1" : "py-1.5")} aria-label={t("contents")}>
         {headings.length === 0 ? (
-          <p className="px-3 py-2 text-xs text-gray-400">{t("noHeadings")}</p>
+          <p className={"text-gray-400 " + (compact ? "px-2 py-1.5 text-[11px]" : "px-3 py-2 text-xs")}>{t("noHeadings")}</p>
         ) : (
           headings.map((heading) => {
             const active = heading.id === activeId;
@@ -57,10 +73,9 @@ export default function MarkdownOutline({ headings, activeId, open, onOpenChange
                 onClick={() => onSelect(heading.id)}
                 aria-current={active ? "true" : undefined}
                 className={
-                  "block w-full truncate rounded-none py-1.5 pr-3 text-left text-sm transition-colors " +
-                  (active ? "bg-blue-50 font-medium text-blue-700" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900")
+                  itemClass + (active ? "bg-blue-50 font-medium text-blue-700" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900")
                 }
-                style={{ paddingLeft: `${0.5 + (heading.level - 1) * 0.7}rem` }}
+                style={{ paddingLeft: `${(compact ? 0.4 : 0.5) + (heading.level - 1) * (compact ? 0.4 : 0.7)}rem` }}
                 title={heading.text}
               >
                 {heading.text}

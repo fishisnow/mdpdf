@@ -3,6 +3,7 @@ export const SITE_TOOLS = [
   { href: "/md-to-pdf", id: "mdToPdf", accent: "indigo" },
   { href: "/pdf-to-jpg", id: "pdfToJpg", accent: "sky" },
   { href: "/md-viewer", id: "mdViewer", accent: "emerald" },
+  { href: "/md-diff", id: "mdDiff", accent: "violet" },
   { href: "/json-viewer", id: "jsonViewer", accent: "amber" },
   { href: "/text-replacer", id: "textReplacer", accent: "rose" },
 ] as const;

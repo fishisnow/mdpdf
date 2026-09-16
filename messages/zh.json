@@ -53,6 +53,11 @@
       "card": "MD 查看器",
       "description": "实时 MD 查看器，支持分栏或全宽渲染 Markdown 预览。"
     },
+    "mdDiff": {
+      "nav": "MD Diff",
+      "card": "MD Diff",
+      "description": "用 md diff 对照两份 Markdown，并统计引用。"
+    },
     "jsonViewer": {
       "nav": "JSON 查看器",
       "card": "JSON 查看器",
@@ -80,6 +85,10 @@
     "mdViewer": {
       "title": "MD 查看器 - 在线实时 Markdown 编辑器 - MdPdf",
       "description": "免费 MD 查看器，在浏览器中实时预览 Markdown。可分栏查看源码与预览，也可复制或下载 .md 文件。"
+    },
+    "mdDiff": {
+      "title": "md diff - 并排对照 Markdown - MdPdf",
+      "description": "免费 md diff 工具。在浏览器中用 md diff 对照两份 Markdown，查看行号并统计引用。"
     },
     "jsonViewer": {
       "title": "JSON 查看器 - 在线 JSON 格式化与树形查看 - MdPdf",
@@ -320,7 +329,8 @@
       }
     ],
     "contents": "目录",
-    "noHeadings": "暂无标题"
+    "noHeadings": "暂无标题",
+    "lines": "{count} 行"
   },
   "jsonViewer": {
     "h1": "JSON 查看器",
@@ -533,5 +543,53 @@
     "s12P1": "本条款受 MdPdf 运营方适用法律管辖，不考虑法律冲突原则。具体管辖地可能取决于运营服务的法律实体或司法管辖区。",
     "s13Title": "13. 联系我们",
     "s13P1": "如对本服务条款有疑问，请通过网站提供的联系方式与我们联系。"
+  },
+  "mdDiff": {
+    "h1": "MD Diff",
+    "subtitle": "免费 md diff，在浏览器中并排对照两份 Markdown。",
+    "compare": "对比",
+    "compareMode": "对照方式",
+    "viewPreview": "预览",
+    "viewSource": "原文",
+    "edit": "编辑",
+    "original": "原文",
+    "modified": "对照",
+    "leftPlaceholder": "粘贴原始 Markdown…",
+    "rightPlaceholder": "粘贴要对照的 Markdown…",
+    "lines": "{count} 行",
+    "citations": "{count} 处引用",
+    "numberedCitations": "编号引用",
+    "generatedReferences": "生成的参考文献",
+    "intro": "两份 Markdown 草稿有出入时，用这个 md diff。两侧粘贴内容、查看引用计数，再运行 md diff 进入全屏并排对照。增删行都在浏览器内完成，不会上传。",
+    "whyTitle": "为什么使用 md diff？",
+    "sideTitle": "并排 md diff",
+    "sideBody": "md diff 把两份文件对齐，不用来回切换就能扫过标题、列表和段落改动。",
+    "citeTitle": "引用计数",
+    "citeBody": "每个输入框都会显示 md diff 统计到的 Markdown 链接引用数，合并前更容易发现漏掉的参考文献。",
+    "privateTitle": "留在你的设备上",
+    "privateBody": "md diff 在浏览器中运行。打开本地 .md 文件即可对照，无需上传。",
+    "faqTitle": "md diff 常见问题",
+    "faqs": [
+      {
+        "question": "md diff 会上传我的 Markdown 吗？",
+        "answer": "不会。md diff 在浏览器里对照两份文件，文本不会离开你的设备。"
+      },
+      {
+        "question": "md diff 如何统计引用？",
+        "answer": "md diff 统计不重复的 [标题](url) Markdown 链接，规则与 MD 查看器的编号引用一致。自动链接和相同 URL 不会重复计数。"
+      },
+      {
+        "question": "在 md diff 里点对比会发生什么？",
+        "answer": "md diff 默认打开全屏并排预览，并显示目录。切换到原文后，才用增删颜色标出逐行改动。"
+      },
+      {
+        "question": "md diff 会显示行号吗？",
+        "answer": "会。md diff 对照两侧都显示行号，便于指出具体改了哪一行。"
+      },
+      {
+        "question": "md diff 免费吗？",
+        "answer": "免费。可在浏览器中使用 md diff，无需账号。"
+      }
+    ]
   }
 }

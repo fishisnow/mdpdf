@@ -1,9 +1,11 @@
 import { Marked } from "marked";
 import { numberedCitationsExtension, type MarkdownCitation } from "./markdown-citations";
 import { headingIdExtension } from "./markdown-headings";
+import { enableMarkdownSourceLines } from "./markdown-source-lines";
 
 export type MarkdownToHtmlOptions = {
   numberedCitations?: boolean;
+  sourceLines?: boolean;
 };
 
 export type MarkdownDocument = {
@@ -21,6 +23,8 @@ export function parseMarkdownDocument(markdown: string, options: MarkdownToHtmlO
     parser.use(numbered.extension);
     citations = numbered.citations;
   }
+
+  if (options.sourceLines) enableMarkdownSourceLines(parser);
 
   const result = parser.parse(markdown, { async: false });
   if (typeof result !== "string") {

@@ -53,6 +53,11 @@
       "card": "MD ビューア",
       "description": "分割または全幅で Markdown をリアルタイム表示できる MD ビューアです。"
     },
+    "mdDiff": {
+      "nav": "MD Diff",
+      "card": "MD Diff",
+      "description": "md diff で 2 つの Markdown を比較し、引用数を確認します。"
+    },
     "jsonViewer": {
       "nav": "JSON ビューア",
       "card": "JSON ビューア",
@@ -80,6 +85,10 @@
     "mdViewer": {
       "title": "MD ビューア - オンライン Markdown ライブエディタ - MdPdf",
       "description": "無料の MD ビューアで、ブラウザ上のライブ Markdown プレビュー。ソースとプレビューの分割表示、コピー、.md のダウンロードが可能です。"
+    },
+    "mdDiff": {
+      "title": "md diff - Markdown を並べて比較 - MdPdf",
+      "description": "無料の md diff。ブラウザで 2 つの Markdown を比較し、行番号と引用数を確認できます。"
     },
     "jsonViewer": {
       "title": "JSON ビューア - オンライン JSON 整形・ツリー表示 - MdPdf",
@@ -320,7 +329,8 @@
       }
     ],
     "contents": "目次",
-    "noHeadings": "見出しがありません"
+    "noHeadings": "見出しがありません",
+    "lines": "{count} 行"
   },
   "jsonViewer": {
     "h1": "JSON ビューア",
@@ -533,5 +543,53 @@
     "s12P1": "本規約は、法の抵触に関する原則にかかわらず、MdPdf の運営者に適用される法令に準拠します。正確な管轄は、本サービスを運営する法人または法域により異なる場合があります。",
     "s13Title": "13. お問い合わせ",
     "s13P1": "本利用規約についてご質問がある場合は、サイトに記載の連絡方法でお問い合わせください。"
+  },
+  "mdDiff": {
+    "h1": "MD Diff",
+    "subtitle": "無料の md diff。ブラウザで 2 つの Markdown を並べて比較します。",
+    "compare": "比較",
+    "compareMode": "比較モード",
+    "viewPreview": "プレビュー",
+    "viewSource": "原文",
+    "edit": "編集",
+    "original": "元の文書",
+    "modified": "比較対象",
+    "leftPlaceholder": "元の Markdown を貼り付け…",
+    "rightPlaceholder": "比較する Markdown を貼り付け…",
+    "lines": "{count} 行",
+    "citations": "引用 {count} 件",
+    "numberedCitations": "番号付き引用",
+    "generatedReferences": "生成された参考文献",
+    "intro": "2 つの Markdown 草案がずれたときに md diff を使います。両側に貼り付け、引用数を確認し、md diff を実行して全画面の並列表示を開きます。追加・削除はブラウザ内で完結し、アップロードしません。",
+    "whyTitle": "なぜ md diff を使うのか？",
+    "sideTitle": "並列の md diff",
+    "sideBody": "md diff は両方のファイルを揃えるので、タブを切り替えずに見出し・リスト・段落の変更を確認できます。",
+    "citeTitle": "引用カウント",
+    "citeBody": "各ペインは md diff が数えた Markdown リンク引用を表示するので、マージ前に欠けた参考文献に気づきやすくなります。",
+    "privateTitle": "端末内で完結",
+    "privateBody": "md diff はブラウザで動作します。ローカルの .md を開いて比較でき、アップロードは不要です。",
+    "faqTitle": "md diff のよくある質問",
+    "faqs": [
+      {
+        "question": "md diff は Markdown をアップロードしますか？",
+        "answer": "しません。md diff はブラウザ内で比較するため、テキストは端末から出ません。"
+      },
+      {
+        "question": "md diff はどう引用を数えますか？",
+        "answer": "md diff は重複しない [title](url) リンクを、MD Viewer の番号付き引用と同じ規則で数えます。"
+      },
+      {
+        "question": "md diff で比較をクリックすると？",
+        "answer": "md diff は既定で目次つきの全画面プレビューを開きます。原文に切り替えると、追加・削除の色で行単位の差分が出ます。"
+      },
+      {
+        "question": "md diff は行番号を表示しますか？",
+        "answer": "はい。md diff の比較では両側に行番号が出るので、変わった行を指し示せます。"
+      },
+      {
+        "question": "md diff は無料ですか？",
+        "answer": "はい。アカウントなしでブラウザの md diff を無料利用できます。"
+      }
+    ]
   }
 }

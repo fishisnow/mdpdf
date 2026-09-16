@@ -6,6 +6,7 @@ const priorities: Record<(typeof PAGE_PATHS)[number], number> = {
   "/md-to-pdf": 0.9,
   "/pdf-to-jpg": 0.9,
   "/md-viewer": 0.8,
+  "/md-diff": 0.8,
   "/json-viewer": 0.8,
   "/text-replacer": 0.8,
   "/privacy-policy": 0.3,

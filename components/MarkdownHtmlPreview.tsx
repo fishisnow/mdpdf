@@ -11,8 +11,9 @@ const WORKER_THRESHOLD = 150_000;
 const PREVIEW_ROOT_CLASS =
   "markdown-preview min-h-0 flex-1 overflow-auto rounded-lg border border-gray-200 bg-white p-4 text-sm text-gray-800 contain-content sm:p-5 md:p-6";
 
-function previewRootClass(extra?: string) {
-  return extra ? `${PREVIEW_ROOT_CLASS} ${extra}` : PREVIEW_ROOT_CLASS;
+function previewRootClass(extra?: string, sourceLines?: boolean) {
+  const withLines = sourceLines ? `${PREVIEW_ROOT_CLASS} markdown-preview-lines` : PREVIEW_ROOT_CLASS;
+  return extra ? `${withLines} ${extra}` : withLines;
 }
 
 const MarkdownHtmlPreview = memo(
@@ -20,20 +21,22 @@ const MarkdownHtmlPreview = memo(
     markdown,
     className,
     numberedCitations = false,
+    sourceLines = false,
     onCitationsChange,
     containerRef,
   }: {
     markdown: string;
     className?: string;
     numberedCitations?: boolean;
+    sourceLines?: boolean;
     onCitationsChange?: (citations: MarkdownCitation[]) => void;
     containerRef?: Ref<HTMLDivElement>;
   }) {
     const smallDoc = useMemo(() => {
       if (markdown.length > WORKER_THRESHOLD) return null;
-      const parsed = parseMarkdownDocument(markdown, { numberedCitations });
+      const parsed = parseMarkdownDocument(markdown, { numberedCitations, sourceLines });
       return { html: sanitizeMarkdownHtml(parsed.html), citations: parsed.citations };
-    }, [markdown, numberedCitations]);
+    }, [markdown, numberedCitations, sourceLines]);
 
     const [largeHtml, setLargeHtml] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -58,7 +61,7 @@ const MarkdownHtmlPreview = memo(
       const runOnMainWhenIdle = () => {
         if (cancelled) return;
         try {
-          const parsed = parseMarkdownDocument(markdown, { numberedCitations });
+          const parsed = parseMarkdownDocument(markdown, { numberedCitations, sourceLines });
           const safe = sanitizeMarkdownHtml(parsed.html);
           if (!cancelled) {
             setLargeHtml(safe);
@@ -104,7 +107,7 @@ const MarkdownHtmlPreview = memo(
       };
 
       try {
-        worker.postMessage({ markdown, numberedCitations });
+        worker.postMessage({ markdown, numberedCitations, sourceLines });
       } catch {
         requestIdleCallback(runOnMainWhenIdle);
       }
@@ -113,13 +116,13 @@ const MarkdownHtmlPreview = memo(
         cancelled = true;
         worker?.terminate();
       };
-    }, [markdown, numberedCitations, onCitationsChange]);
+    }, [markdown, numberedCitations, sourceLines, onCitationsChange]);
 
     if (markdown.length <= WORKER_THRESHOLD) {
       return (
         <div
           ref={containerRef}
-          className={previewRootClass(className)}
+          className={previewRootClass(className, sourceLines)}
           dangerouslySetInnerHTML={{ __html: smallDoc?.html ?? "" }}
         />
       );
@@ -127,7 +130,7 @@ const MarkdownHtmlPreview = memo(
 
     if (error) {
       return (
-        <div ref={containerRef} className={`${previewRootClass(className)} text-red-600`}>
+        <div ref={containerRef} className={`${previewRootClass(className, sourceLines)} text-red-600`}>
           {error}
         </div>
       );
@@ -137,7 +140,7 @@ const MarkdownHtmlPreview = memo(
       return (
         <div
           ref={containerRef}
-          className={`${previewRootClass(className)} flex items-center justify-center text-gray-500`}
+          className={`${previewRootClass(className, sourceLines)} flex items-center justify-center text-gray-500`}
         >
           Rendering preview…
         </div>
@@ -145,13 +148,14 @@ const MarkdownHtmlPreview = memo(
     }
 
     return (
-      <div ref={containerRef} className={previewRootClass(className)} dangerouslySetInnerHTML={{ __html: largeHtml }} />
+      <div ref={containerRef} className={previewRootClass(className, sourceLines)} dangerouslySetInnerHTML={{ __html: largeHtml }} />
     );
   },
   (prev, next) =>
     prev.markdown === next.markdown &&
     prev.className === next.className &&
     prev.numberedCitations === next.numberedCitations &&
+    prev.sourceLines === next.sourceLines &&
     prev.onCitationsChange === next.onCitationsChange,
 );
 

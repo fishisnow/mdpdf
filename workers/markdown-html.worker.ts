@@ -2,10 +2,13 @@
 
 import { parseMarkdownDocument } from "@/lib/markdown-to-html";
 
-self.onmessage = (e: MessageEvent<{ markdown: string; numberedCitations?: boolean }>) => {
+self.onmessage = (
+  e: MessageEvent<{ markdown: string; numberedCitations?: boolean; sourceLines?: boolean }>,
+) => {
   try {
     const { html, citations } = parseMarkdownDocument(e.data.markdown, {
       numberedCitations: e.data.numberedCitations,
+      sourceLines: e.data.sourceLines,
     });
     self.postMessage({ ok: true as const, html, citations });
   } catch (err) {

@@ -10,6 +10,7 @@ import FaqList from "@/components/FaqList";
 import { trackEvent } from "@/lib/analytics";
 import type { MarkdownCitation } from "@/lib/markdown-citations";
 import { extractMarkdownHeadings } from "@/lib/markdown-headings";
+import { countLines } from "@/lib/md-diff";
 import { downloadTextFile, workspacePaneHeight } from "@/lib/tools";
 
 function PreviewLoading() {
@@ -61,7 +62,7 @@ This References heading is part of the source document. Generated citations appe
 `;
 
 const PREVIEW_CLASS =
-  "h-full min-h-0 flex-1 overflow-auto rounded-none border-0 bg-white !p-3 sm:!p-4 !shadow-none";
+  "markdown-preview-lines h-auto min-h-0 min-w-0 flex-1 !overflow-visible rounded-none border-0 bg-white !py-3 !pr-3 !pl-11 sm:!py-4 sm:!pr-4 sm:!pl-12 !shadow-none";
 
 export default function MarkdownPreviewPage() {
   const t = useTranslations("mdViewer");
@@ -82,6 +83,7 @@ export default function MarkdownPreviewPage() {
   const isSplit = viewMode === "split";
   const paneHeight = workspacePaneHeight(isFullscreen, isSplit);
   const headings = useMemo(() => extractMarkdownHeadings(markdown), [markdown]);
+  const lineCount = useMemo(() => countLines(markdown), [markdown]);
 
   const syncFullscreenState = useCallback(() => {
     const active = document.fullscreenElement === viewerRef.current;
@@ -257,15 +259,21 @@ export default function MarkdownPreviewPage() {
             )}
             <div className={isFullscreen ? "flex min-h-0 min-w-0 flex-1 flex-col" : previewColumnClass}>
               {!isFullscreen && (
-                <span className="mb-2 shrink-0 text-xs font-medium uppercase tracking-wide text-gray-500">{tCommon("preview")}</span>
+                <div className="mb-2 flex h-7 shrink-0 items-center justify-between gap-2">
+                  <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{tCommon("preview")}</span>
+                  <span className="text-xs text-gray-400">{t("lines", { count: lineCount })}</span>
+                </div>
               )}
-              <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
+              <div
+                ref={previewRef}
+                className="min-h-0 w-full flex-1 overflow-auto rounded-lg border border-gray-200 bg-white"
+              >
                 <MarkdownHtmlPreview
                   markdown={markdown}
                   className={PREVIEW_CLASS}
                   numberedCitations={numberedCitations}
+                  sourceLines
                   onCitationsChange={handleCitationsChange}
-                  containerRef={previewRef}
                 />
               </div>
             </div>

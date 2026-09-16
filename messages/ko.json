@@ -53,6 +53,11 @@
       "card": "MD 뷰어",
       "description": "분할 또는 전체 너비로 Markdown을 실시간 미리보기하는 MD 뷰어입니다."
     },
+    "mdDiff": {
+      "nav": "MD Diff",
+      "card": "MD Diff",
+      "description": "md diff 로 두 Markdown 을 비교하고 인용 수를 확인합니다."
+    },
     "jsonViewer": {
       "nav": "JSON 뷰어",
       "card": "JSON 뷰어",
@@ -80,6 +85,10 @@
     "mdViewer": {
       "title": "MD 뷰어 - 온라인 실시간 Markdown 편집기 - MdPdf",
       "description": "무료 MD 뷰어로 브라우저에서 Markdown을 실시간 미리보기하세요. 소스와 미리보기를 분할하고, 복사하거나 .md 파일을 다운로드할 수 있습니다."
+    },
+    "mdDiff": {
+      "title": "md diff - Markdown 나란히 비교 - MdPdf",
+      "description": "무료 md diff. 브라우저에서 두 Markdown 을 비교하고 줄 번호와 인용 수를 확인하세요."
     },
     "jsonViewer": {
       "title": "JSON 뷰어 - 온라인 JSON 포맷터 및 트리 보기 - MdPdf",
@@ -320,7 +329,8 @@
       }
     ],
     "contents": "목차",
-    "noHeadings": "제목 없음"
+    "noHeadings": "제목 없음",
+    "lines": "{count}줄"
   },
   "jsonViewer": {
     "h1": "JSON 뷰어",
@@ -533,5 +543,53 @@
     "s12P1": "본 약관은 법 충돌 원칙과 관계없이 MdPdf 운영자에게 적용되는 법률의 적용을 받습니다. 정확한 관할은 서비스를 운영하는 법인 또는 관할에 따라 달라질 수 있습니다.",
     "s13Title": "13. 문의",
     "s13P1": "본 서비스 약관에 대해 질문이 있으면 사이트에 안내된 연락 방법으로 문의해 주세요."
+  },
+  "mdDiff": {
+    "h1": "MD Diff",
+    "subtitle": "무료 md diff 로 브라우저에서 두 Markdown 을 나란히 비교하세요.",
+    "compare": "비교",
+    "compareMode": "비교 방식",
+    "viewPreview": "미리보기",
+    "viewSource": "원문",
+    "edit": "편집",
+    "original": "원본",
+    "modified": "비교본",
+    "leftPlaceholder": "원본 Markdown 을 붙여넣기…",
+    "rightPlaceholder": "비교할 Markdown 을 붙여넣기…",
+    "lines": "{count}줄",
+    "citations": "인용 {count}개",
+    "numberedCitations": "번호 인용",
+    "generatedReferences": "생성된 참고 문헌",
+    "intro": "두 Markdown 초안이 달라졌을 때 이 md diff 를 쓰세요. 양쪽에 붙여넣고 인용 수를 확인한 뒤 md diff 를 실행하면 전체 화면 나란히 보기가 열립니다. 추가·삭제는 브라우저에서 처리되며 업로드되지 않습니다.",
+    "whyTitle": "왜 md diff 를 쓰나요?",
+    "sideTitle": "나란히 보는 md diff",
+    "sideBody": "md diff 는 두 파일을 맞춰 주므로 탭을 오가지 않고 제목, 목록, 문단 변경을 훑을 수 있습니다.",
+    "citeTitle": "인용 수",
+    "citeBody": "각 패널은 md diff 가 센 Markdown 링크 인용 수를 보여 주어 병합 전에 빠진 참고 문헌을 찾기 쉽습니다.",
+    "privateTitle": "기기에 남습니다",
+    "privateBody": "md diff 는 브라우저에서 실행됩니다. 로컬 .md 를 열어 비교하면 되고 업로드는 없습니다.",
+    "faqTitle": "md diff FAQ",
+    "faqs": [
+      {
+        "question": "md diff 가 Markdown 을 업로드하나요?",
+        "answer": "아니요. md diff 는 브라우저에서 비교하므로 텍스트가 기기를 떠나지 않습니다."
+      },
+      {
+        "question": "md diff 는 인용을 어떻게 세나요?",
+        "answer": "md diff 는 MD Viewer 번호 인용과 같이 고유한 [제목](url) 링크를 셉니다."
+      },
+      {
+        "question": "md diff 에서 비교를 누르면?",
+        "answer": "md diff 는 기본적으로 목차가 있는 전체 화면 미리보기를 엽니다. 원문으로 바꾸면 추가·삭제 색으로 줄 단위 차이가 표시됩니다."
+      },
+      {
+        "question": "md diff 가 줄 번호를 보여 주나요?",
+        "answer": "네. md diff 비교는 양쪽에 줄 번호를 보여 정확한 행을 가리킬 수 있습니다."
+      },
+      {
+        "question": "md diff 는 무료인가요?",
+        "answer": "네. 계정 없이 브라우저에서 md diff 를 무료로 쓸 수 있습니다."
+      }
+    ]
   }
 }
