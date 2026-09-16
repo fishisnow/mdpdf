@@ -1,4 +1,5 @@
 import { parseMarkdownDocument } from "@/lib/markdown-to-html";
+import type { MarkdownCitation } from "@/lib/markdown-citations";
 
 export type DiffKind = "same" | "del" | "add" | "gap";
 
@@ -7,6 +8,13 @@ export type DiffRow = {
   rightNumber: number | null;
   leftText: string;
   rightText: string;
+  leftKind: DiffKind;
+  rightKind: DiffKind;
+};
+
+export type CitationDiffRow = {
+  left: MarkdownCitation | null;
+  right: MarkdownCitation | null;
   leftKind: DiffKind;
   rightKind: DiffKind;
 };
@@ -28,6 +36,52 @@ export function listMarkdownCitations(markdown: string) {
 
 export function countMarkdownCitations(markdown: string): number {
   return listMarkdownCitations(markdown).length;
+}
+
+/** Drop hash, query, www, and trailing slash. Host + path must still match. */
+export function normalizeCitationHref(href: string): string {
+  const trimmed = href.trim();
+  try {
+    const url = new URL(trimmed);
+    const hostname = url.hostname.replace(/^www\./i, "").toLowerCase();
+    let pathname = decodeURIComponent(url.pathname).replace(/\/{2,}/g, "/");
+    if (pathname.length > 1) pathname = pathname.replace(/\/+$/, "");
+    return `https://${hostname}${pathname || "/"}`;
+  } catch {
+    return trimmed.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/+$/, "");
+  }
+}
+
+/** Pair citations by URL only. Hash and query are ignored; different hosts stay different. */
+export function diffCitationsByUrl(left: MarkdownCitation[], right: MarkdownCitation[]): CitationDiffRow[] {
+  const rightByHref = new Map<string, MarkdownCitation>();
+  for (const citation of right) {
+    const key = normalizeCitationHref(citation.href);
+    if (!rightByHref.has(key)) rightByHref.set(key, citation);
+  }
+
+  const leftHrefs = new Set(left.map((citation) => normalizeCitationHref(citation.href)));
+  const pairedRight = new Set<MarkdownCitation>();
+  const rows: CitationDiffRow[] = [];
+
+  for (const citation of left) {
+    const match = rightByHref.get(normalizeCitationHref(citation.href));
+    if (match) {
+      if (pairedRight.has(match)) continue;
+      pairedRight.add(match);
+      rows.push({ left: citation, right: match, leftKind: "same", rightKind: "same" });
+    } else {
+      rows.push({ left: citation, right: null, leftKind: "del", rightKind: "gap" });
+    }
+  }
+
+  for (const citation of right) {
+    if (pairedRight.has(citation)) continue;
+    if (leftHrefs.has(normalizeCitationHref(citation.href))) continue;
+    rows.push({ left: null, right: citation, leftKind: "gap", rightKind: "add" });
+  }
+
+  return rows;
 }
 
 export function diffMarkdownLines(left: string, right: string): DiffRow[] {

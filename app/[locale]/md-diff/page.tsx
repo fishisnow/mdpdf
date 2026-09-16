@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { startTransition, useCallback, useEffect, useMemo, useRef, useState, type PointerEvent } from "react";
 import { useTranslations } from "next-intl";
 import MarkdownDiffPreviewView from "@/components/MarkdownDiffPreviewView";
 import MarkdownDiffView from "@/components/MarkdownDiffView";
@@ -8,7 +8,14 @@ import MoreTools from "@/components/MoreTools";
 import FaqList from "@/components/FaqList";
 import { trackEvent } from "@/lib/analytics";
 import type { MarkdownCitation } from "@/lib/markdown-citations";
-import { countLines, countMarkdownCitations, diffMarkdownLines, listMarkdownCitations } from "@/lib/md-diff";
+import {
+  countLines,
+  countMarkdownCitations,
+  diffMarkdownLines,
+  listMarkdownCitations,
+  normalizeCitationHref,
+  type DiffKind,
+} from "@/lib/md-diff";
 import { workspacePaneHeight } from "@/lib/tools";
 
 type CompareMode = "preview" | "source";
@@ -40,6 +47,7 @@ export default function MdDiffPage() {
   const [compareMode, setCompareMode] = useState<CompareMode>("preview");
   const [numberedCitations, setNumberedCitations] = useState(true);
   const [referencesOpen, setReferencesOpen] = useState(true);
+  const [referencesHeight, setReferencesHeight] = useState(176);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const viewerRef = useRef<HTMLDivElement | null>(null);
   const leftFileRef = useRef<HTMLInputElement | null>(null);
@@ -167,8 +175,8 @@ export default function MdDiffPage() {
             </div>
           </div>
 
-          {comparing ? (
-            <div className={`flex min-h-0 flex-col ${paneHeight}`}>
+          <div className={`flex min-h-0 flex-col ${paneHeight}`}>
+            {comparing ? (
               <div className="flex min-h-0 flex-1 flex-col">
                 {compareMode === "preview" ? (
                   <MarkdownDiffPreviewView
@@ -180,20 +188,8 @@ export default function MdDiffPage() {
                   <MarkdownDiffView rows={rows} />
                 )}
               </div>
-              {numberedCitations ? (
-                <GeneratedReferences
-                  left={leftCitationList}
-                  right={rightCitationList}
-                  title={t("generatedReferences")}
-                  collapsible
-                  open={referencesOpen}
-                  onOpenChange={setReferencesOpen}
-                />
-              ) : null}
-            </div>
-          ) : (
-            <>
-              <div className="grid min-h-0 gap-4 md:grid-cols-2 md:gap-6">
+            ) : (
+              <div className="grid min-h-0 flex-1 gap-4 md:grid-cols-2 md:gap-6">
                 <EditorPane
                   label={t("original")}
                   value={left}
@@ -203,7 +199,6 @@ export default function MdDiffPage() {
                   openLabel={tCommon("openFile")}
                   onOpen={() => leftFileRef.current?.click()}
                   placeholder={t("leftPlaceholder")}
-                  paneHeight={paneHeight}
                 />
                 <EditorPane
                   label={t("modified")}
@@ -214,18 +209,23 @@ export default function MdDiffPage() {
                   openLabel={tCommon("openFile")}
                   onOpen={() => rightFileRef.current?.click()}
                   placeholder={t("rightPlaceholder")}
-                  paneHeight={paneHeight}
                 />
               </div>
-              {numberedCitations ? (
-                <GeneratedReferences
-                  left={leftCitationList}
-                  right={rightCitationList}
-                  title={t("generatedReferences")}
-                />
-              ) : null}
-            </>
-          )}
+            )}
+            {numberedCitations ? (
+              <GeneratedReferences
+                left={leftCitationList}
+                right={rightCitationList}
+                title={t("generatedReferences")}
+                collapsible={comparing}
+                open={referencesOpen}
+                onOpenChange={setReferencesOpen}
+                highlight={comparing && compareMode === "source"}
+                height={referencesHeight}
+                onHeightChange={setReferencesHeight}
+              />
+            ) : null}
+          </div>
         </div>
       </div>
 
@@ -268,6 +268,9 @@ function GeneratedReferences({
   collapsible = false,
   open = true,
   onOpenChange,
+  highlight = false,
+  height,
+  onHeightChange,
 }: {
   left: MarkdownCitation[];
   right: MarkdownCitation[];
@@ -275,56 +278,137 @@ function GeneratedReferences({
   collapsible?: boolean;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  highlight?: boolean;
+  height: number;
+  onHeightChange: (height: number) => void;
 }) {
+  const asideRef = useRef<HTMLElement | null>(null);
+  const drag = useRef<{ startY: number; startHeight: number } | null>(null);
+
   if (left.length === 0 && right.length === 0) return null;
   const expanded = !collapsible || open;
 
+  const onPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.currentTarget.setPointerCapture(event.pointerId);
+    drag.current = { startY: event.clientY, startHeight: height };
+    if (!expanded) onOpenChange?.(true);
+  };
+
+  const onPointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (!drag.current) return;
+    const parentHeight = asideRef.current?.parentElement?.clientHeight ?? 640;
+    const maxHeight = Math.max(120, parentHeight - 160);
+    const next = drag.current.startHeight + (drag.current.startY - event.clientY);
+    onHeightChange(Math.min(maxHeight, Math.max(120, next)));
+  };
+
+  const onPointerUp = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    drag.current = null;
+  };
+
   return (
-    <aside className="mt-3 shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+    <aside
+      ref={asideRef}
+      style={expanded ? { height } : undefined}
+      className="relative mt-3 flex shrink-0 flex-col overflow-hidden rounded-lg border border-gray-200 bg-gray-50"
+    >
+      <div
+        role="separator"
+        aria-orientation="horizontal"
+        aria-label={title}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        className="absolute inset-x-0 top-0 z-10 flex h-2 cursor-ns-resize items-start justify-center touch-none"
+      >
+        <span className="mt-0.5 h-1 w-8 rounded-full bg-gray-300" />
+      </div>
       {collapsible ? (
         <button
           type="button"
           onClick={() => onOpenChange?.(!open)}
           aria-expanded={expanded}
-          className="flex w-full items-center justify-between gap-3 px-4 py-2 text-left transition-colors hover:bg-gray-100"
+          className="flex h-9 shrink-0 items-center justify-between gap-3 px-4 pt-1 text-left transition-colors hover:bg-gray-100"
         >
           <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{title}</span>
           <span className="text-lg leading-none text-gray-400">{expanded ? "−" : "+"}</span>
         </button>
       ) : (
-        <div className="border-b border-gray-200 px-4 py-2">
+        <div className="flex h-9 shrink-0 items-center border-b border-gray-200 px-4 pt-1">
           <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{title}</span>
         </div>
       )}
       <div
         className={
-          "grid grid-cols-1 md:grid-cols-2 md:divide-x md:divide-gray-200 " +
+          "min-h-0 flex-1 overflow-auto " +
           (expanded ? "" : "hidden") +
-          (collapsible && expanded ? "border-t border-gray-200" : "")
+          (collapsible && expanded ? " border-t border-gray-200" : "")
         }
       >
-        <CitationColumn citations={left} />
-        <CitationColumn citations={right} />
+        {highlight ? (
+          <div className="grid min-h-full content-start grid-cols-1 md:grid-cols-2 md:divide-x md:divide-gray-200">
+            <CitationColumn citations={left} other={right} side="left" />
+            <CitationColumn citations={right} other={left} side="right" />
+          </div>
+        ) : (
+          <div className="grid min-h-full grid-cols-1 md:grid-cols-2 md:divide-x md:divide-gray-200">
+            <CitationColumn citations={left} />
+            <CitationColumn citations={right} />
+          </div>
+        )}
       </div>
     </aside>
   );
 }
 
-function CitationColumn({ citations }: { citations: MarkdownCitation[] }) {
+const citationKindClass: Record<Exclude<DiffKind, "gap">, string> = {
+  same: "bg-white text-gray-800",
+  del: "bg-red-50 text-red-900",
+  add: "bg-emerald-50 text-emerald-900",
+};
+
+function citationKind(href: string, other: MarkdownCitation[], side: "left" | "right"): Exclude<DiffKind, "gap"> {
+  const key = normalizeCitationHref(href);
+  const matched = other.some((citation) => normalizeCitationHref(citation.href) === key);
+  if (matched) return "same";
+  return side === "right" ? "add" : "del";
+}
+
+function CitationColumn({
+  citations,
+  other,
+  side,
+}: {
+  citations: MarkdownCitation[];
+  other?: MarkdownCitation[];
+  side?: "left" | "right";
+}) {
   if (citations.length === 0) {
     return <div className="min-h-10 px-4 py-3" />;
   }
 
   return (
-    <ol className="max-h-40 space-y-2 overflow-auto px-4 py-3 text-sm text-gray-800">
-      {citations.map((citation) => (
-        <li key={`${citation.index}-${citation.href}`} className="leading-6">
-          <span className="mr-1.5 font-semibold text-gray-700">[{citation.index}]</span>
-          <a href={citation.href} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-            {citation.label}
-          </a>
-        </li>
-      ))}
+    <ol className="min-h-full">
+      {citations.map((citation) => {
+        const kind = other && side ? citationKind(citation.href, other, side) : "same";
+        return (
+          <li
+            key={`${citation.index}-${citation.href}`}
+            className={`px-4 py-2 text-sm leading-6 ${citationKindClass[kind]}`}
+          >
+            <span className="mr-1.5 font-semibold text-gray-700">[{citation.index}]</span>
+            <a href={citation.href} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+              {citation.label}
+            </a>
+            <div className="mt-0.5 break-all text-[11px] leading-4 opacity-70">{citation.href}</div>
+          </li>
+        );
+      })}
     </ol>
   );
 }
@@ -378,7 +462,6 @@ function EditorPane({
   openLabel,
   onOpen,
   placeholder,
-  paneHeight,
 }: {
   label: string;
   value: string;
@@ -388,10 +471,9 @@ function EditorPane({
   openLabel: string;
   onOpen: () => void;
   placeholder: string;
-  paneHeight: string;
 }) {
   return (
-    <div className={`flex min-h-0 flex-col ${paneHeight}`}>
+    <div className="flex min-h-0 min-w-0 flex-1 flex-col">
       <div className="mb-2 flex h-7 shrink-0 items-center justify-between gap-2">
         <div className="flex min-w-0 items-baseline gap-2">
           <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{label}</span>
