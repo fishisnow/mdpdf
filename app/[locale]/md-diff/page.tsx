@@ -112,14 +112,14 @@ export default function MdDiffPage() {
   return (
     <main className="mx-auto w-full max-w-[90rem] px-4 py-8 sm:px-6 sm:py-10 md:py-12">
       <div className="mb-8 text-center sm:mb-10">
-        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">{t("h1")}</h1>
-        <p className="mx-auto text-base text-gray-500 sm:text-lg md:whitespace-nowrap">{t("subtitle")}</p>
+        <h1 className="mb-3 text-3xl font-heading sm:text-4xl">{t("h1")}</h1>
+        <p className="mx-auto text-base text-foreground/70 sm:text-lg md:whitespace-nowrap">{t("subtitle")}</p>
       </div>
 
-      <div className="mb-12 flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:gap-6 sm:p-6 md:mb-16 md:p-8">
+      <div className="mb-12 flex flex-col gap-5 neo-panel p-5 sm:gap-6 sm:p-6 md:mb-16 md:p-8">
         <div
           ref={viewerRef}
-          className="flex min-h-0 flex-col [&:fullscreen]:box-border [&:fullscreen]:size-full [&:fullscreen]:min-h-0 [&:fullscreen]:bg-white [&:fullscreen]:p-4 sm:[&:fullscreen]:p-6"
+          className="flex min-h-0 flex-col [&:fullscreen]:box-border [&:fullscreen]:size-full [&:fullscreen]:min-h-0 [&:fullscreen]:bg-secondary-background [&:fullscreen]:p-4 sm:[&:fullscreen]:p-6"
         >
           <input
             ref={leftFileRef}
@@ -145,12 +145,12 @@ export default function MdDiffPage() {
           />
 
           <div className="mb-3 flex shrink-0 flex-wrap items-center justify-between gap-2">
-            <label className="inline-flex items-center gap-2 text-sm text-gray-700">
+            <label className="inline-flex items-center gap-2 text-sm text-foreground/80">
               <input
                 type="checkbox"
                 checked={numberedCitations}
                 onChange={(event) => setNumberedCitations(event.target.checked)}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-border text-foreground underline decoration-2 focus:ring-black"
               />
               {t("numberedCitations")}
             </label>
@@ -160,7 +160,7 @@ export default function MdDiffPage() {
                 <button
                   type="button"
                   onClick={exitCompare}
-                  className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50"
+                  className="rounded-base border-2 border-border bg-secondary-background px-3 py-2 text-sm shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none"
                 >
                   {isFullscreen ? tCommon("exit") : t("edit")}
                 </button>
@@ -168,7 +168,7 @@ export default function MdDiffPage() {
                 <button
                   type="button"
                   onClick={enterCompare}
-                  className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+                  className="rounded-base border-2 border-border bg-main px-3 py-2 text-sm font-base text-main-foreground shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none"
                 >
                   {t("compare")}
                 </button>
@@ -230,24 +230,24 @@ export default function MdDiffPage() {
         </div>
       </div>
 
-      <p className="mx-auto mb-12 max-w-4xl text-center text-sm leading-relaxed text-gray-600 sm:mb-16 sm:text-base">
+      <p className="mx-auto mb-12 max-w-4xl text-center text-sm leading-relaxed text-foreground/80 sm:mb-16 sm:text-base">
         {t("intro")}
       </p>
 
       <section className="mb-12 sm:mb-16">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">{t("whyTitle")}</h2>
+        <h2 className="mb-6 text-center text-2xl font-heading sm:mb-8">{t("whyTitle")}</h2>
         <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
-          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("sideTitle")}</h3>
-            <p className="text-sm leading-relaxed text-gray-600">{t("sideBody")}</p>
+          <div className="neo-panel p-5 sm:p-6">
+            <h3 className="mb-2 text-lg font-heading">{t("sideTitle")}</h3>
+            <p className="text-sm leading-relaxed text-foreground/80">{t("sideBody")}</p>
           </div>
-          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("citeTitle")}</h3>
-            <p className="text-sm leading-relaxed text-gray-600">{t("citeBody")}</p>
+          <div className="neo-panel p-5 sm:p-6">
+            <h3 className="mb-2 text-lg font-heading">{t("citeTitle")}</h3>
+            <p className="text-sm leading-relaxed text-foreground/80">{t("citeBody")}</p>
           </div>
-          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("privateTitle")}</h3>
-            <p className="text-sm leading-relaxed text-gray-600">{t("privateBody")}</p>
+          <div className="neo-panel p-5 sm:p-6">
+            <h3 className="mb-2 text-lg font-heading">{t("privateTitle")}</h3>
+            <p className="text-sm leading-relaxed text-foreground/80">{t("privateBody")}</p>
           </div>
         </div>
       </section>
@@ -255,7 +255,7 @@ export default function MdDiffPage() {
       <SeoSections className="mb-12 sm:mb-16" sections={t.raw("seoSections") as SeoSection[]} />
 
       <section className="mb-12 sm:mb-16">
-        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">{t("faqTitle")}</h2>
+        <h2 className="mb-4 text-center text-2xl font-heading">{t("faqTitle")}</h2>
         <FaqList items={t.raw("faqs")} />
       </section>
 
@@ -317,7 +317,7 @@ function GeneratedReferences({
     <aside
       ref={asideRef}
       style={expanded ? { height } : undefined}
-      className="relative mt-3 flex shrink-0 flex-col overflow-hidden rounded-lg border border-gray-200 bg-gray-50"
+      className="relative mt-3 flex shrink-0 flex-col overflow-hidden rounded-lg border border-border bg-background"
     >
       <div
         role="separator"
@@ -338,19 +338,19 @@ function GeneratedReferences({
           aria-expanded={expanded}
           className="flex h-9 shrink-0 items-center justify-between gap-3 px-4 pt-1 text-left transition-colors hover:bg-gray-100"
         >
-          <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{title}</span>
-          <span className="text-lg leading-none text-gray-400">{expanded ? "−" : "+"}</span>
+          <span className="text-xs font-medium uppercase tracking-wide text-foreground/60">{title}</span>
+          <span className="text-lg leading-none text-foreground/50">{expanded ? "−" : "+"}</span>
         </button>
       ) : (
-        <div className="flex h-9 shrink-0 items-center border-b border-gray-200 px-4 pt-1">
-          <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{title}</span>
+        <div className="flex h-9 shrink-0 items-center border-b border-border px-4 pt-1">
+          <span className="text-xs font-medium uppercase tracking-wide text-foreground/60">{title}</span>
         </div>
       )}
       <div
         className={
           "min-h-0 flex-1 overflow-auto " +
           (expanded ? "" : "hidden") +
-          (collapsible && expanded ? " border-t border-gray-200" : "")
+          (collapsible && expanded ? " border-t border-border" : "")
         }
       >
         {highlight ? (
@@ -370,7 +370,7 @@ function GeneratedReferences({
 }
 
 const citationKindClass: Record<Exclude<DiffKind, "gap">, string> = {
-  same: "bg-white text-gray-800",
+  same: "bg-secondary-background text-foreground",
   del: "bg-red-50 text-red-900",
   add: "bg-emerald-50 text-emerald-900",
 };
@@ -404,8 +404,8 @@ function CitationColumn({
             key={`${citation.index}-${citation.href}`}
             className={`px-4 py-2 text-sm leading-6 ${citationKindClass[kind]}`}
           >
-            <span className="mr-1.5 font-semibold text-gray-700">[{citation.index}]</span>
-            <a href={citation.href} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+            <span className="mr-1.5 font-semibold text-foreground/80">[{citation.index}]</span>
+            <a href={citation.href} target="_blank" rel="noopener noreferrer" className="text-foreground underline decoration-2 hover:underline">
               {citation.label}
             </a>
             <div className="mt-0.5 break-all text-[11px] leading-4 opacity-70">{citation.href}</div>
@@ -431,7 +431,7 @@ function CompareModeToggle({
 
   return (
     <div
-      className="inline-flex rounded-lg border border-gray-200 bg-gray-50 p-0.5"
+      className="inline-flex rounded-base border-2 border-border bg-background p-0.5"
       role="group"
       aria-label={t("compareMode")}
     >
@@ -445,7 +445,7 @@ function CompareModeToggle({
             onClick={() => onChange(option.id)}
             className={
               "rounded-md px-3 py-1.5 text-sm font-medium transition-colors " +
-              (active ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-900")
+              (active ? "bg-secondary-background text-foreground shadow-sm" : "text-foreground/70 hover:text-foreground")
             }
           >
             {option.label}
@@ -479,12 +479,12 @@ function EditorPane({
     <div className="flex min-h-0 min-w-0 flex-1 flex-col">
       <div className="mb-2 flex h-7 shrink-0 items-center justify-between gap-2">
         <div className="flex min-w-0 items-baseline gap-2">
-          <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{label}</span>
-          <span className="truncate text-xs text-gray-400">
+          <span className="text-xs font-medium uppercase tracking-wide text-foreground/60">{label}</span>
+          <span className="truncate text-xs text-foreground/50">
             {lineLabel} · {citationLabel}
           </span>
         </div>
-        <button type="button" onClick={onOpen} className="text-xs text-blue-600 hover:underline">
+        <button type="button" onClick={onOpen} className="text-xs text-foreground underline decoration-2 hover:underline">
           {openLabel}
         </button>
       </div>
@@ -493,7 +493,7 @@ function EditorPane({
         onChange={(event) => onChange(event.target.value)}
         spellCheck={false}
         placeholder={placeholder}
-        className="min-h-0 w-full flex-1 resize-none rounded-lg border border-gray-200 bg-gray-50 p-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:p-4"
+        className="min-h-0 w-full flex-1 resize-none rounded-base border-2 border-border bg-secondary-background p-3 font-mono text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black sm:p-4"
       />
     </div>
   );

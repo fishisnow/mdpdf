@@ -4,10 +4,10 @@ import { useCallback, useRef, type RefObject } from "react";
 import type { DiffKind, DiffRow } from "@/lib/md-diff";
 
 const kindClass: Record<DiffKind, string> = {
-  same: "bg-white text-gray-800",
+  same: "bg-secondary-background text-foreground",
   del: "bg-red-50 text-red-900",
   add: "bg-emerald-50 text-emerald-900",
-  gap: "bg-gray-50 text-gray-300",
+  gap: "bg-background text-foreground/30",
 };
 
 type Props = {
@@ -59,7 +59,7 @@ function DiffPane({
         const kind = side === "left" ? row.leftKind : row.rightKind;
         return (
           <div key={`${side}-${index}`} className={`flex min-h-6 ${kindClass[kind]}`}>
-            <span className="w-10 shrink-0 select-none border-r border-gray-200/80 px-1.5 text-right text-[11px] text-gray-400">
+            <span className="w-10 shrink-0 select-none border-r border-border/80 px-1.5 text-right text-[11px] text-foreground/50">
               {number ?? ""}
             </span>
             <pre className="min-w-0 flex-1 overflow-x-auto whitespace-pre-wrap break-all px-2 py-0.5">{text || " "}</pre>

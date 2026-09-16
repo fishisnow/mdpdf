@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 type FaqItem = {
   question: string;
@@ -8,24 +8,16 @@ type FaqItem = {
 };
 
 export default function FaqList({ items }: { items: FaqItem[] }) {
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  if (!items?.length) return null;
 
   return (
-    <div className="mx-auto max-w-3xl space-y-4">
-      {items.map((faq, index) => (
-        <div key={faq.question} className="overflow-hidden rounded-lg border border-gray-200 bg-white">
-          <button
-            className="flex w-full items-start justify-between gap-4 px-4 py-4 text-start transition-colors hover:bg-gray-50 sm:px-6"
-            onClick={() => setOpenFaq(openFaq === index ? null : index)}
-          >
-            <span className="font-medium text-gray-900">{faq.question}</span>
-            <span className="ms-auto shrink-0 text-xl text-gray-400">{openFaq === index ? "−" : "+"}</span>
-          </button>
-          <div className={openFaq === index ? "px-4 pb-4 text-sm leading-relaxed text-gray-600 sm:px-6" : "hidden"}>
-            {faq.answer}
-          </div>
-        </div>
+    <Accordion className="mx-auto flex max-w-3xl flex-col gap-4" defaultValue={[items[0].question]}>
+      {items.map((faq) => (
+        <AccordionItem key={faq.question} value={faq.question}>
+          <AccordionTrigger>{faq.question}</AccordionTrigger>
+          <AccordionContent>{faq.answer}</AccordionContent>
+        </AccordionItem>
       ))}
-    </div>
+    </Accordion>
   );
 }

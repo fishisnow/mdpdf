@@ -9,7 +9,7 @@ import { sanitizeMarkdownHtml } from "@/lib/sanitize-markdown-html";
 const WORKER_THRESHOLD = 150_000;
 
 const PREVIEW_ROOT_CLASS =
-  "markdown-preview min-h-0 flex-1 overflow-auto rounded-lg border border-gray-200 bg-white p-4 text-sm text-gray-800 contain-content sm:p-5 md:p-6";
+  "markdown-preview min-h-0 flex-1 overflow-auto rounded-lg border border-border bg-secondary-background p-4 text-sm text-foreground contain-content sm:p-5 md:p-6";
 
 function previewRootClass(extra?: string, sourceLines?: boolean) {
   const withLines = sourceLines ? `${PREVIEW_ROOT_CLASS} markdown-preview-lines` : PREVIEW_ROOT_CLASS;
@@ -140,7 +140,7 @@ const MarkdownHtmlPreview = memo(
       return (
         <div
           ref={containerRef}
-          className={`${previewRootClass(className, sourceLines)} flex items-center justify-center text-gray-500`}
+          className={`${previewRootClass(className, sourceLines)} flex items-center justify-center text-foreground/60`}
         >
           Rendering preview…
         </div>

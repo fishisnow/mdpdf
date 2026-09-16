@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import MarkdownHtmlPreview from "@/components/MarkdownHtmlPreview";
 import SourceTextarea from "@/components/SourceTextarea";
 import ViewModeToggle, { type ResultViewMode } from "@/components/ViewModeToggle";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   markdown: string;
@@ -87,51 +88,35 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-lg font-semibold text-gray-700">{t("result")}</h2>
+        <h2 className="text-lg font-heading">{t("result")}</h2>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
           {viewToggle}
           {!isFullscreen && (
-            <button
-              type="button"
-              onClick={handleFullscreenToggle}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50 sm:w-auto"
-            >
+            <Button type="button" variant="neutral" onClick={handleFullscreenToggle} className="w-full sm:w-auto">
               {t("fullscreen")}
-            </button>
+            </Button>
           )}
-          <button
-            type="button"
-            onClick={handleDownload}
-            className="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-700 sm:w-auto"
-          >
+          <Button type="button" onClick={handleDownload} className="w-full sm:w-auto">
             {t("downloadMd")}
-          </button>
+          </Button>
         </div>
       </div>
 
       <div
         ref={viewerRef}
-        className="flex min-h-0 flex-col [&:fullscreen]:box-border [&:fullscreen]:size-full [&:fullscreen]:min-h-0 [&:fullscreen]:bg-white [&:fullscreen]:p-4 sm:[&:fullscreen]:p-6"
+        className="flex min-h-0 flex-col [&:fullscreen]:box-border [&:fullscreen]:size-full [&:fullscreen]:min-h-0 [&:fullscreen]:bg-secondary-background [&:fullscreen]:p-4 sm:[&:fullscreen]:p-6"
       >
         {isFullscreen && (
-          <div className="mb-3 flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-gray-200 pb-3">
-            <span className="text-sm font-medium text-gray-700">{t("sourceAndPreview")}</span>
+          <div className="mb-3 flex shrink-0 flex-wrap items-center justify-between gap-2 border-b-2 border-border pb-3">
+            <span className="text-sm font-heading">{t("sourceAndPreview")}</span>
             <div className="flex flex-wrap items-center gap-2">
               {viewToggle}
-              <button
-                type="button"
-                onClick={handleDownload}
-                className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-blue-700"
-              >
+              <Button type="button" size="sm" onClick={handleDownload}>
                 {t("downloadMd")}
-              </button>
-              <button
-                type="button"
-                onClick={handleFullscreenToggle}
-                className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50"
-              >
+              </Button>
+              <Button type="button" size="sm" variant="neutral" onClick={handleFullscreenToggle}>
                 {t("exitFullscreen")}
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -145,29 +130,21 @@ export default function MarkdownPreview({ markdown, filename, onDownload }: Prop
           {isSplit && (
             <div className={paneShellClass}>
               <div className="mb-2 flex items-center justify-between gap-2">
-                <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{t("source")}</span>
-                <button
-                  type="button"
-                  onClick={handleCopy}
-                  className="rounded bg-gray-700 px-3 py-1 text-xs text-gray-300 transition-colors hover:bg-gray-600"
-                >
+                <span className="text-xs font-heading uppercase tracking-wide">{t("source")}</span>
+                <Button type="button" size="xs" variant="neutral" onClick={handleCopy}>
                   {copyState === "copied" ? t("copied") : t("copy")}
-                </button>
+                </Button>
               </div>
               <SourceTextarea markdown={markdown} />
             </div>
           )}
           <div className={paneShellClass}>
             <div className="mb-2 flex items-center justify-between gap-2">
-              <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{t("preview")}</span>
+              <span className="text-xs font-heading uppercase tracking-wide">{t("preview")}</span>
               {!isSplit && (
-                <button
-                  type="button"
-                  onClick={handleCopy}
-                  className="rounded bg-gray-700 px-3 py-1 text-xs text-gray-300 transition-colors hover:bg-gray-600"
-                >
+                <Button type="button" size="xs" variant="neutral" onClick={handleCopy}>
                   {copyState === "copied" ? t("copied") : t("copy")}
-                </button>
+                </Button>
               )}
             </div>
             <MarkdownHtmlPreview markdown={markdown} />

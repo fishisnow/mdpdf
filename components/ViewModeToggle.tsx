@@ -2,6 +2,8 @@
 
 import { useTranslations } from "next-intl";
 
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+
 export type ResultViewMode = "split" | "preview";
 
 interface Props {
@@ -11,36 +13,20 @@ interface Props {
 
 export default function ViewModeToggle({ value, onChange }: Props) {
   const t = useTranslations("viewMode");
-  const options: { id: ResultViewMode; label: string }[] = [
-    { id: "split", label: t("split") },
-    { id: "preview", label: t("preview") },
-  ];
 
   return (
-    <div
-      className="inline-flex rounded-lg border border-gray-200 bg-gray-50 p-0.5"
-      role="group"
+    <ToggleGroup
+      value={[value]}
+      onValueChange={(next) => {
+        const mode = next[0];
+        if (mode === "split" || mode === "preview") onChange(mode);
+      }}
+      spacing={0}
+      size="sm"
       aria-label={t("label")}
     >
-      {options.map((option) => {
-        const active = value === option.id;
-        return (
-          <button
-            key={option.id}
-            type="button"
-            aria-pressed={active}
-            onClick={() => onChange(option.id)}
-            className={
-              "rounded-md px-3 py-1.5 text-sm font-medium transition-colors " +
-              (active
-                ? "bg-white text-gray-900 shadow-sm"
-                : "text-gray-600 hover:text-gray-900")
-            }
-          >
-            {option.label}
-          </button>
-        );
-      })}
-    </div>
+      <ToggleGroupItem value="split">{t("split")}</ToggleGroupItem>
+      <ToggleGroupItem value="preview">{t("preview")}</ToggleGroupItem>
+    </ToggleGroup>
   );
 }

@@ -22,7 +22,7 @@ function JsonPrimitive({ value }: { value: unknown }) {
   if (typeof value === "string") {
     return <span className="text-emerald-700">{quote(value)}</span>;
   }
-  return <span className="text-gray-500">null</span>;
+  return <span className="text-foreground/60">null</span>;
 }
 
 function JsonNode({
@@ -111,7 +111,7 @@ function JsonFormattedView({
   onDelete?: (path: JsonPath) => void;
 }) {
   return (
-    <div className="min-h-0 flex-1 overflow-auto whitespace-pre-wrap break-words rounded-lg border border-gray-200 bg-white p-3 font-mono text-[13px] leading-6 text-gray-800 sm:p-4">
+    <div className="min-h-0 flex-1 overflow-auto whitespace-pre-wrap break-words rounded-lg border border-border bg-secondary-background p-3 font-mono text-[13px] leading-6 text-foreground sm:p-4">
       <JsonNode value={value} indent={0} path={[]} onDelete={onDelete} />
     </div>
   );

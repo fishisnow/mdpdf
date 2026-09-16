@@ -12,7 +12,7 @@ import SeoSections, { type SeoSection } from "@/components/SeoSections";
 function PreviewLoading() {
   const tCommon = useTranslations("common");
   return (
-    <div className="flex h-full min-h-[200px] items-center justify-center rounded-lg border border-dashed border-gray-200 bg-gray-50 text-sm text-gray-500">
+    <div className="flex h-full min-h-[200px] items-center justify-center rounded-base border-2 border-dashed border-border bg-background text-sm text-foreground/70">
       {tCommon("loadingPreview")}
     </div>
   );
@@ -53,7 +53,7 @@ End of document.`;
 
 /** 嵌在带边框的 shell 内：用 !padding 覆盖 MarkdownHtmlPreview 默认大内边距，避免「边框离正文过远」 */
 const MD_TO_PDF_PREVIEW_CLASS =
-  "h-full min-h-0 flex-1 overflow-auto rounded-none border-0 bg-white !p-3 sm:!p-4 !shadow-none";
+  "h-full min-h-0 flex-1 overflow-auto rounded-none border-0 bg-secondary-background !p-3 sm:!p-4 !shadow-none";
 
 export default function MdToPdfPage() {
   const t = useTranslations("mdToPdf");
@@ -148,39 +148,39 @@ export default function MdToPdfPage() {
   const previewColumnClass = `flex min-h-0 flex-col print:h-auto print:min-h-0 print:max-h-none print:overflow-visible ${splitColumnHeights}`;
 
   const previewShellClass =
-    "print-document-shell flex w-full min-h-0 flex-1 flex-col overflow-y-auto rounded-lg border border-gray-200 bg-white p-0 print:h-auto print:min-h-0 print:max-h-none print:overflow-visible print:rounded-none print:border-0 print:bg-transparent print:p-0 " +
+    "print-document-shell flex w-full min-h-0 flex-1 flex-col overflow-y-auto rounded-lg border border-border bg-secondary-background p-0 print:h-auto print:min-h-0 print:max-h-none print:overflow-visible print:rounded-none print:border-0 print:bg-transparent print:p-0 " +
     (isFullscreen ? "min-h-0" : "");
 
   return (
     <main className="mx-auto w-full max-w-[90rem] px-4 py-8 print:block print:h-auto print:max-h-none print:overflow-visible sm:px-6 sm:py-10 md:py-12">
       <div className="mb-8 text-center print:hidden sm:mb-10">
-        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">{t("h1")}</h1>
-        <p className="mx-auto text-base text-gray-500 sm:text-lg md:whitespace-nowrap">
+        <h1 className="mb-3 text-3xl font-heading sm:text-4xl">{t("h1")}</h1>
+        <p className="mx-auto text-base text-foreground/70 sm:text-lg md:whitespace-nowrap">
           {t("subtitle")}
         </p>
       </div>
 
-      <div className="mb-12 flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm print:mb-0 print:block print:h-auto print:max-h-none print:overflow-visible print:rounded-none print:border-0 print:bg-transparent print:p-0 print:shadow-none sm:gap-6 sm:p-6 md:mb-16 md:p-8">
+      <div className="mb-12 flex flex-col gap-5 neo-panel p-5 print:mb-0 print:block print:h-auto print:max-h-none print:overflow-visible print:rounded-none print:border-0 print:bg-transparent print:p-0 print:shadow-none sm:gap-6 sm:p-6 md:mb-16 md:p-8">
         <div
           ref={viewerRef}
           className={
             "flex min-h-0 flex-col print:h-auto print:min-h-0 print:max-h-none print:overflow-visible " +
-            "[&:fullscreen]:box-border [&:fullscreen]:size-full [&:fullscreen]:min-h-0 [&:fullscreen]:bg-white [&:fullscreen]:p-4 sm:[&:fullscreen]:p-6"
+            "[&:fullscreen]:box-border [&:fullscreen]:size-full [&:fullscreen]:min-h-0 [&:fullscreen]:bg-secondary-background [&:fullscreen]:p-4 sm:[&:fullscreen]:p-6"
           }
         >
           {errorMessage && (
-            <div className="mb-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700 print:hidden">
+            <div className="mb-3 rounded-base border-2 border-border bg-chart-2 p-3 text-sm font-base shadow-shadow print:hidden">
               {errorMessage}
             </div>
           )}
 
           {isFullscreen && (
-            <div className="mb-3 flex shrink-0 flex-col gap-3 border-b border-gray-200 pb-3 print:hidden sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-              <span className="text-sm font-medium text-gray-700">{tCommon("writeAndPreview")}</span>
+            <div className="mb-3 flex shrink-0 flex-col gap-3 border-b border-border pb-3 print:hidden sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+              <span className="text-sm font-heading">{tCommon("writeAndPreview")}</span>
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end sm:gap-2">
                 <ViewModeToggle value={viewMode} onChange={setViewMode} />
                 <div className="flex min-w-0 flex-wrap items-center gap-2">
-                  <label className="shrink-0 text-xs text-gray-600 sm:text-sm" htmlFor="md-pdf-filename-fs">
+                  <label className="shrink-0 text-xs text-foreground/70 sm:text-sm" htmlFor="md-pdf-filename-fs">
                     {tCommon("filename")}
                   </label>
                   <input
@@ -188,17 +188,17 @@ export default function MdToPdfPage() {
                     type="text"
                     value={filename}
                     onChange={(e) => setFilename(e.target.value)}
-                    className="min-w-0 max-w-[12rem] flex-1 rounded-lg border border-gray-200 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:max-w-[14rem]"
+                    className="min-w-0 max-w-[12rem] flex-1 rounded-base border-2 border-border bg-secondary-background px-2 py-1.5 text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black sm:max-w-[14rem]"
                     placeholder="document"
                   />
-                  <span className="shrink-0 text-sm text-gray-400">.pdf</span>
+                  <span className="shrink-0 text-sm text-foreground/50">.pdf</span>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
                   <button
                     type="button"
                     onClick={handlePrint}
                     disabled={!markdown.trim() || isPrinting}
-                    className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="inline-flex items-center justify-center gap-1.5 rounded-base border-2 border-border bg-main px-3 py-2 text-sm font-base text-main-foreground shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none disabled:pointer-events-none disabled:opacity-50"
                   >
                     {isPrinting ? (
                       <>
@@ -220,7 +220,7 @@ export default function MdToPdfPage() {
                   <button
                     type="button"
                     onClick={handleFullscreenToggle}
-                    className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50"
+                    className="rounded-base border-2 border-border bg-secondary-background px-3 py-2 text-sm shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none"
                   >
                     {tCommon("exit")}
                   </button>
@@ -229,50 +229,10 @@ export default function MdToPdfPage() {
             </div>
           )}
 
-          <div
-            className={
-              (isFullscreen
-                ? "grid min-h-0 flex-1 gap-4 pt-1 md:gap-6 md:pt-2"
-                : "grid min-h-0 gap-4 md:gap-6") +
-              (isSplit ? " grid-cols-1 md:grid-cols-2" : " grid-cols-1") +
-              " print:grid-cols-1 print:h-auto print:max-h-none print:overflow-visible"
-            }
-          >
-            {isSplit && (
-            <div className={editorColumnClass}>
-              <span className="mb-2 shrink-0 text-xs font-medium uppercase tracking-wide text-gray-500">{tCommon("writeMarkdown")}</span>
-              <textarea
-                value={markdown}
-                onChange={(e) => setMarkdown(e.target.value)}
-                placeholder="# Start writing your Markdown here...
-
-## Example
-
-- Item 1
-- Item 2
-
-**Bold text** and *italic text*"
-                className="min-h-0 w-full flex-1 resize-none rounded-lg border border-gray-200 bg-gray-50 p-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:p-4"
-              />
-            </div>
-            )}
-
-            <div className={previewColumnClass}>
-              <span className="mb-2 shrink-0 text-xs font-medium uppercase tracking-wide text-gray-500 print:hidden">{tCommon("preview")}</span>
-              <div className={previewShellClass}>
-                <article className="print-document flex h-full min-h-0 w-full max-w-none flex-1 flex-col bg-white print:block print:h-auto print:max-h-none print:min-h-0 print:overflow-visible print:max-w-none">
-                  <MarkdownHtmlPreview markdown={markdown} className={MD_TO_PDF_PREVIEW_CLASS} />
-                </article>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {!isFullscreen && (
-          <div className="flex flex-col gap-4 print:hidden">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+          {!isFullscreen && (
+            <div className="mb-4 flex flex-col gap-3 print:hidden sm:flex-row sm:items-center sm:justify-between sm:gap-6">
               <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
-                <label className="shrink-0 text-sm text-gray-600" htmlFor="md-pdf-filename">
+                <label className="shrink-0 text-sm text-foreground/80" htmlFor="md-pdf-filename">
                   {tCommon("filename")}
                 </label>
                 <input
@@ -280,17 +240,17 @@ export default function MdToPdfPage() {
                   type="text"
                   value={filename}
                   onChange={(e) => setFilename(e.target.value)}
-                  className="min-w-0 flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:max-w-xs sm:flex-none"
+                  className="min-w-0 flex-1 rounded-base border-2 border-border bg-secondary-background px-3 py-2 text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black sm:max-w-xs sm:flex-none"
                   placeholder="document"
                 />
-                <span className="shrink-0 text-sm text-gray-400">.pdf</span>
+                <span className="shrink-0 text-sm text-foreground/50">.pdf</span>
               </div>
-              <div className="flex flex-wrap items-center justify-end gap-2 sm:justify-end sm:gap-3">
+              <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
                 <ViewModeToggle value={viewMode} onChange={setViewMode} />
                 <button
                   type="button"
                   onClick={handleFullscreenToggle}
-                  className="rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-50"
+                  className="rounded-base border-2 border-border bg-secondary-background px-4 py-2.5 text-sm shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none"
                 >
                   {tCommon("fullscreen")}
                 </button>
@@ -298,7 +258,7 @@ export default function MdToPdfPage() {
                   type="button"
                   onClick={handlePrint}
                   disabled={!markdown.trim() || isPrinting}
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex items-center justify-center gap-2 rounded-base border-2 border-border bg-main px-5 py-2.5 text-sm font-base text-main-foreground shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none disabled:pointer-events-none disabled:opacity-50"
                 >
                   {isPrinting ? (
                     <>
@@ -319,55 +279,93 @@ export default function MdToPdfPage() {
                 </button>
               </div>
             </div>
+          )}
+
+          <div
+            className={
+              (isFullscreen
+                ? "grid min-h-0 flex-1 gap-4 pt-1 md:gap-6 md:pt-2"
+                : "grid min-h-0 gap-4 md:gap-6") +
+              (isSplit ? " grid-cols-1 md:grid-cols-2" : " grid-cols-1") +
+              " print:grid-cols-1 print:h-auto print:max-h-none print:overflow-visible"
+            }
+          >
+            {isSplit && (
+            <div className={editorColumnClass}>
+              <span className="mb-2 shrink-0 text-xs font-medium uppercase tracking-wide text-foreground/60">{tCommon("writeMarkdown")}</span>
+              <textarea
+                value={markdown}
+                onChange={(e) => setMarkdown(e.target.value)}
+                placeholder="# Start writing your Markdown here...
+
+## Example
+
+- Item 1
+- Item 2
+
+**Bold text** and *italic text*"
+                className="min-h-0 w-full flex-1 resize-none rounded-base border-2 border-border bg-secondary-background p-3 font-mono text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black sm:p-4"
+              />
+            </div>
+            )}
+
+            <div className={previewColumnClass}>
+              <span className="mb-2 shrink-0 text-xs font-medium uppercase tracking-wide text-foreground/60 print:hidden">{tCommon("preview")}</span>
+              <div className={previewShellClass}>
+                <article className="print-document flex h-full min-h-0 w-full max-w-none flex-1 flex-col bg-secondary-background print:block print:h-auto print:max-h-none print:min-h-0 print:overflow-visible print:max-w-none">
+                  <MarkdownHtmlPreview markdown={markdown} className={MD_TO_PDF_PREVIEW_CLASS} />
+                </article>
+              </div>
+            </div>
           </div>
-        )}
+        </div>
       </div>
 
-      <p className="mx-auto mb-12 max-w-4xl text-center text-sm leading-relaxed text-gray-600 print:hidden sm:mb-16 sm:text-base">
+      <p className="mx-auto mb-12 max-w-4xl text-center text-sm leading-relaxed text-foreground/80 print:hidden sm:mb-16 sm:text-base">
         {t("intro")}
       </p>
 
       <section className="mb-12 print:hidden sm:mb-16">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">{t("whyTitle")}</h2>
+        <h2 className="mb-6 text-center text-2xl font-heading sm:mb-8">{t("whyTitle")}</h2>
         <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
-          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("nativeTitle")}</h3>
-            <p className="text-sm leading-relaxed text-gray-600">{t("nativeBody")}</p>
+          <div className="neo-panel p-5 sm:p-6">
+            <h3 className="mb-2 text-lg font-heading">{t("nativeTitle")}</h3>
+            <p className="text-sm leading-relaxed text-foreground/80">{t("nativeBody")}</p>
           </div>
-          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("previewTitle")}</h3>
-            <p className="text-sm leading-relaxed text-gray-600">{t("previewBody")}</p>
+          <div className="neo-panel p-5 sm:p-6">
+            <h3 className="mb-2 text-lg font-heading">{t("previewTitle")}</h3>
+            <p className="text-sm leading-relaxed text-foreground/80">{t("previewBody")}</p>
           </div>
-          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("frontendTitle")}</h3>
-            <p className="text-sm leading-relaxed text-gray-600">{t("frontendBody")}</p>
+          <div className="neo-panel p-5 sm:p-6">
+            <h3 className="mb-2 text-lg font-heading">{t("frontendTitle")}</h3>
+            <p className="text-sm leading-relaxed text-foreground/80">{t("frontendBody")}</p>
           </div>
         </div>
       </section>
 
       <section className="mb-12 print:hidden sm:mb-16">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">{t("howTitle")}</h2>
-        <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6 md:p-8">
+        <h2 className="mb-6 text-center text-2xl font-heading sm:mb-8">{t("howTitle")}</h2>
+        <div className="neo-panel p-5 sm:p-6 md:p-8">
           <ol className="space-y-4">
             <li className="flex items-start gap-4">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white">1</span>
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-base border-2 border-border bg-main font-heading">1</span>
               <div>
-                <p className="font-medium text-gray-900">{t("step1Title")}</p>
-                <p className="text-sm text-gray-600">{t("step1Body")}</p>
+                <p className="font-heading">{t("step1Title")}</p>
+                <p className="text-sm text-foreground/80">{t("step1Body")}</p>
               </div>
             </li>
             <li className="flex items-start gap-4">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white">2</span>
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-base border-2 border-border bg-main font-heading">2</span>
               <div>
-                <p className="font-medium text-gray-900">{t("step2Title")}</p>
-                <p className="text-sm text-gray-600">{t("step2Body")}</p>
+                <p className="font-heading">{t("step2Title")}</p>
+                <p className="text-sm text-foreground/80">{t("step2Body")}</p>
               </div>
             </li>
             <li className="flex items-start gap-4">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white">3</span>
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-base border-2 border-border bg-main font-heading">3</span>
               <div>
-                <p className="font-medium text-gray-900">{t("step3Title")}</p>
-                <p className="text-sm text-gray-600">{t("step3Body")}</p>
+                <p className="font-heading">{t("step3Title")}</p>
+                <p className="text-sm text-foreground/80">{t("step3Body")}</p>
               </div>
             </li>
           </ol>
@@ -380,7 +378,7 @@ export default function MdToPdfPage() {
       />
 
       <section className="mb-12 print:hidden sm:mb-16">
-        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">{t("faqTitle")}</h2>
+        <h2 className="mb-4 text-center text-2xl font-heading">{t("faqTitle")}</h2>
         <FaqList items={t.raw("faqs")} />
       </section>
 

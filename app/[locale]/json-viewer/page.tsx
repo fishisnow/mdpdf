@@ -142,16 +142,16 @@ export default function JsonPreviewPage() {
   return (
     <main className="mx-auto w-full max-w-[90rem] px-4 py-8 sm:px-6 sm:py-10 md:py-12">
       <div className="mb-8 text-center sm:mb-10">
-        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">{t("h1")}</h1>
-        <p className="mx-auto text-base text-gray-500 sm:text-lg md:whitespace-nowrap">
+        <h1 className="mb-3 text-3xl font-heading sm:text-4xl">{t("h1")}</h1>
+        <p className="mx-auto text-base text-foreground/70 sm:text-lg md:whitespace-nowrap">
           {t("subtitle")}
         </p>
       </div>
 
-      <div className="mb-12 flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:gap-6 sm:p-6 md:mb-16 md:p-8">
+      <div className="mb-12 flex flex-col gap-5 neo-panel p-5 sm:gap-6 sm:p-6 md:mb-16 md:p-8">
         <div
           ref={viewerRef}
-          className="flex min-h-0 flex-col [&:fullscreen]:box-border [&:fullscreen]:size-full [&:fullscreen]:min-h-0 [&:fullscreen]:bg-white [&:fullscreen]:p-4 sm:[&:fullscreen]:p-6"
+          className="flex min-h-0 flex-col [&:fullscreen]:box-border [&:fullscreen]:size-full [&:fullscreen]:min-h-0 [&:fullscreen]:bg-secondary-background [&:fullscreen]:p-4 sm:[&:fullscreen]:p-6"
         >
           <input
             ref={fileInputRef}
@@ -167,7 +167,7 @@ export default function JsonPreviewPage() {
 
           <div className="mb-3 flex shrink-0 flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex min-w-0 flex-wrap items-center gap-2">
-              <label className="shrink-0 text-sm text-gray-600" htmlFor="json-preview-filename">
+              <label className="shrink-0 text-sm text-foreground/80" htmlFor="json-preview-filename">
                 {tCommon("filename")}
               </label>
               <input
@@ -175,10 +175,10 @@ export default function JsonPreviewPage() {
                 type="text"
                 value={filename}
                 onChange={(event) => setFilename(event.target.value)}
-                className="min-w-0 max-w-[12rem] flex-1 rounded-lg border border-gray-200 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:max-w-[14rem]"
+                className="min-w-0 max-w-[12rem] flex-1 rounded-base border-2 border-border bg-secondary-background px-2 py-1.5 text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black sm:max-w-[14rem]"
                 placeholder="data"
               />
-              <span className="shrink-0 text-sm text-gray-400">.json</span>
+              <span className="shrink-0 text-sm text-foreground/50">.json</span>
               <span
                 className={
                   "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium " +
@@ -186,7 +186,7 @@ export default function JsonPreviewPage() {
                     ? "bg-emerald-50 text-emerald-700"
                     : source.trim()
                       ? "bg-red-50 text-red-700"
-                      : "bg-gray-100 text-gray-600")
+                      : "bg-gray-100 text-foreground/70")
                 }
               >
                 {parsed.ok ? t("valid") : source.trim() ? t("invalid") : t("empty")}
@@ -194,7 +194,7 @@ export default function JsonPreviewPage() {
             </div>
             <div className="flex flex-wrap items-center justify-end gap-2">
               <ViewModeToggle value={viewMode} onChange={setViewMode} />
-              <div className="inline-flex rounded-lg border border-gray-200 bg-gray-50 p-0.5" role="group" aria-label={t("kindLabel")}>
+              <div className="inline-flex rounded-base border-2 border-border bg-background p-0.5" role="group" aria-label={t("kindLabel")}>
                 {(["formatted", "tree"] as const).map((kind) => {
                   const active = previewKind === kind;
                   return (
@@ -205,7 +205,7 @@ export default function JsonPreviewPage() {
                       onClick={() => setPreviewKind(kind)}
                       className={
                         "rounded-md px-3 py-1.5 text-sm font-medium transition-colors " +
-                        (active ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-900")
+                        (active ? "bg-secondary-background text-foreground shadow-sm" : "text-foreground/70 hover:text-foreground")
                       }
                     >
                       {kind === "formatted" ? t("formatted") : t("tree")}
@@ -217,7 +217,7 @@ export default function JsonPreviewPage() {
                 type="button"
                 onClick={handleFormat}
                 disabled={!parsed.ok}
-                className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-base border-2 border-border bg-secondary-background px-3 py-2 text-sm shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none disabled:pointer-events-none disabled:opacity-50"
               >
                 {t("format")}
               </button>
@@ -225,14 +225,14 @@ export default function JsonPreviewPage() {
                 type="button"
                 onClick={handleMinify}
                 disabled={!parsed.ok}
-                className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-base border-2 border-border bg-secondary-background px-3 py-2 text-sm shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none disabled:pointer-events-none disabled:opacity-50"
               >
                 {t("minify")}
               </button>
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50"
+                className="rounded-base border-2 border-border bg-secondary-background px-3 py-2 text-sm shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none"
               >
                 {tCommon("openFile")}
               </button>
@@ -240,7 +240,7 @@ export default function JsonPreviewPage() {
                 type="button"
                 onClick={() => void handleCopy()}
                 disabled={!source}
-                className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-base border-2 border-border bg-secondary-background px-3 py-2 text-sm shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none disabled:pointer-events-none disabled:opacity-50"
               >
                 {copyState === "copied" ? tCommon("copied") : tCommon("copy")}
               </button>
@@ -248,14 +248,14 @@ export default function JsonPreviewPage() {
                 type="button"
                 onClick={handleDownload}
                 disabled={!source.trim()}
-                className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-base border-2 border-border bg-main px-3 py-2 text-sm font-base text-main-foreground shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none disabled:pointer-events-none disabled:opacity-50"
               >
                 {tCommon("download")}
               </button>
               <button
                 type="button"
                 onClick={handleFullscreenToggle}
-                className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50"
+                className="rounded-base border-2 border-border bg-secondary-background px-3 py-2 text-sm shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none"
               >
                 {isFullscreen ? tCommon("exit") : tCommon("fullscreen")}
               </button>
@@ -271,12 +271,12 @@ export default function JsonPreviewPage() {
             {isSplit && (
               <div className={editorColumnClass}>
                 <div className="mb-2 flex h-7 shrink-0 items-center gap-2">
-                  <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{tCommon("json")}</span>
+                  <span className="text-xs font-medium uppercase tracking-wide text-foreground/60">{tCommon("json")}</span>
                   <button
                     type="button"
                     onClick={handleUnescape}
                     disabled={unescapedSource === null}
-                    className="h-6 rounded-md border border-gray-300 px-2 text-xs leading-none text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="h-6 rounded-md border border-border px-2 text-xs leading-none text-foreground/80 transition-colors hover:bg-background disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {t("unescape")}
                   </button>
@@ -286,29 +286,29 @@ export default function JsonPreviewPage() {
                   onChange={(event) => setSource(event.target.value)}
                   spellCheck={false}
                   placeholder='{"hello": "world"}'
-                  className="min-h-0 w-full flex-1 resize-none rounded-lg border border-gray-200 bg-gray-50 p-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:p-4"
+                  className="min-h-0 w-full flex-1 resize-none rounded-base border-2 border-border bg-secondary-background p-3 font-mono text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black sm:p-4"
                 />
               </div>
             )}
             <div className={previewColumnClass}>
               <div className="mb-2 flex h-7 shrink-0 items-center justify-between gap-2">
                 <div className="flex min-w-0 items-baseline gap-2">
-                  <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{tCommon("preview")}</span>
-                  <span className="hidden truncate text-xs text-gray-400 sm:inline">{t("hoverHint")}</span>
+                  <span className="text-xs font-medium uppercase tracking-wide text-foreground/60">{tCommon("preview")}</span>
+                  <span className="hidden truncate text-xs text-foreground/50 sm:inline">{t("hoverHint")}</span>
                 </div>
                 {previewKind === "tree" && parsed.ok && (
                   <div className="flex gap-2">
-                    <button type="button" className="text-xs text-blue-600 hover:underline" onClick={() => resetTree(99)}>
+                    <button type="button" className="text-xs text-foreground underline decoration-2 hover:underline" onClick={() => resetTree(99)}>
                       {t("expandAll")}
                     </button>
-                    <button type="button" className="text-xs text-blue-600 hover:underline" onClick={() => resetTree(0)}>
+                    <button type="button" className="text-xs text-foreground underline decoration-2 hover:underline" onClick={() => resetTree(0)}>
                       {t("collapseAll")}
                     </button>
                   </div>
                 )}
               </div>
               {!parsed.ok ? (
-                <div className="flex min-h-0 flex-1 items-start overflow-auto rounded-lg border border-dashed border-gray-200 bg-gray-50 p-4 text-sm text-gray-600">
+                <div className="flex min-h-0 flex-1 items-start overflow-auto rounded-base border-2 border-dashed border-border bg-background p-4 text-sm text-foreground/80">
                   {source.trim() ? (
                     <p className="text-red-700">{parsed.message}</p>
                   ) : (
@@ -320,8 +320,8 @@ export default function JsonPreviewPage() {
                   <JsonTreeView key={treeKey} value={parsed.value} expandDepth={expandDepth} onDelete={handleDeletePath} />
                 ) : (
                   <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-                    <p className="mb-2 shrink-0 text-xs text-gray-500">{t("tooLarge")}</p>
-                    <pre className="min-h-0 flex-1 overflow-auto whitespace-pre-wrap break-words rounded-lg border border-gray-200 bg-white p-3 font-mono text-[13px] leading-6 text-gray-800 sm:p-4">
+                    <p className="mb-2 shrink-0 text-xs text-foreground/60">{t("tooLarge")}</p>
+                    <pre className="min-h-0 flex-1 overflow-auto whitespace-pre-wrap break-words rounded-lg border border-border bg-secondary-background p-3 font-mono text-[13px] leading-6 text-foreground sm:p-4">
                       {formatted}
                     </pre>
                   </div>
@@ -329,7 +329,7 @@ export default function JsonPreviewPage() {
               ) : showHighlighted ? (
                 <JsonFormattedView value={parsed.value} formatted={formatted} onDelete={handleDeletePath} />
               ) : (
-                <pre className="min-h-0 flex-1 overflow-auto whitespace-pre-wrap break-words rounded-lg border border-gray-200 bg-white p-3 font-mono text-[13px] leading-6 text-gray-800 sm:p-4">
+                <pre className="min-h-0 flex-1 overflow-auto whitespace-pre-wrap break-words rounded-lg border border-border bg-secondary-background p-3 font-mono text-[13px] leading-6 text-foreground sm:p-4">
                   {formatted}
                 </pre>
               )}
@@ -338,24 +338,24 @@ export default function JsonPreviewPage() {
         </div>
       </div>
 
-      <p className="mx-auto mb-12 max-w-4xl text-center text-sm leading-relaxed text-gray-600 sm:mb-16 sm:text-base">
+      <p className="mx-auto mb-12 max-w-4xl text-center text-sm leading-relaxed text-foreground/80 sm:mb-16 sm:text-base">
         {t("intro")}
       </p>
 
       <section className="mb-12 sm:mb-16">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">{t("whyTitle")}</h2>
+        <h2 className="mb-6 text-center text-2xl font-heading sm:mb-8">{t("whyTitle")}</h2>
         <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
-          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("validateTitle")}</h3>
-            <p className="text-sm leading-relaxed text-gray-600">{t("validateBody")}</p>
+          <div className="neo-panel p-5 sm:p-6">
+            <h3 className="mb-2 text-lg font-heading">{t("validateTitle")}</h3>
+            <p className="text-sm leading-relaxed text-foreground/80">{t("validateBody")}</p>
           </div>
-          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("inspectTitle")}</h3>
-            <p className="text-sm leading-relaxed text-gray-600">{t("inspectBody")}</p>
+          <div className="neo-panel p-5 sm:p-6">
+            <h3 className="mb-2 text-lg font-heading">{t("inspectTitle")}</h3>
+            <p className="text-sm leading-relaxed text-foreground/80">{t("inspectBody")}</p>
           </div>
-          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("privateTitle")}</h3>
-            <p className="text-sm leading-relaxed text-gray-600">{t("privateBody")}</p>
+          <div className="neo-panel p-5 sm:p-6">
+            <h3 className="mb-2 text-lg font-heading">{t("privateTitle")}</h3>
+            <p className="text-sm leading-relaxed text-foreground/80">{t("privateBody")}</p>
           </div>
         </div>
       </section>
@@ -363,7 +363,7 @@ export default function JsonPreviewPage() {
       <SeoSections className="mb-12 sm:mb-16" sections={t.raw("seoSections") as SeoSection[]} />
 
       <section className="mb-12 sm:mb-16">
-        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">{t("faqTitle")}</h2>
+        <h2 className="mb-4 text-center text-2xl font-heading">{t("faqTitle")}</h2>
         <FaqList items={t.raw("faqs")} />
       </section>
 

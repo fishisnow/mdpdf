@@ -7,39 +7,39 @@ export default function Footer() {
   const t = useTranslations("common");
 
   return (
-    <footer className="bg-white border-t border-gray-100 mt-auto">
+    <footer className="mt-auto border-t-2 border-border bg-secondary-background">
       <div className="mx-auto max-w-[90rem] px-4 py-8 sm:px-6">
         <div className="flex flex-col items-center justify-center gap-4 text-center">
           <div className="flex flex-wrap items-center justify-center gap-4 text-center">
-            <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-gray-500 sm:gap-6">
-              <Link href="/privacy-policy" className="hover:text-gray-700 transition-colors">
+            <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-foreground/70 sm:gap-6">
+              <Link href="/privacy-policy" className="font-heading hover:text-foreground">
                 {t("privacyPolicy")}
               </Link>
-              <span className="text-gray-300">•</span>
-              <Link href="/terms-of-service" className="hover:text-gray-700 transition-colors">
+              <span aria-hidden="true">•</span>
+              <Link href="/terms-of-service" className="font-heading hover:text-foreground">
                 {t("termsOfService")}
               </Link>
-              <span className="text-gray-300">•</span>
+              <span aria-hidden="true">•</span>
               <a
                 href="http://pixae.app/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-gray-700 transition-colors"
+                className="font-heading hover:text-foreground"
               >
                 AI Image Creator
               </a>
-              <span className="text-gray-300">•</span>
+              <span aria-hidden="true">•</span>
               <a
                 href="https://pixae.app/ai-tools/text-to-video"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-gray-700 transition-colors"
+                className="font-heading hover:text-foreground"
               >
                 AI Video Generator
               </a>
             </div>
-            <p className="text-sm text-gray-400">{t("copyright", { year: 2026 })}</p>
           </div>
+          <p className="text-sm text-foreground/60">{t("copyright", { year: new Date().getFullYear() })}</p>
         </div>
       </div>
     </footer>

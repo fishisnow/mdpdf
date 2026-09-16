@@ -47,21 +47,16 @@ export default function SeoSections({
   return (
     <div className={`space-y-8 text-left sm:space-y-10 ${className}`.trim()}>
       {sections.length > 1 && (
-        <nav
-          aria-label={t("guide")}
-          className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5"
-        >
-          <p className="mb-3 text-xs font-medium uppercase tracking-[0.14em] text-gray-400">
-            {t("guide")}
-          </p>
+        <nav aria-label={t("guide")} className="neo-panel p-4 sm:p-5">
+          <p className="mb-3 text-xs font-heading uppercase tracking-[0.14em] text-foreground/50">{t("guide")}</p>
           <ul className="flex flex-wrap gap-2">
             {sections.map((section, index) => (
               <li key={section.title}>
                 <a
                   href={`#${sectionId(section.title, index)}`}
-                  className="inline-flex max-w-full items-center rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-left text-sm text-gray-700 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+                  className="inline-flex max-w-full items-center rounded-base border-2 border-border bg-secondary-background px-3 py-1.5 text-left text-sm shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none"
                 >
-                  <span className="mr-2 shrink-0 font-mono text-[11px] text-gray-400">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="mr-2 shrink-0 font-mono text-[11px]">{String(index + 1).padStart(2, "0")}</span>
                   <span>{section.title}</span>
                 </a>
               </li>
@@ -76,23 +71,14 @@ export default function SeoSections({
         const id = sectionId(section.title, index);
 
         return (
-          <section
-            key={id}
-            id={id}
-            className="scroll-mt-24 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"
-          >
-            <div className="border-l-[3px] border-blue-500 px-5 py-6 sm:px-8 sm:py-8">
-              <h2 className="text-2xl font-bold tracking-tight text-gray-900">{section.title}</h2>
+          <section key={id} id={id} className="neo-panel scroll-mt-24 overflow-hidden">
+            <div className="border-l-[6px] border-border px-5 py-6 sm:px-8 sm:py-8">
+              <h2 className="text-2xl font-heading tracking-tight">{section.title}</h2>
 
               {paragraphs.length > 0 && (
-                <div className="mt-4 max-w-4xl space-y-4 text-[15px] leading-7 text-gray-600 sm:text-base sm:leading-8">
+                <div className="mt-4 max-w-4xl space-y-4 text-[15px] leading-7 text-foreground/80 sm:text-base sm:leading-8">
                   {paragraphs.map((paragraph, paragraphIndex) => (
-                    <p
-                      key={`${id}-p-${paragraphIndex}`}
-                      className={paragraphIndex === 0 ? "text-gray-700" : undefined}
-                    >
-                      {paragraph}
-                    </p>
+                    <p key={`${id}-p-${paragraphIndex}`}>{paragraph}</p>
                   ))}
                 </div>
               )}
@@ -100,12 +86,9 @@ export default function SeoSections({
               {items.length > 0 && (
                 <div className={`mt-6 ${itemGridClass(items.length)}`}>
                   {items.map((item) => (
-                    <article
-                      key={item.title}
-                      className="flex h-full flex-col rounded-xl border border-gray-100 bg-gray-50/80 p-4 sm:p-5"
-                    >
-                      <h3 className="text-base font-semibold leading-snug text-gray-900">{item.title}</h3>
-                      <div className="mt-2 space-y-2.5 text-sm leading-7 text-gray-600">
+                    <article key={item.title} className="flex h-full flex-col rounded-base border-2 border-border bg-background p-4 sm:p-5">
+                      <h3 className="text-base font-heading leading-snug">{item.title}</h3>
+                      <div className="mt-2 space-y-2.5 text-sm leading-7 text-foreground/80">
                         {paragraphList(item.body).map((paragraph, paragraphIndex) => (
                           <p key={`${item.title}-${paragraphIndex}`}>{paragraph}</p>
                         ))}

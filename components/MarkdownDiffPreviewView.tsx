@@ -7,12 +7,12 @@ import MarkdownOutline from "@/components/MarkdownOutline";
 import { extractMarkdownHeadings } from "@/lib/markdown-headings";
 
 const PREVIEW_CLASS =
-  "markdown-preview-lines h-auto min-h-0 min-w-0 flex-1 !overflow-visible rounded-none border-0 bg-white !py-3 !pr-3 !pl-11 sm:!py-4 sm:!pr-4 sm:!pl-12 !shadow-none";
+  "markdown-preview-lines h-auto min-h-0 min-w-0 flex-1 !overflow-visible rounded-none border-0 bg-secondary-background !py-3 !pr-3 !pl-11 sm:!py-4 sm:!pr-4 sm:!pl-12 !shadow-none";
 
 function PreviewLoading() {
   const tCommon = useTranslations("common");
   return (
-    <div className="flex h-full min-h-[200px] items-center justify-center text-sm text-gray-500">
+    <div className="flex h-full min-h-[200px] items-center justify-center text-sm text-foreground/70">
       {tCommon("loadingPreview")}
     </div>
   );

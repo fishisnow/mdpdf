@@ -56,30 +56,30 @@ function JsonTreeNode({
   }, [expandable, value]);
 
   return (
-    <div className={depth === 0 ? "" : "ml-3 border-l border-gray-200 pl-3"}>
-      <div className="group flex items-start gap-1 rounded-md px-1 py-0.5 hover:bg-gray-50">
+    <div className={depth === 0 ? "" : "ml-3 border-l border-border pl-3"}>
+      <div className="group flex items-start gap-1 rounded-md px-1 py-0.5 hover:bg-background">
         <button
           type="button"
           className="flex min-w-0 flex-1 items-start gap-2 text-left font-mono text-[13px]"
           onClick={() => expandable && setUserOpen(!(userOpen ?? depth < expandDepth))}
           disabled={!expandable}
         >
-          <span className={`mt-0.5 inline-block w-3 shrink-0 text-gray-400 ${expandable ? "" : "opacity-0"}`} aria-hidden="true">
+          <span className={`mt-0.5 inline-block w-3 shrink-0 text-foreground/50 ${expandable ? "" : "opacity-0"}`} aria-hidden="true">
             {open ? "▾" : "▸"}
           </span>
           {name !== undefined && (
             <span className="shrink-0 text-blue-800">
               {typeof name === "number" ? name : JSON.stringify(name)}
-              <span className="text-gray-400">:</span>
+              <span className="text-foreground/50">:</span>
             </span>
           )}
           {expandable ? (
             open ? (
-              <span className="text-gray-400">
+              <span className="text-foreground/50">
                 {Array.isArray(value) ? "[" : "{"} {typeLabel(value)}
               </span>
             ) : (
-              <span className="min-w-0 break-all text-gray-600">{previewText(value)}</span>
+              <span className="min-w-0 break-all text-foreground/70">{previewText(value)}</span>
             )
           ) : (
             <span className="min-w-0 break-all">
@@ -113,7 +113,7 @@ function JsonTreeNode({
               onDelete={onDelete}
             />
           ))}
-          <div className="pl-6 font-mono text-[13px] text-gray-400">{Array.isArray(value) ? "]" : "}"}</div>
+          <div className="pl-6 font-mono text-[13px] text-foreground/50">{Array.isArray(value) ? "]" : "}"}</div>
         </div>
       )}
     </div>
@@ -125,7 +125,7 @@ function JsonLeaf({ value }: { value: unknown }) {
   if (typeof value === "boolean") return <span className="text-violet-700">{String(value)}</span>;
   if (typeof value === "number") return <span className="text-amber-700">{String(value)}</span>;
   if (typeof value === "string") return <span className="text-emerald-700">{JSON.stringify(value)}</span>;
-  return <span className="text-gray-500">{String(value)}</span>;
+  return <span className="text-foreground/60">{String(value)}</span>;
 }
 
 export default function JsonTreeView({
@@ -138,7 +138,7 @@ export default function JsonTreeView({
   onDelete?: (path: JsonPath) => void;
 }) {
   return (
-    <div className="min-h-0 flex-1 overflow-auto rounded-lg border border-gray-200 bg-white p-3 sm:p-4">
+    <div className="min-h-0 flex-1 overflow-auto rounded-lg border border-border bg-secondary-background p-3 sm:p-4">
       <JsonTreeNode value={value} depth={0} expandDepth={expandDepth} path={[]} onDelete={onDelete} />
     </div>
   );

@@ -160,22 +160,22 @@ export default function Home() {
   return (
     <main className="mx-auto w-full max-w-[90rem] px-4 py-8 sm:px-6 sm:py-10 md:py-12">
       <div className="mb-8 text-center sm:mb-10">
-        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">{t("h1")}</h1>
-        <p className="mx-auto text-base text-gray-500 sm:text-lg md:whitespace-nowrap">
+        <h1 className="mb-3 text-3xl font-heading sm:text-4xl">{t("h1")}</h1>
+        <p className="mx-auto text-base text-foreground/70 sm:text-lg md:whitespace-nowrap">
           {t("subtitle")}
         </p>
       </div>
 
-      <div className="mb-8 flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:gap-6 sm:p-6 md:p-8">
+      <div className="mb-8 flex flex-col gap-5 neo-panel p-5 sm:gap-6 sm:p-6 md:p-8">
         <div className="mb-1 text-center sm:mb-2">
-          <h2 className="text-xl font-bold text-gray-900">{t("boxTitle")}</h2>
-          <p className="text-sm text-gray-500">{t("boxHint")}</p>
+          <h2 className="text-xl font-bold text-foreground">{t("boxTitle")}</h2>
+          <p className="text-sm text-foreground/70">{t("boxHint")}</p>
         </div>
         <UploadZone onUpload={handleUpload} disabled={state === "converting"} />
 
         {state === "converting" && (
           <div className="flex flex-col gap-2">
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-foreground/70">
               {progressView.label} <span className="font-medium break-all">{filename}</span>
             </p>
             <ProgressBar progress={progressView.percent} />
@@ -183,7 +183,7 @@ export default function Home() {
         )}
 
         {state === "error" && (
-          <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          <div className="rounded-base border-2 border-border bg-chart-2 p-4 text-sm font-base shadow-shadow">
             {error}
           </div>
         )}
@@ -206,32 +206,32 @@ export default function Home() {
 
       <MoreTools currentHref="/" />
 
-      <p className="mx-auto mb-12 max-w-4xl text-center text-sm leading-relaxed text-gray-600 sm:mb-16 sm:text-base">
+      <p className="mx-auto mb-12 max-w-4xl text-center text-sm leading-relaxed text-foreground/80 sm:mb-16 sm:text-base">
         {t("intro")}
       </p>
 
       <section className="mb-12 sm:mb-16">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">{t("whyTitle")}</h2>
-        <div className="mb-6 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6 md:p-8">
-          <p className="text-sm leading-7 text-gray-600 sm:text-base">
+        <h2 className="mb-6 text-center text-2xl font-heading sm:mb-8">{t("whyTitle")}</h2>
+        <div className="mb-6 neo-panel p-5 sm:p-6 md:p-8">
+          <p className="text-sm leading-7 text-foreground/70 sm:text-base">
             {t("whyBody")}
           </p>
         </div>
         <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
-          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+          <div className="neo-panel p-5 sm:p-6">
             <div className="mb-3 text-3xl">⚡</div>
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("fastTitle")}</h3>
-            <p className="text-sm leading-relaxed text-gray-600">{t("fastBody")}</p>
+            <h3 className="mb-2 text-lg font-heading">{t("fastTitle")}</h3>
+            <p className="text-sm leading-relaxed text-foreground/80">{t("fastBody")}</p>
           </div>
-          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+          <div className="neo-panel p-5 sm:p-6">
             <div className="mb-3 text-3xl">🎯</div>
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("accurateTitle")}</h3>
-            <p className="text-sm leading-relaxed text-gray-600">{t("accurateBody")}</p>
+            <h3 className="mb-2 text-lg font-heading">{t("accurateTitle")}</h3>
+            <p className="text-sm leading-relaxed text-foreground/80">{t("accurateBody")}</p>
           </div>
-          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+          <div className="neo-panel p-5 sm:p-6">
             <div className="mb-3 text-3xl">🔒</div>
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("privacyTitle")}</h3>
-            <p className="text-sm leading-relaxed text-gray-600">{t("privacyBody")}</p>
+            <h3 className="mb-2 text-lg font-heading">{t("privacyTitle")}</h3>
+            <p className="text-sm leading-relaxed text-foreground/80">{t("privacyBody")}</p>
           </div>
         </div>
       </section>
@@ -239,8 +239,8 @@ export default function Home() {
       <SeoSections className="mb-12 sm:mb-16" sections={t.raw("seoSections") as SeoSection[]} />
 
       <section className="mb-12">
-        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">{t("faqTitle")}</h2>
-        <p className="mx-auto mb-8 max-w-2xl text-center text-gray-500">{t("faqIntro")}</p>
+        <h2 className="mb-4 text-center text-2xl font-heading">{t("faqTitle")}</h2>
+        <p className="mx-auto mb-8 max-w-2xl text-center text-foreground/70">{t("faqIntro")}</p>
         <FaqList items={t.raw("faqs")} />
       </section>
     </main>

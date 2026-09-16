@@ -155,16 +155,16 @@ export default function TextReplacerPage() {
   return (
     <main className="mx-auto w-full max-w-[90rem] px-4 py-8 sm:px-6 sm:py-10 md:py-12">
       <div className="mb-8 text-center sm:mb-10">
-        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl">{t("h1")}</h1>
-        <p className="mx-auto text-base text-gray-500 sm:text-lg md:whitespace-nowrap">
+        <h1 className="mb-3 text-3xl font-heading sm:text-4xl">{t("h1")}</h1>
+        <p className="mx-auto text-base text-foreground/70 sm:text-lg md:whitespace-nowrap">
           {t("subtitle")}
         </p>
       </div>
 
-      <div className="mb-12 flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:gap-6 sm:p-6 md:mb-16 md:p-8">
+      <div className="mb-12 flex flex-col gap-5 neo-panel p-5 sm:gap-6 sm:p-6 md:mb-16 md:p-8">
         <div
           ref={viewerRef}
-          className="flex min-h-0 flex-col [&:fullscreen]:box-border [&:fullscreen]:size-full [&:fullscreen]:min-h-0 [&:fullscreen]:bg-white [&:fullscreen]:p-4 sm:[&:fullscreen]:p-6"
+          className="flex min-h-0 flex-col [&:fullscreen]:box-border [&:fullscreen]:size-full [&:fullscreen]:min-h-0 [&:fullscreen]:bg-secondary-background [&:fullscreen]:p-4 sm:[&:fullscreen]:p-6"
         >
           <input
             ref={fileInputRef}
@@ -180,7 +180,7 @@ export default function TextReplacerPage() {
 
           <div className="mb-4 flex shrink-0 flex-col gap-3">
             <div className="flex min-w-0 flex-wrap items-center gap-2">
-              <label className="shrink-0 text-sm text-gray-600" htmlFor="text-replacer-filename">
+              <label className="shrink-0 text-sm text-foreground/80" htmlFor="text-replacer-filename">
                 {tCommon("filename")}
               </label>
               <input
@@ -188,11 +188,11 @@ export default function TextReplacerPage() {
                 type="text"
                 value={filename}
                 onChange={(event) => setFilename(event.target.value)}
-                className="min-w-0 max-w-[12rem] flex-1 rounded-lg border border-gray-200 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:max-w-[14rem]"
+                className="min-w-0 max-w-[12rem] flex-1 rounded-base border-2 border-border bg-secondary-background px-2 py-1.5 text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black sm:max-w-[14rem]"
                 placeholder="replaced"
               />
-              <span className="shrink-0 text-sm text-gray-400">.txt</span>
-              <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">
+              <span className="shrink-0 text-sm text-foreground/50">.txt</span>
+              <span className="inline-flex items-center rounded-base border-2 border-border bg-chart-3 px-2.5 py-1 text-xs font-heading">
                 {result.error ? t("patternError") : t("replacements", { count: result.count })}
               </span>
               <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
@@ -200,7 +200,7 @@ export default function TextReplacerPage() {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50"
+                  className="rounded-base border-2 border-border bg-secondary-background px-3 py-2 text-sm shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none"
                 >
                   {tCommon("openFile")}
                 </button>
@@ -208,28 +208,28 @@ export default function TextReplacerPage() {
                   type="button"
                   onClick={() => setSource(result.output)}
                   disabled={Boolean(result.error) || result.output === source}
-                  className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-base border-2 border-border bg-secondary-background px-3 py-2 text-sm shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none disabled:pointer-events-none disabled:opacity-50"
                 >
                   {t("useResult")}
                 </button>
                 <button
                   type="button"
                   onClick={() => void handleCopy()}
-                  className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50"
+                  className="rounded-base border-2 border-border bg-secondary-background px-3 py-2 text-sm shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none"
                 >
                   {copyState === "copied" ? tCommon("copied") : tCommon("copy")}
                 </button>
                 <button
                   type="button"
                   onClick={handleDownload}
-                  className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+                  className="rounded-base border-2 border-border bg-main px-3 py-2 text-sm font-base text-main-foreground shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none"
                 >
                   {tCommon("download")}
                 </button>
                 <button
                   type="button"
                   onClick={handleFullscreenToggle}
-                  className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50"
+                  className="rounded-base border-2 border-border bg-secondary-background px-3 py-2 text-sm shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none"
                 >
                   {isFullscreen ? tCommon("exit") : tCommon("fullscreen")}
                 </button>
@@ -238,24 +238,24 @@ export default function TextReplacerPage() {
 
             <div className="grid gap-3 md:grid-cols-2">
               <label className="flex min-w-0 flex-col gap-1">
-                <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                <span className="text-xs font-medium uppercase tracking-wide text-foreground/60">
                   {useRegex ? t("findRegex") : t("find")}
                 </span>
                 <input
                   value={find}
                   onChange={(event) => setFind(event.target.value)}
                   spellCheck={false}
-                  className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="rounded-base border-2 border-border bg-secondary-background px-3 py-2 font-mono text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black"
                   placeholder={useRegex ? "(\\d+)" : "\\n"}
                 />
               </label>
               <label className="flex min-w-0 flex-col gap-1">
-                <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{t("replaceWith")}</span>
+                <span className="text-xs font-medium uppercase tracking-wide text-foreground/60">{t("replaceWith")}</span>
                 <input
                   value={replace}
                   onChange={(event) => setReplace(event.target.value)}
                   spellCheck={false}
-                  className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="rounded-base border-2 border-border bg-secondary-background px-3 py-2 font-mono text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black"
                   placeholder={useRegex ? "$1" : "\\n"}
                 />
               </label>
@@ -271,10 +271,10 @@ export default function TextReplacerPage() {
                     aria-pressed={active}
                     onClick={() => applyPreset(preset.id)}
                     className={
-                      "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors " +
+                      "rounded-base border-2 px-3 py-1.5 text-xs font-heading transition-all " +
                       (active
-                        ? "border-blue-300 bg-blue-50 text-blue-700"
-                        : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50")
+                        ? "border-border bg-main text-main-foreground shadow-shadow"
+                        : "border-border bg-secondary-background hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-shadow")
                     }
                   >
                     {t(preset.labelKey)}
@@ -283,13 +283,13 @@ export default function TextReplacerPage() {
               })}
             </div>
 
-            <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-gray-700">
+            <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-foreground/80">
               <label className="inline-flex items-center gap-2">
                 <input
                   type="checkbox"
                   checked={interpretReplace}
                   onChange={(event) => setInterpretReplace(event.target.checked)}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-border text-foreground underline decoration-2 focus:ring-black"
                 />
                 {t("interpretReplace")}
               </label>
@@ -299,7 +299,7 @@ export default function TextReplacerPage() {
                   checked={interpretFind}
                   disabled={useRegex}
                   onChange={(event) => setInterpretFind(event.target.checked)}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50"
+                  className="rounded border-border text-foreground underline decoration-2 focus:ring-black disabled:opacity-50"
                 />
                 {t("interpretFind")}
               </label>
@@ -308,7 +308,7 @@ export default function TextReplacerPage() {
                   type="checkbox"
                   checked={!caseSensitive}
                   onChange={(event) => setCaseSensitive(!event.target.checked)}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-border text-foreground underline decoration-2 focus:ring-black"
                 />
                 {t("ignoreCase")}
               </label>
@@ -317,7 +317,7 @@ export default function TextReplacerPage() {
                   type="checkbox"
                   checked={useRegex}
                   onChange={(event) => setUseRegex(event.target.checked)}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-border text-foreground underline decoration-2 focus:ring-black"
                 />
                 {t("useRegex")}
               </label>
@@ -327,12 +327,12 @@ export default function TextReplacerPage() {
                   checked={greedy}
                   disabled={!useRegex}
                   onChange={(event) => setGreedy(event.target.checked)}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50"
+                  className="rounded border-border text-foreground underline decoration-2 focus:ring-black disabled:opacity-50"
                 />
                 {t("greedy")}
               </label>
             </div>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-foreground/60">
               {useRegex
                 ? greedy
                   ? t("hintRegexGreedy")
@@ -342,7 +342,7 @@ export default function TextReplacerPage() {
           </div>
 
           {result.error && (
-            <div className="mb-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">{result.error}</div>
+            <div className="mb-3 rounded-base border-2 border-border bg-chart-2 p-3 text-sm font-base shadow-shadow">{result.error}</div>
           )}
 
           <div
@@ -353,49 +353,49 @@ export default function TextReplacerPage() {
           >
             {isSplit && (
               <div className={editorColumnClass}>
-                <span className="mb-2 shrink-0 text-xs font-medium uppercase tracking-wide text-gray-500">{tCommon("original")}</span>
+                <span className="mb-2 shrink-0 text-xs font-medium uppercase tracking-wide text-foreground/60">{tCommon("original")}</span>
                 <textarea
                   value={source}
                   onChange={(event) => setSource(event.target.value)}
                   spellCheck={false}
                   placeholder={t("placeholder")}
-                  className="min-h-0 w-full flex-1 resize-none rounded-lg border border-gray-200 bg-gray-50 p-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:p-4"
+                  className="min-h-0 w-full flex-1 resize-none rounded-base border-2 border-border bg-secondary-background p-3 font-mono text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black sm:p-4"
                 />
               </div>
             )}
             <div className={previewColumnClass}>
-              <span className="mb-2 shrink-0 text-xs font-medium uppercase tracking-wide text-gray-500">{tCommon("result")}</span>
+              <span className="mb-2 shrink-0 text-xs font-medium uppercase tracking-wide text-foreground/60">{tCommon("result")}</span>
               <textarea
                 value={result.output}
                 readOnly
                 spellCheck={false}
-                className="min-h-0 w-full flex-1 resize-none rounded-lg border border-gray-200 bg-white p-3 font-mono text-sm text-gray-800 sm:p-4"
+                className="min-h-0 w-full flex-1 resize-none rounded-base border-2 border-border bg-secondary-background p-3 font-mono text-sm sm:p-4"
               />
             </div>
           </div>
         </div>
       </div>
 
-      <p className="mx-auto mb-12 max-w-4xl text-center text-sm leading-relaxed text-gray-600 sm:mb-16 sm:text-base">
+      <p className="mx-auto mb-12 max-w-4xl text-center text-sm leading-relaxed text-foreground/80 sm:mb-16 sm:text-base">
         {t("intro")}
       </p>
 
       <section className="mb-12 sm:mb-16">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">{t("whyTitle")}</h2>
+        <h2 className="mb-6 text-center text-2xl font-heading sm:mb-8">{t("whyTitle")}</h2>
         <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
-          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("newlineTitle")}</h3>
-            <p className="text-sm leading-relaxed text-gray-600">
+          <div className="neo-panel p-5 sm:p-6">
+            <h3 className="mb-2 text-lg font-heading">{t("newlineTitle")}</h3>
+            <p className="text-sm leading-relaxed text-foreground/80">
               {t("newlineBody")}
             </p>
           </div>
-          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("liveTitle")}</h3>
-            <p className="text-sm leading-relaxed text-gray-600">{t("liveBody")}</p>
+          <div className="neo-panel p-5 sm:p-6">
+            <h3 className="mb-2 text-lg font-heading">{t("liveTitle")}</h3>
+            <p className="text-sm leading-relaxed text-foreground/80">{t("liveBody")}</p>
           </div>
-          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">{t("privateTitle")}</h3>
-            <p className="text-sm leading-relaxed text-gray-600">{t("privateBody")}</p>
+          <div className="neo-panel p-5 sm:p-6">
+            <h3 className="mb-2 text-lg font-heading">{t("privateTitle")}</h3>
+            <p className="text-sm leading-relaxed text-foreground/80">{t("privateBody")}</p>
           </div>
         </div>
       </section>
@@ -403,7 +403,7 @@ export default function TextReplacerPage() {
       <SeoSections className="mb-12 sm:mb-16" sections={t.raw("seoSections") as SeoSection[]} />
 
       <section className="mb-12 sm:mb-16">
-        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">{t("faqTitle")}</h2>
+        <h2 className="mb-4 text-center text-2xl font-heading">{t("faqTitle")}</h2>
         <FaqList items={t.raw("faqs")} />
       </section>
 

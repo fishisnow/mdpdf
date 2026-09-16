@@ -32,7 +32,7 @@ export default function JsonCopyButton({
           timeoutRef.current = window.setTimeout(() => setCopied(false), 1500);
         });
       }}
-      className="shrink-0 rounded px-1.5 py-0.5 text-[11px] font-medium leading-none text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 focus-visible:bg-blue-50 focus-visible:text-blue-600 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
+      className="shrink-0 rounded-base border-2 border-transparent px-1.5 py-0.5 text-[11px] font-heading leading-none text-foreground/50 transition-colors hover:border-border hover:bg-main hover:text-main-foreground md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
     >
       {copied ? "Copied" : "Copy"}
     </button>

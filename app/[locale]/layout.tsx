@@ -1,5 +1,6 @@
 import React from "react";
 import type { Metadata } from "next";
+import { Public_Sans } from "next/font/google";
 import Script from "next/script";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -9,6 +10,12 @@ import Footer from "@/components/Footer";
 import { localeHtmlLang, routing } from "@/i18n/routing";
 import { pageMetadata } from "@/lib/seo";
 import "../globals.css";
+
+const publicSans = Public_Sans({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-public-sans",
+  display: "swap",
+});
 
 type Props = {
   children: React.ReactNode;
@@ -39,8 +46,8 @@ export default async function LocaleLayout({ children, params }: Props) {
   setRequestLocale(locale);
 
   return (
-    <html lang={localeHtmlLang[locale]} dir="ltr">
-      <body className="bg-gray-50 min-h-screen flex flex-col">
+    <html lang={localeHtmlLang[locale]} dir="ltr" className={publicSans.variable}>
+      <body className="relative isolate flex min-h-screen flex-col bg-background font-sans text-foreground">
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-H29RTX0PPF"
           strategy="afterInteractive"

@@ -3,50 +3,16 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { SITE_TOOLS, type SiteToolHref } from "@/lib/tools";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-const accentClass: Record<(typeof SITE_TOOLS)[number]["accent"], { box: string; icon: string; hover: string; title: string }> = {
-  blue: {
-    box: "bg-blue-100",
-    icon: "text-blue-600",
-    hover: "hover:border-blue-200",
-    title: "group-hover:text-blue-600",
-  },
-  indigo: {
-    box: "bg-indigo-100",
-    icon: "text-indigo-600",
-    hover: "hover:border-indigo-200",
-    title: "group-hover:text-indigo-600",
-  },
-  sky: {
-    box: "bg-sky-100",
-    icon: "text-sky-600",
-    hover: "hover:border-sky-200",
-    title: "group-hover:text-sky-600",
-  },
-  emerald: {
-    box: "bg-emerald-100",
-    icon: "text-emerald-600",
-    hover: "hover:border-emerald-200",
-    title: "group-hover:text-emerald-600",
-  },
-  violet: {
-    box: "bg-violet-100",
-    icon: "text-violet-600",
-    hover: "hover:border-violet-200",
-    title: "group-hover:text-violet-600",
-  },
-  amber: {
-    box: "bg-amber-100",
-    icon: "text-amber-600",
-    hover: "hover:border-amber-200",
-    title: "group-hover:text-amber-600",
-  },
-  rose: {
-    box: "bg-rose-100",
-    icon: "text-rose-600",
-    hover: "hover:border-rose-200",
-    title: "group-hover:text-rose-600",
-  },
+const accentClass: Record<(typeof SITE_TOOLS)[number]["accent"], string> = {
+  blue: "bg-main",
+  indigo: "bg-chart-5",
+  sky: "bg-chart-1",
+  emerald: "bg-chart-4",
+  violet: "bg-chart-5",
+  amber: "bg-chart-3",
+  rose: "bg-chart-2",
 };
 
 function ToolIcon({ href, className }: { href: SiteToolHref; className: string }) {
@@ -106,30 +72,23 @@ export default function MoreTools({ currentHref }: { currentHref: SiteToolHref }
 
   return (
     <section className="mt-12 mb-12 sm:mt-16 sm:mb-16">
-      <h2 className="mb-6 text-center text-2xl font-bold text-gray-900 sm:mb-8">{t("common.moreTools")}</h2>
+      <h2 className="mb-6 text-center text-2xl font-heading sm:mb-8">{t("common.moreTools")}</h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {tools.map((tool) => {
-          const colors = accentClass[tool.accent];
-          return (
-            <Link
-              key={tool.href}
-              href={tool.href}
-              className={`group block rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all ${colors.hover} hover:shadow-md sm:p-6`}
-            >
-              <div className="flex items-start gap-3">
-                <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${colors.box}`}>
-                  <ToolIcon href={tool.href} className={`h-5 w-5 ${colors.icon}`} />
+        {tools.map((tool) => (
+          <Link key={tool.href} href={tool.href} className="group block">
+            <Card size="sm" className="h-full bg-secondary-background transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none">
+              <CardHeader className="grid-cols-[auto_1fr] gap-3">
+                <div className={`flex size-10 shrink-0 items-center justify-center rounded-base border-2 border-border ${accentClass[tool.accent]}`}>
+                  <ToolIcon href={tool.href} className="size-5" />
                 </div>
                 <div className="min-w-0">
-                  <span className={`block font-semibold text-gray-900 transition-colors ${colors.title}`}>
-                    {t(`tools.${tool.id}.card`)} →
-                  </span>
-                  <p className="mt-1 text-sm leading-relaxed text-gray-500">{t(`tools.${tool.id}.description`)}</p>
+                  <CardTitle className="text-base">{t(`tools.${tool.id}.card`)} →</CardTitle>
+                  <CardDescription className="mt-1 text-foreground/70">{t(`tools.${tool.id}.description`)}</CardDescription>
                 </div>
-              </div>
-            </Link>
-          );
-        })}
+              </CardHeader>
+            </Card>
+          </Link>
+        ))}
       </div>
     </section>
   );
