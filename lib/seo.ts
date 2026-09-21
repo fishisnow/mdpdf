@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getPathname } from "@/i18n/navigation";
-import { localeOg, routing, type AppLocale } from "@/i18n/routing";
+import { localeHtmlLang, localeOg, routing, type AppLocale } from "@/i18n/routing";
 
 export const SITE_URL = "https://mdpdf.net";
 
@@ -28,7 +28,7 @@ export function languageAlternates(href: PagePath): Record<string, string> {
     "x-default": localizedUrl(routing.defaultLocale, href),
   };
   for (const locale of routing.locales) {
-    languages[locale] = localizedUrl(locale, href);
+    languages[localeHtmlLang[locale]] = localizedUrl(locale, href);
   }
   return languages;
 }

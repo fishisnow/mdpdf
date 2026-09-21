@@ -35,6 +35,13 @@ const nextConfig: NextConfig = {
           { key: "Cache-Control", value: "public, max-age=86400" },
         ],
       },
+      {
+        source: "/sitemap.xsl",
+        headers: [
+          { key: "Content-Type", value: "text/xsl; charset=utf-8" },
+          { key: "Cache-Control", value: "public, max-age=86400" },
+        ],
+      },
     ];
   },
 };
